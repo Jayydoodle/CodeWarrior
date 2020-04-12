@@ -1,27 +1,30 @@
 import 'phaser';
-import MainScene from './scenes/mainScene';
-import PreloadScene from './scenes/preloadScene';
+import MainScene from './scenes/MainScene';
+import PreloadScene from './scenes/PreloadScene';
 import GameConfig = Phaser.Types.Core.GameConfig;
+import UIScene from './scenes/UIScene';
+import BattleEarthScene from './scenes/BattleEarthScene';
+import StartScene from './scenes/StartScene';
+import BattleFireScene from './scenes/BattleFireScene';
 
-const DEFAULT_WIDTH = 400;
-const DEFAULT_HEIGHT = 400;
-
+const DEFAULT_WIDTH = window.innerWidth * window.devicePixelRatio;
+const DEFAULT_HEIGHT = window.innerHeight * window.devicePixelRatio;
 
 const config: GameConfig = {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#000000',
     scale: {
         parent: 'phaser-game',
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
+        mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,
+        autoCenter: Phaser.Scale.CENTER_VERTICALLY,
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT
     },
-    scene: [PreloadScene, MainScene],
+    scene: [PreloadScene, StartScene, MainScene, UIScene, BattleEarthScene, BattleFireScene],
     physics: {
         default: 'arcade',
         arcade: {
             debug: false,
-            gravity: { y: 400 }
+            gravity: { y: 0 }
         }
     }
 };

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  
     <meta charset="UTF-8" />
     <meta
             name="viewport"
@@ -11,30 +12,27 @@
     <meta name="theme-color" content="#000000" />
 
     <link rel="manifest" href="./manifest.json" />
-
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="application-name" content="<%= htmlWebpackPlugin.options.gameName %>" />
     <meta name="apple-mobile-web-app-title" content="<%= htmlWebpackPlugin.options.gameName %>" />
     <meta name="msapplication-starturl" content="./" />
 
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icons-192.png" />
+    
+    <base href="/">
+    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/theme/lucario.css">
+    <link rel="stylesheet" href="../src/css/game.css" >
+
+   <!-- <link rel="icon" type="image/png" sizes="192x192" href="./icons/icons-192.png" />
     <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="./icons/icons-192.png" />
 
     <link rel="icon" type="image/png" sizes="512x512" href="./icons/icons-512.png" />
     <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="./icons/icons-512.png" />
 
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" /> -->
 
     <title><%= htmlWebpackPlugin.options.gameName %></title>
-    <style>
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            background-color: #000000;
-        }
-    </style>
 
     <noscript>Please enable javascript to continue using this application.</noscript>
 
@@ -48,6 +46,23 @@
     </script> -->
 </head>
 <body>
-<div id="phaser-game"></div>
+  <div id="phaser-game">
+      
+  </div>
+  <div id="leftScreen">
+      <div id="codeBox">
+        <textarea name="Code" id="code"></textarea>
+      </div>
+      <div id="buttonContainer">
+        <button id="apply">Apply</button>
+        <button id="reset">Reset</button>
+      </div>
+  </div>
+  <div id ="rightScreen">
+    <div id="gameRules">
+      <div id = "book">Hello</div>
+    </div>
+    <div id="console"></div>  
+  </div>
 </body>
 </html>

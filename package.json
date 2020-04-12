@@ -63,6 +63,7 @@
     "workbox-webpack-plugin": "^4.3.1"
   },
   "dependencies": {
+    "codemirror": "^5.52.2",
     "phaser": "^3.22.0"
   }
 }

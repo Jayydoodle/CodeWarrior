@@ -1,0 +1,117 @@
+html, body {
+    margin: 0;
+    background-color: #000000;
+    overflow: hidden;
+}
+#leftScreen{
+  position: relative;
+  left: 0px;
+  bottom: 0px;
+  height: 30%;
+  width: 70%;
+}
+#rightScreen{
+	position: absolute;
+	width: 30%;
+	height: 100%;
+	right: 0px;
+	top: 0px;
+}
+#gameRules{
+	position: absolute;
+  background-color:rgb(49, 46, 46);
+  background-image: url("../assets/dirt-clipart-background-15.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+	font-family: 'Courier New', Courier, monospace;
+	border-bottom: solid white;
+	width: 100%;
+	height: 70%;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+#book{
+  margin-top: 8%;
+  margin-left: 25%;
+  font-size: calc(1.5vh + 1.5vh);
+  overflow-wrap: break-word;
+  overflow-y: scroll;
+  width: 60%;
+  height: 80%;
+}
+#console{
+	position: absolute;
+  bottom: 0px;
+  right: 0px;
+	width: 100%;
+  height: 29.7%;
+  overflow-y: hidden;
+	background-color: #2B3E4F;
+	font-family: 'Courier New', Courier, monospace;
+}
+#codeBox{
+  position: relative;
+  width: 60%;
+  height: 100%;
+  border-top: solid white;
+}
+.CodeMirror {
+  border: 1px solid #eee;
+  height: 100%;
+}
+#buttonContainer{
+  background-color:#2B3E4F;
+  position: absolute;
+  width: 40%;
+  height: 100%;
+  top: 0px;
+  right: 0px;
+  opacity:.985;
+  border-top: solid white;
+  border-left: solid white;
+  border-right: solid white;
+}
+button {
+  position: absolute;
+  background-color: #1E3E59;
+  border: none;
+  color: white;
+  padding: 5% 7%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 90%;
+}
+#apply{
+	position: absolute;
+	right: 55%;
+	top: 50%;
+	border-radius: 10px;
+	border-width: 10px;
+	font-family: 'Courier New', Courier, monospace
+}
+#apply:hover{
+	transition: background-color 0.5s;
+	background-color: green;
+	opacity: .9;
+}
+#reset{
+	position: absolute;
+	left: 55%;
+	top: 50%;
+	border-radius: 10px;
+	border-width: 10px;
+	font-family: 'Courier New', Courier, monospace
+}
+#reset:hover{
+	transition: background-color 0.5s;
+	background-color: red;
+	opacity: .9;
+}
+#phaser-game{
+  position: relative;
+  margin-top: 0px;
+  width: 100%;
+  height: 70%;
+}

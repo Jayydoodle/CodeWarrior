@@ -2,33 +2,32 @@ import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Hero, HeroType } from '../objects/characters/Hero';
 import { Party } from '../utility/Party';
+import { EventType } from '../utility/Enumeration';
 import { GameState } from '../utility/GameState';
 
-export default class MainScene extends Phaser.Scene {
+export default class StartScene extends Phaser.Scene {
 
   public assetDictionary: AssetDictionary;
   private gameState: GameState;
 
   private background: Background;
-  private gameWidth: number;
-  private gameHeight: number;
-  private graphics: Phaser.GameObjects.Graphics;
   private ranger: Hero;
   private warrior: Hero;
   private mage: Hero;
   private party: Party;
 
   constructor() {
-    super({ key: 'MainScene' });
+    super({ key: 'StartScene' });
     this.assetDictionary = new AssetDictionary();
   }
 
   create() {
-    
-    this.gameWidth = this.game.config.width as number;
-    this.gameHeight = this.game.config.height as number;
 
-    this.scene.launch('UIScene');
+    this.background = new Background(this.findAsset("start_scene").key, this, 0, 0);
+
+    this.scene.get('UIScene').events.on(EventType.btnApplyClicked, this.evaluateCode, this);
+
+    this.scene.launch('UIScene', {parentScene: this.scene.key});
   }
 
   update() {
@@ -36,7 +35,7 @@ export default class MainScene extends Phaser.Scene {
 
   }
 
-  createNewParty()
+  private createParty()
   {
       this.ranger = new Hero(0, 0, this, {
         name: "Ranger",
@@ -66,9 +65,25 @@ export default class MainScene extends Phaser.Scene {
       });
 
       this.party = new Party(this.warrior, this.mage, this.ranger);
+      this.gameState = new GameState(this.party);
+
+      this.scene.get('UIScene').children.destroy();
+      this.scene.get('UIScene').events.shutdown();
+      this.scene.start('BattleEarthScene', {gameState: this.gameState});
   }
 
-  findAsset(key: string)
+  private evaluateCode(code)
+  {
+      try {
+          eval(code); 
+      } catch (e) {
+          
+        alert("There is an error with your code, please try again.");
+        return;
+      }
+  }
+
+  private findAsset(key: string)
   {
     return this.assetDictionary.findAssetByKey(key);
   }
