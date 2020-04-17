@@ -3,7 +3,6 @@ import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Enemy } from '../objects/characters/Hero';
 import * as Enum from '../utility/Enumeration';
-import { ArmorType, WeaponType } from '../objects/items/Item';
 import { AlignGrid } from '../utility/AlignGrid';
 import { BattleParty } from '../utility/Party';
 import { BattleManager } from '../utility/BattleManager';
@@ -79,7 +78,9 @@ export default class BattleScene extends Phaser.Scene {
     this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.btnApplyClicked, this.startBattle, this);
     //this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.uiLoaded, this.generateChallenge, this);
 
-    this.turnCountText = this.add.text(100, 100, "", { color:'#ffffff', font: '50pt Arial'});
+    this.turnCountText = this.add.text(0, 0, "", { color:'#000000', font: '80pt Arial'});
+
+    this.alignGrid.placeAtIndex(8, this.turnCountText);
 
     this.scene.get(Enum.Scene.UIScene).scene.restart({parentScene: this.scene.key, isBattleScene: true});
   }

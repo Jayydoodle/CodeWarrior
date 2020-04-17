@@ -1,5 +1,7 @@
-import { CharacterType, Depth, EventType, ObjectScale, HeroType } from "../../utility/Enumeration";
-import { Weapon, Armor, WeaponType, ArmorType } from "../items/Item";
+import { CharacterType, Depth, EventType, 
+         ObjectScale, HeroType, ArmorType, 
+         WeaponType } from "../../utility/Enumeration";
+import { Weapon, Armor } from "../items/Item";
 
 export class Character extends Phaser.Physics.Arcade.Sprite{
 
@@ -34,6 +36,11 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     changeScene(scene: Phaser.Scene)
     {
         this.scene = scene;
+    }
+
+    getWeapon()
+    {
+        return this.weapon;
     }
 
     setInitialPosition()
@@ -88,6 +95,14 @@ export class Hero extends Character {
         this.name = config.name != null
                     ? config.name
                     : this.heroType;
+
+        this.weapon = config.weapon != null
+                    ? config.weapon
+                    : this.weapon;
+        
+        this.armor = config.armor != null
+                    ? config.armor
+                    : this.armor;           
 
         this.hitpoints = config.hitpoints;
         this.imageKey = config.imageKey;
@@ -144,6 +159,8 @@ export type HeroConfig  = {
     name: string,
     heroType: HeroType,
     hitpoints: number,
+    weapon: Weapon | null,
+    armor: Armor | null,
     imageKey: string,
     animationFrames: number,
     animationFrameRate: number

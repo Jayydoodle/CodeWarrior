@@ -1,57 +1,49 @@
-export class Item extends Phaser.GameObjects.Sprite{
+import { ItemType, WeaponType, ArmorType, ElementType } from "../../utility/Enumeration";
+
+export class Item{
 
     displayName: string;
     itemType: ItemType;
     isConsumable: boolean;
+    imageKey: string;
 
-    constructor(scene: Phaser.Scene, displayName: string, type: ItemType, isConsumable: boolean, imageSource: string)
+    constructor(displayName: string, type: ItemType, isConsumable: boolean, imageKey: string)
     {
-        super(scene, 0, 0, imageSource);
         this.displayName = displayName;
         this.itemType = type;
         this.isConsumable = isConsumable;
-
+        this.imageKey = imageKey;
     }
 }
 
 export class Weapon extends Item{
 
     weaponType: WeaponType;
+    attackPower: number;
+    element: ElementType;
 
-    constructor(scene: Phaser.Scene, displayName: string, type: WeaponType, imageSource: string)
+    constructor(displayName: string, type: WeaponType, element: ElementType,  attackPower: number, imageKey: string)
     {
-        super(scene, displayName, ItemType.Weapon, false, imageSource);
+        super(displayName, ItemType.Weapon, false, imageKey);
         this.weaponType = type;
+        this.element = element;
+        this.attackPower = attackPower;
     }
 }
 
 export class Armor extends Item{
 
     armorType: ArmorType;
+    mitigation: number;
+    element: ElementType;
+    elementWeakness: ElementType;
 
-    constructor(scene: Phaser.Scene, displayName: string, type: ArmorType, imageSource: string)
+    constructor(displayName: string, type: ArmorType, mitigation: number, element: ElementType, elementWeakness: ElementType, imageKey: string)
     {
-        super(scene, displayName, ItemType.Armor, false, imageSource);
+        super(displayName, ItemType.Armor, false, imageKey);
         this.armorType = type;
+        this.mitigation = mitigation;
+        this.element = element;
+        this.elementWeakness = elementWeakness;
     }
-}
-
-export enum ItemType{
-
-    Weapon,
-    Armor
-}
-
-export enum WeaponType{
-
-    Melee,
-    Ranged,
-    Magic
-}
-
-export enum ArmorType{
-
-    Heavy,
-    Light,
-    Robe
 }

@@ -12,14 +12,16 @@ export class BattleManager{
     private consoleLogger: ConsoleLogger;
     private turnCount: number = 1;
     private code: string;
+    private functionCalled: boolean;
 
-    private attackOffset: number = 300;
+    private playerAttackOffset: number = 300;
+    private enemyAttackOffset: number = -300;
     private movementSpeed: number = 3000;
     private attackDelay: number = AttackDelay.none;
 
     private battleParty: BattleParty;
     private enemy: Enemy;
-    private currentTarget: Hero;
+    private currentTarget: Character;
     private currentAttacker: Character;
 
     private queue: Queue<Character>;
@@ -51,51 +53,59 @@ export class BattleManager{
 
     update()
     {
-        if(this.enemyIsAttacking()){
-            this.enemy.body.velocity.setTo(0, 0);
-            this.enemy.PlayAttackAnimation();
-        }
-        
-        if(this.warriorIsAttacking()){
-            this.battleParty.warrior.body.velocity.setTo(0, 0);
-            this.battleParty.warrior.PlayAttackAnimation();
+        if(this.currentAttacker != null && this.isMeleeAttacker()){
+            this.currentAttacker.body.velocity.setTo(0, 0);
+            this.currentAttacker.PlayAttackAnimation();
         }
     }
 
     startBattle(code)
     {
         this.code = code;
-        this.currentAttacker = this.queue.dequeue() as Character;
 
-        
+        if(this.currentAttacker == null)
+            this.currentAttacker = this.queue.dequeue() as Character;
+        else
+            return;
+
         this.handleTurn();
     }
 
     handleTurn()
     {
-        if(this.currentAttacker.characterType == CharacterType.player){
+        this.functionCalled = false;
+
+        var isPlayer = this.currentAttacker.characterType == CharacterType.player;
+        
+        if(isPlayer){
+
+            this.currentTarget = this.enemy;
             
             try {
                 eval(this.code); 
             } catch (e) {
                 
               this.consoleLogger.log(this.turnCount, Message.SyntaxError);
-              this.nextTurn();
-              //return;
             }
         }
         else{
             this.determineTarget();
-            this.meleeAttack(this.enemy, this.currentTarget);
+            this.meleeAttack(this.currentAttacker, this.currentTarget);
             this.consoleLogger.logAttack(this.turnCount, this.enemy.name, this.currentTarget.name, "100");
         }
+
+        if(isPlayer && !this.functionCalled)
+        {
+            this.consoleLogger.log(this.turnCount, Message.SyntaxError);
+            this.nextTurn();
+        }
+            
     }
 
     nextTurn()
     {
         var previousAttacker = this.currentAttacker;
         previousAttacker.actedThisTurn = false;
-        this.battleParty.warrior.actedThisTurn = false;
 
         this.currentAttacker = this.queue.dequeue() as Character;
         this.queue.enqueue(previousAttacker);
@@ -112,18 +122,20 @@ export class BattleManager{
         this.currentTarget = this.battleParty.group[random];
     }
 
-    enemyIsAttacking()
+    isMeleeAttacker()
     {
-       return (this.battleParty.warrior.x <= this.enemy.x + this.attackOffset)
-                && this.enemy.isAttacking && !this.enemy.actedThisTurn
+        switch(this.currentAttacker.characterType)
+        {
+            case CharacterType.player:
+                return (this.currentAttacker.x <= this.currentTarget.x + this.playerAttackOffset) 
+                && this.currentAttacker.isAttacking && !this.currentAttacker.actedThisTurn
                 ? true : false;
-    }
-
-    warriorIsAttacking()
-    {
-        return (this.battleParty.warrior.x <= this.enemy.x + this.attackOffset) 
-                && this.battleParty.warrior.isAttacking && !this.battleParty.warrior.actedThisTurn
+            
+            case CharacterType.enemy:
+                return (this.currentAttacker.x >= this.currentTarget.x + this.enemyAttackOffset) 
+                && this.currentAttacker.isAttacking && !this.currentAttacker.actedThisTurn
                 ? true : false;
+        }
     }
 
     getTurnCount(){
@@ -139,9 +151,9 @@ export class BattleManager{
 
     attack(enemy: Enemy)
     {
-        if(enemy == null)
+        if(enemy != this.enemy)
         {
-            this.nextTurn();
+            this.consoleLogger.log(this.turnCount, Message.SyntaxError);
             return;
         }
         
@@ -149,12 +161,13 @@ export class BattleManager{
 
         if(currentHero.heroType == HeroType.Warrior)
         {
-            this.meleeAttack(currentHero, enemy);
+            this.meleeAttack(currentHero, this.currentTarget);
         }
         else{
             currentHero.PlayAttackAnimation();
         }
 
         this.consoleLogger.logAttack(this.turnCount, currentHero.name, enemy.name, "100");
+        this.functionCalled = true;
     }
 }

@@ -4,10 +4,13 @@ import { Hero } from '../objects/characters/Hero';
 import { Party } from '../utility/Party';
 import { EventType, HeroType } from '../utility/Enumeration';
 import { GameState } from '../utility/GameState';
+import { ItemDatabase } from '../objects/items/ItemDatabase';
+import { Weapon } from '../objects/items/Item';
 
 export default class StartScene extends Phaser.Scene {
 
   public assetDictionary: AssetDictionary;
+  public itemDatabase: ItemDatabase;
   private gameState: GameState;
 
   private background: Background;
@@ -15,6 +18,7 @@ export default class StartScene extends Phaser.Scene {
   constructor() {
     super({ key: 'StartScene' });
     this.assetDictionary = new AssetDictionary();
+    this.itemDatabase = new ItemDatabase();
   }
 
   create() {
@@ -26,11 +30,6 @@ export default class StartScene extends Phaser.Scene {
     this.scene.launch('UIScene', {parentScene: this.scene.key});
   }
 
-  update() {
-
-
-  }
-
   createParty(warriorName, mageName, rangerName)
   {
       let warrior = new Hero(0, 0, this, {
@@ -38,6 +37,8 @@ export default class StartScene extends Phaser.Scene {
         imageKey: this.findAsset("warrior_battle").key,
         heroType: HeroType.Warrior,
         hitpoints: 100,
+        weapon: this.findItem("wooden_sword") as Weapon,
+        armor: null,
         animationFrames: this.findAsset("warrior_battle").frames,
         animationFrameRate: 10
       });
@@ -47,6 +48,8 @@ export default class StartScene extends Phaser.Scene {
         imageKey: this.findAsset("mage_battle").key,
         heroType: HeroType.Mage,
         hitpoints: 100,
+        weapon: this.findItem("wooden_staff") as Weapon,
+        armor: null,
         animationFrames: this.findAsset("mage_battle").frames,
         animationFrameRate: 13
       });
@@ -56,6 +59,8 @@ export default class StartScene extends Phaser.Scene {
         imageKey: this.findAsset("ranger_battle").key,
         heroType: HeroType.Ranger,
         hitpoints: 100,
+        weapon: this.findItem("wooden_bow") as Weapon,
+        armor: null,
         animationFrames: this.findAsset("ranger_battle").frames,
         animationFrameRate: 13
       });
@@ -83,5 +88,10 @@ export default class StartScene extends Phaser.Scene {
   findAsset(key: string)
   {
     return this.assetDictionary.findAssetByKey(key);
+  }
+
+  findItem(key: string)
+  {
+    return this.itemDatabase.findItemByKey(key);
   }
 }
