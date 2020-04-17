@@ -1,14 +1,13 @@
 import { GameObjects } from 'phaser';
 import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
-import { Hero, Enemy, HeroConfig, HeroType } from '../objects/characters/Hero';
+import { Enemy } from '../objects/characters/Hero';
 import * as Enum from '../utility/Enumeration';
 import { ArmorType, WeaponType } from '../objects/items/Item';
 import { AlignGrid } from '../utility/AlignGrid';
 import { BattleParty } from '../utility/Party';
 import { BattleManager } from '../utility/BattleManager';
 import { GameState } from '../utility/GameState';
-import { ChallengeManager } from '../utility/ChallengeManager';
 import { BattleConfig } from '../utility/Configuration';
 
 export default class BattleScene extends Phaser.Scene {
@@ -19,10 +18,9 @@ export default class BattleScene extends Phaser.Scene {
   protected background: Background;
   protected alignGrid: AlignGrid;
   protected battleManager: BattleManager;
-  protected challengeManager: ChallengeManager;
   private config: BattleConfig;
 
-  protected timerText: Phaser.GameObjects.Text;
+  protected turnCountText: Phaser.GameObjects.Text;
 
   protected battleParty: BattleParty;
   protected enemy: Enemy;
@@ -77,40 +75,20 @@ export default class BattleScene extends Phaser.Scene {
     this.enemy.setInitialPosition();
     
     this.battleManager = new BattleManager(this, this.battleParty, this.enemy);
-    this.challengeManager = new ChallengeManager();
     
-    this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.btnApplyClicked, this.evaluateAnswer, this);
-    this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.uiLoaded, this.generateChallenge, this);
-    this.challengeManager.emitter.on(Enum.EventType.infoTextUpdated, this.updateInfoText, this);
+    this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.btnApplyClicked, this.startBattle, this);
+    //this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.uiLoaded, this.generateChallenge, this);
 
-    this.timerText = this.add.text(100, 100, "", { color:'#ffffff', font: '50pt Arial'});
+    this.turnCountText = this.add.text(100, 100, "", { color:'#ffffff', font: '50pt Arial'});
 
     this.scene.get(Enum.Scene.UIScene).scene.restart({parentScene: this.scene.key, isBattleScene: true});
-
   }
 
   update() 
   {
-    this.timerText.text = this.battleManager.getElapsedTime();
+    this.turnCountText.text = this.battleManager.getTurnCount().toString();
     this.battleManager.update();
-  }
-
-  protected generateChallenge()
-  {
-    this.challengeManager.generateChallege();
-  }
-
-  protected evaluateAnswer(code)
-  {
-      let correctAnswer: boolean = this.challengeManager.evaluateAnswer(code);
-
-      if(correctAnswer)
-      {
-        this.battleManager.playerAttack();
-        this.challengeManager.generateChallege();
-      }
-
-      this.nextTurn(correctAnswer);
+    this.updateInfoText("Available Actions: this.attack(enemy);\n\nAvailable target: this.enemy");
   }
 
   protected updateInfoText(text)
@@ -118,12 +96,9 @@ export default class BattleScene extends Phaser.Scene {
     this.events.emit(Enum.EventType.infoTextUpdated, text);
   }
 
-  protected nextTurn(correctAnswer)
+  protected startBattle(code)
   {
-      if(correctAnswer)
-        this.events.emit(Enum.EventType.correctAnswer)
-      else
-        this.events.emit(Enum.EventType.turnEnded);
+      this.battleManager.startBattle(code);
   }
 
   protected findAsset(key: string)

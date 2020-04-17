@@ -39,9 +39,14 @@ export class BattleParty extends Party{
     {
         super(warrior, mage, ranger);
         this.emitter = new Phaser.Events.EventEmitter();
-        this.warrior.on(EventType.attacking, this.emitAttackComplete, this);
-        this.mage.on(EventType.attacking, this.emitAttackComplete, this);
-        this.ranger.on(EventType.attacking, this.emitAttackComplete, this);
+
+        this.warrior.on(EventType.attacking, this.emitAttacking, this);
+        this.mage.on(EventType.attacking, this.emitAttacking, this);
+        this.ranger.on(EventType.attacking, this.emitAttacking, this);
+
+        this.warrior.on(EventType.attackComplete, this.emitAttackComplete, this);
+        this.mage.on(EventType.attackComplete, this.emitAttackComplete, this);
+        this.ranger.on(EventType.attackComplete, this.emitAttackComplete, this);
     }
 
     memberIsAttacking()
@@ -56,9 +61,14 @@ export class BattleParty extends Party{
         this.ranger.setInitialPosition();
     }
 
+    emitAttacking()
+    {
+        this.emitter.emit(EventType.attacking)
+    }
+
     emitAttackComplete()
     {
-        this.emitter.emit(EventType.attacking);
+        this.emitter.emit(EventType.playerAttackComplete);
     }
 
     static createFromParty(party: Party)

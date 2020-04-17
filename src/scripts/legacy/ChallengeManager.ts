@@ -1,6 +1,6 @@
 import { AssignmentChallenge, Challenge } from "./Challenge"
 import { EventEmitter } from "events";
-import { EventType } from "./Enumeration";
+import { EventType } from "../utility/Enumeration";
 
 export class ChallengeManager{
 

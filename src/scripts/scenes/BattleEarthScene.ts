@@ -8,7 +8,7 @@ export default class BattleEarthScene extends BattleScene {
       super('BattleEarthScene', {
 
           backgroundAssetKey: "earth_battle",
-          enemyName: "Enemy",
+          enemyName: "Earth",
           enemyAssetKey: "warrior_battle",
           enemyHP: 100,
           enemyPosition: GridPosition.earthEnemy,
@@ -33,24 +33,14 @@ export default class BattleEarthScene extends BattleScene {
       super.update();
     }
 
-    protected generateChallenge()
-    {
-      super.generateChallenge();
-    }
-
-    protected evaluateAnswer(code)
-    {
-      super.evaluateAnswer(code);
-    }
-
     protected updateInfoText(text)
     {
       super.updateInfoText(text);
     }
 
-    protected nextTurn(correctAnswer)
+    protected startBattle(code)
     {
-      super.nextTurn(correctAnswer);
+      super.startBattle(code);
     }
 
     protected findAsset(key: string)

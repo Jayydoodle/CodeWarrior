@@ -1,9 +1,10 @@
-import { Depth, EventType, ObjectScale } from "../../utility/Enumeration";
+import { CharacterType, Depth, EventType, ObjectScale, HeroType } from "../../utility/Enumeration";
 import { Weapon, Armor, WeaponType, ArmorType } from "../items/Item";
 
 export class Character extends Phaser.Physics.Arcade.Sprite{
 
     protected imageKey: string;
+    public characterType: CharacterType;
 
     protected allowedWeaponType: WeaponType;
     protected allowedArmorType: ArmorType;
@@ -12,6 +13,9 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     protected armor: Armor;
 
     public isAttacking: boolean = false;
+    public actedThisTurn: boolean = false;
+    public priority: number = 0;
+
     protected initialX: number;
     protected initialY: number;
     protected animationFrames: number;
@@ -47,36 +51,44 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
     PlayAttackAnimation()
     {
+        if(this.actedThisTurn)
+            return;
+            
         this.anims.animationManager.create(
         {
             key: this.name,
             frames: this.anims.animationManager.generateFrameNumbers(this.imageKey, { start: 0, end: this.animationFrames }),
             frameRate: this.animationFrameRate,
-            repeat: 1
-        
+            repeat: 0
         });
 
         this.setDepth(Depth.attacker);
         
         this.emit(EventType.attacking);
+        this.actedThisTurn = true;
 
         this.play(this.name, true).once("animationcomplete-"+this.name, () =>
         {
             this.setFrame(0);
             this.resetPosition();
             this.isAttacking = false;
+            this.emit(EventType.attackComplete, this);
         });
     }
 }
 export class Hero extends Character {
 
-    private heroType: HeroType;
+    public heroType: HeroType;
 
     constructor(x: number, y: number, scene: Phaser.Scene, config: HeroConfig) {
         super(scene, x, y, config.imageKey);
 
-        this.name = config.name;
+        this.characterType = CharacterType.player;
         this.heroType = config.heroType;
+        this.name = config.name != null
+                    ? config.name
+                    : this.heroType;
+
         this.hitpoints = config.hitpoints;
         this.imageKey = config.imageKey;
         this.animationFrames = config.animationFrames;
@@ -106,6 +118,7 @@ export class Hero extends Character {
             default:
                 break;
         }
+        
     }
 }
 
@@ -115,6 +128,7 @@ export class Enemy extends Character{
         super(scene, x, y, config.imageKey);
 
         this.name = config.name;
+        this.characterType = CharacterType.enemy;
         this.hitpoints = config.hitpoints;
         this.imageKey = config.imageKey;
         this.animationFrames = config.animationFrames;
@@ -142,10 +156,4 @@ export type EnemyConfig = {
     imageKey: string,
     animationFrames: number,
     animationFrameRate: number
-}
-
-export enum HeroType{
-    Warrior,
-    Mage,
-    Ranger
 }

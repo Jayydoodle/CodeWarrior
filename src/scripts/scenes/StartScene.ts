@@ -1,8 +1,8 @@
 import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
-import { Hero, HeroType } from '../objects/characters/Hero';
+import { Hero } from '../objects/characters/Hero';
 import { Party } from '../utility/Party';
-import { EventType } from '../utility/Enumeration';
+import { EventType, HeroType } from '../utility/Enumeration';
 import { GameState } from '../utility/GameState';
 
 export default class StartScene extends Phaser.Scene {
@@ -11,10 +11,6 @@ export default class StartScene extends Phaser.Scene {
   private gameState: GameState;
 
   private background: Background;
-  private ranger: Hero;
-  private warrior: Hero;
-  private mage: Hero;
-  private party: Party;
 
   constructor() {
     super({ key: 'StartScene' });
@@ -35,19 +31,10 @@ export default class StartScene extends Phaser.Scene {
 
   }
 
-  private createParty()
+  createParty(warriorName, mageName, rangerName)
   {
-      this.ranger = new Hero(0, 0, this, {
-        name: "Ranger",
-        imageKey: this.findAsset("ranger_battle").key,
-        heroType: HeroType.Ranger,
-        hitpoints: 100,
-        animationFrames: this.findAsset("ranger_battle").frames,
-        animationFrameRate: 12
-      });
-
-      this.warrior = new Hero(0, 0, this, {
-        name: "Warrior",
+      let warrior = new Hero(0, 0, this, {
+        name: warriorName,
         imageKey: this.findAsset("warrior_battle").key,
         heroType: HeroType.Warrior,
         hitpoints: 100,
@@ -55,24 +42,34 @@ export default class StartScene extends Phaser.Scene {
         animationFrameRate: 10
       });
 
-      this.mage = new Hero(0, 0, this, {
-        name: "Mage",
+      let mage = new Hero(0, 0, this, {
+        name: mageName,
         imageKey: this.findAsset("mage_battle").key,
         heroType: HeroType.Mage,
         hitpoints: 100,
         animationFrames: this.findAsset("mage_battle").frames,
-        animationFrameRate: 12
+        animationFrameRate: 13
       });
 
-      this.party = new Party(this.warrior, this.mage, this.ranger);
-      this.gameState = new GameState(this.party);
+      let ranger = new Hero(0, 0, this, {
+        name: rangerName,
+        imageKey: this.findAsset("ranger_battle").key,
+        heroType: HeroType.Ranger,
+        hitpoints: 100,
+        animationFrames: this.findAsset("ranger_battle").frames,
+        animationFrameRate: 13
+      });
+
+      let party = new Party(warrior, mage, ranger);
+      this.gameState = new GameState(party);
 
       this.scene.get('UIScene').children.destroy();
       this.scene.get('UIScene').events.shutdown();
+
       this.scene.start('BattleEarthScene', {gameState: this.gameState});
   }
 
-  private evaluateCode(code)
+  evaluateCode(code)
   {
       try {
           eval(code); 
@@ -83,7 +80,7 @@ export default class StartScene extends Phaser.Scene {
       }
   }
 
-  private findAsset(key: string)
+  findAsset(key: string)
   {
     return this.assetDictionary.findAssetByKey(key);
   }

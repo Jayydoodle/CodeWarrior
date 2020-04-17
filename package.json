@@ -64,6 +64,8 @@
   },
   "dependencies": {
     "codemirror": "^5.52.2",
-    "phaser": "^3.22.0"
+    "phaser": "^3.22.0",
+    "queue-typescript": "^1.0.1",
+    "typedpriorityqueue": "^1.0.1"
   }
 }

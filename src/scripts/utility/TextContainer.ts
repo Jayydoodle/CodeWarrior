@@ -11,4 +11,12 @@ export class TextContainer
     {
         this.htmlElement.innerText = text;
     }
+
+    addText(text:string)
+    {
+        var innerDiv = document.createElement('div') as HTMLDivElement;
+        this.htmlElement.appendChild(innerDiv);
+        innerDiv.innerHTML = text;
+        this.htmlElement.scrollTop += this.htmlElement.lastElementChild?.scrollHeight as number;
+    }
 }

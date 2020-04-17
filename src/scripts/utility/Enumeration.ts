@@ -8,8 +8,17 @@ export enum AssetType{
 
 export enum AttackDelay
 {
-    veryFast = 5000,
-    fast = 10000,
+    none = 0,
+    veryFast = 400,
+    fast = 800,
+    slow = 1200,
+    verySlow = 1600
+}
+
+export enum CharacterType
+{
+    enemy,
+    player
 }
 
 export enum Depth
@@ -27,6 +36,7 @@ export enum EventType
     btnApplyClicked = "btnApplyClicked",
     correctAnswer = "correctAnswer",
     infoTextUpdated = "infoTextUpdated",
+    playerAttackComplete = "playerAttackComplete",
     turnEnded = "turnEnded",
     uiLoaded = "uiLoaded"
 }
@@ -37,6 +47,17 @@ export enum GridPosition
     earthMiddle = 57,
     earthBottom = 68,
     earthEnemy = 51
+}
+
+export enum HeroType{
+    Warrior = "warrior",
+    Mage = "mage",
+    Ranger = "ranger"
+}
+
+export enum Message
+{
+    SyntaxError = "There is an error with your code, please try again.",
 }
 
 export enum ObjectScale
