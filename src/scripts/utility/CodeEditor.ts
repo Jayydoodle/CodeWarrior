@@ -2,6 +2,8 @@ import * as CodeMirror from '../../../node_modules/codemirror';
 import '../../../node_modules/codemirror/lib/codemirror.js';
 import '../../../node_modules/codemirror/addon/edit/closebrackets.js';
 import '../../../node_modules/codemirror/mode/javascript/javascript.js';
+require('../../../node_modules/codemirror/lib/codemirror.css');
+require('../../../node_modules/codemirror/theme/lucario.css');
 
 export class CodeEditor
 {

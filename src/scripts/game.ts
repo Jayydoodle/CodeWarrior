@@ -6,6 +6,7 @@ import UIScene from './scenes/UIScene';
 import BattleEarthScene from './scenes/BattleEarthScene';
 import StartScene from './scenes/StartScene';
 import BattleFireScene from './scenes/BattleFireScene';
+require('../css/game.css');
 
 const DEFAULT_WIDTH = window.innerWidth * window.devicePixelRatio;
 const DEFAULT_HEIGHT = window.innerHeight * window.devicePixelRatio;

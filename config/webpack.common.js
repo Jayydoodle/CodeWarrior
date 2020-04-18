@@ -12,10 +12,17 @@ module.exports = {
     chunkFilename: '[name].chunk.js'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js', '.css']
   },
   module: {
-    rules: [{ test: /\.tsx?$/, include: path.join(__dirname, '../src'), loader: 'ts-loader' }]
+    rules: [
+      { test: /\.tsx?$/, include: path.join(__dirname, '../src'), use: 'ts-loader' },
+      { test: /\.css$/, include: [path.join(__dirname, '../src/css'), 
+        path.join(__dirname, '../node_modules/codemirror/lib'),
+        path.join(__dirname, '../node_modules/codemirror/theme')], 
+        use: ['style-loader', 'css-loader'] },
+      //{ test: /\.png$/, use: 'file-loader' }
+    ]
   },
   optimization: {
     splitChunks: {
