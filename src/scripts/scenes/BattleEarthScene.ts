@@ -1,5 +1,5 @@
 import BattleScene from "./BattleScene";
-import { GridPosition } from "../utility/Enumeration";
+import { GridPosition, Value } from "../utility/Enumeration";
 
 export default class BattleEarthScene extends BattleScene {
 
@@ -8,13 +8,38 @@ export default class BattleEarthScene extends BattleScene {
       super('BattleEarthScene', {
 
           backgroundAssetKey: "earth_battle",
-          enemyName: "Earth",
-          enemyAssetKey: "warrior_battle",
-          enemyHP: 100,
-          enemyPosition: GridPosition.earthEnemy,
-          rangerPosition: GridPosition.earthTop,
-          warriorPosition: GridPosition.earthMiddle,
-          magePosition: GridPosition.earthBottom
+          enemyConfigs: [
+            {
+              name: "Earth",
+              hitpoints: Value.StartingPlayerHealth,
+              imageKey: "warrior",
+              battleImageKey: "warrior_battle",
+              deathImageKey: "warrior_death",
+              weaponName: "wooden_sword",
+              armorName: "warrior_clothes",
+              gridPosition: GridPosition.enemyTop
+            },
+            {
+              name: "Earth1",
+              hitpoints: Value.StartingPlayerHealth,
+              imageKey: "warrior",
+              battleImageKey: "warrior_battle",
+              deathImageKey: "warrior_death",
+              weaponName: "wooden_sword",
+              armorName: "warrior_clothes",
+              gridPosition: GridPosition.enemyMiddle
+            },
+            {
+              name: "Earth2",
+              hitpoints: Value.StartingPlayerHealth,
+              imageKey: "warrior",
+              battleImageKey: "warrior_battle",
+              deathImageKey: "warrior_death",
+              weaponName: "wooden_sword",
+              armorName: "warrior_clothes",
+              gridPosition: GridPosition.enemyBottom
+            },
+          ]
       });
     }
 

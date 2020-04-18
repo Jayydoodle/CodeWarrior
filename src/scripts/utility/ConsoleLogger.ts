@@ -8,15 +8,20 @@ export class ConsoleLogger{
         this.textContainer = new TextContainer("console");
     }
 
-    log(turn: number, message: string)
+    log(message: string)
     {
-        this.textContainer.addText(turn + ": " + message + "<br></br>");
+        this.textContainer.addText(message + "<br></br>");
     }
 
-    logAttack(turn: number, attacker: string, target: string, damage: string)
+    logTurn(turn: number, message: string)
+    {
+        this.textContainer.addText(turn + ": " + message);
+    }
+
+    logAttack(turn: number, attacker: string, target: string, damage: number)
     {
         let message = attacker + " attacked " + target + " for " + damage + " damage";
         
-        this.log(turn, message);
+        this.logTurn(turn, message);
     }
 }

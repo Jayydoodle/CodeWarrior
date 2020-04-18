@@ -8,13 +8,7 @@ export default class BattleFireScene extends BattleScene {
       super('BattleFireScene', {
 
           backgroundAssetKey: "fire_battle",
-          enemyName: "Enemy",
-          enemyAssetKey: "warrior_battle",
-          enemyHP: 100,
-          enemyPosition: GridPosition.earthEnemy,
-          rangerPosition: GridPosition.earthTop,
-          warriorPosition: GridPosition.earthMiddle,
-          magePosition: GridPosition.earthBottom
+          enemyConfigs: []
       });
     }
 

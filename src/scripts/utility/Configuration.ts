@@ -1,5 +1,4 @@
-import { Enemy } from "../objects/characters/Hero"
-import { GridPosition } from "./Enumeration"
+import { EnemyConfig } from "../objects/characters/Hero"
 
 export type AlignConfig = {
 
@@ -14,11 +13,5 @@ export type AlignConfig = {
 export type BattleConfig = 
 {
     backgroundAssetKey: string,
-    enemyName: string,
-    enemyAssetKey: string,
-    enemyHP: number,
-    enemyPosition: GridPosition,
-    rangerPosition: GridPosition,
-    warriorPosition: GridPosition,
-    magePosition: GridPosition
+    enemyConfigs: EnemyConfig[]
 }

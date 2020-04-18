@@ -54,6 +54,13 @@ export enum WeaponType{
     Magic
 }
 
+export enum Value{
+
+    DeathFrames = 6,
+    DeathFrameRate = 10,
+    StartingPlayerHealth = 100
+}
+
 //#endregion
 
 //#region Utility
@@ -88,10 +95,12 @@ export enum EventType
 
 export enum GridPosition
 {
-    earthTop = 46,
-    earthMiddle = 57,
-    earthBottom = 68,
-    earthEnemy = 51
+    playerTop = 47,
+    playerMiddle = 58,
+    playerBottom = 69,
+    enemyTop = 42,
+    enemyMiddle = 51,
+    enemyBottom = 60
 }
 
 export enum Message
@@ -107,6 +116,12 @@ export enum ObjectScale
 export enum Scene
 {
     UIScene = 'UIScene'
+}
+
+export enum SceneType
+{
+    BattleScene,
+    WorldScene
 }
 
 //#endregion

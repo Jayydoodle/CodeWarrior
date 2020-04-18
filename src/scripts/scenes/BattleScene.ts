@@ -4,15 +4,19 @@ import { Background } from '../objects/world_space/background';
 import { Enemy } from '../objects/characters/Hero';
 import * as Enum from '../utility/Enumeration';
 import { AlignGrid } from '../utility/AlignGrid';
-import { BattleParty } from '../utility/Party';
+import { BattleParty, EnemyParty } from '../utility/Party';
 import { BattleManager } from '../utility/BattleManager';
 import { GameState } from '../utility/GameState';
 import { BattleConfig } from '../utility/Configuration';
+import { ItemDatabase } from '../objects/items/ItemDatabase';
+import { Weapon, Armor } from '../objects/items/Item';
 
 export default class BattleScene extends Phaser.Scene {
 
   public assetDictionary: AssetDictionary;
+  public itemDatabase: ItemDatabase;
   protected gameState: GameState;
+  protected sceneType: Enum.SceneType = Enum.SceneType.BattleScene;
 
   protected background: Background;
   protected alignGrid: AlignGrid;
@@ -22,14 +26,14 @@ export default class BattleScene extends Phaser.Scene {
   protected turnCountText: Phaser.GameObjects.Text;
 
   protected battleParty: BattleParty;
-  protected enemy: Enemy;
-
+  protected enemyParty: EnemyParty;
   protected currentTurn: number = 0;
   
   constructor(sceneKey: string, config: BattleConfig) {
     super({ key: sceneKey });
     this.config = config;
     this.assetDictionary = new AssetDictionary();
+    this.itemDatabase = new ItemDatabase();
   }
 
   init(data)
@@ -52,37 +56,51 @@ export default class BattleScene extends Phaser.Scene {
       showNumbers: false
     });
 
-    this.enemy = new Enemy(0, 0, this, {
-      name: this.config.enemyName,
-      imageKey: this.findAsset(this.config.enemyAssetKey).key,
-      hitpoints: 100,
-      animationFrames: this.findAsset(this.config.enemyAssetKey).frames,
-      animationFrameRate: 12
+    let enemies:Enemy[] = [];
+
+    this.config.enemyConfigs.forEach(config => {
+
+        enemies.push(new Enemy(0, 0, this, {
+          name: config.name,
+          heroType: Enum.HeroType.Warrior,
+          hitpoints: config.hitpoints, 
+          weapon: this.findItem(config.weaponName) as Weapon,
+          armor: this.findItem(config.armorName) as Armor,
+          imageKey: "",
+          battleImageKey: this.findAsset(config.battleImageKey).key,
+          deathImageKey: this.findAsset(config.deathImageKey).key,
+          battleAnimationFrames: this.findAsset(config.battleImageKey).frames,
+          battleAnimationFrameRate: 10,
+          gridPosition: config.gridPosition
+        }));
     });
     
-    this.battleParty = BattleParty.createFromParty(this.gameState.party);
+    this.battleParty = this.gameState.party;
+    this.enemyParty = new EnemyParty(enemies);
 
-    this.battleParty.addToScene();
-    this.enemy.addToScene();
+    this.battleParty.addToScene(Enum.SceneType.BattleScene);
+    this.enemyParty.addToScene(Enum.SceneType.BattleScene);
 
-    this.alignGrid.placeAtIndex(this.config.rangerPosition, this.battleParty.ranger);
-    this.alignGrid.placeAtIndex(this.config.warriorPosition, this.battleParty.warrior);
-    this.alignGrid.placeAtIndex(this.config.magePosition, this.battleParty.mage);
-    this.alignGrid.placeAtIndex(this.config.enemyPosition, this.enemy);
+    this.battleParty.group.forEach(member => {
+      this.alignGrid.placeAtIndex(member.gridPosition, member);
+    });
+
+    this.enemyParty.group.forEach(member => {
+      this.alignGrid.placeAtIndex(member.gridPosition, member);
+    });
     
     this.battleParty.setInitialPositions();
-    this.enemy.setInitialPosition();
+    this.enemyParty.setInitialPositions();
     
-    this.battleManager = new BattleManager(this, this.battleParty, this.enemy);
+    this.battleManager = new BattleManager(this, this.battleParty, this.enemyParty);
     
     this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.btnApplyClicked, this.startBattle, this);
-    //this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.uiLoaded, this.generateChallenge, this);
 
     this.turnCountText = this.add.text(0, 0, "", { color:'#000000', font: '80pt Arial'});
 
     this.alignGrid.placeAtIndex(8, this.turnCountText);
 
-    this.scene.get(Enum.Scene.UIScene).scene.restart({parentScene: this.scene.key, isBattleScene: true});
+    this.scene.get(Enum.Scene.UIScene).scene.restart({parentScene: this.scene.key, sceneType: this.sceneType});
   }
 
   update() 
@@ -105,5 +123,10 @@ export default class BattleScene extends Phaser.Scene {
   protected findAsset(key: string)
   {
     return this.assetDictionary.findAssetByKey(key);
+  }
+
+  protected findItem(key: string)
+  {
+    return this.itemDatabase.findItemByKey(key);
   }
 }

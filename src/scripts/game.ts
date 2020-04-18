@@ -20,7 +20,7 @@ const config: GameConfig = {
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT
     },
-    scene: [PreloadScene, StartScene, MainScene, UIScene, BattleEarthScene, BattleFireScene],
+    scene: [PreloadScene, StartScene, MainScene, UIScene, BattleEarthScene],
     physics: {
         default: 'arcade',
         arcade: {

@@ -32,15 +32,15 @@ export class ItemDatabase{
         //#region: Armor
 
             //#region: Heavy
-            let warriorClothes = new Armor("Warrior Clothes", ArmorType.Heavy, 0, ElementType.None, ElementType.None, "warrior_clothes");
+            let warriorClothes = new Armor("Warrior Clothes", ArmorType.Heavy, 20, ElementType.None, ElementType.None, "warrior_clothes");
             //#endregion
 
             //#region: Robe
-
+            let mageClothes = new Armor("Mage Clothes", ArmorType.Robe, 20, ElementType.None, ElementType.None, "mage_clothes");
             //#endregion
 
             //#region: Light
-
+            let rangerClothes = new Armor("Ranger Clothes", ArmorType.Robe, 20, ElementType.None, ElementType.None, "ranger_clothes");
             //#endregion
 
         //#endregion
@@ -49,6 +49,8 @@ export class ItemDatabase{
         this.add(woodenStaff);
         this.add(woodenBow);
         this.add(warriorClothes);
+        this.add(mageClothes);
+        this.add(rangerClothes);
     }
     add(item: Item)
     {

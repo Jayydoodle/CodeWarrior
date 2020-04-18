@@ -1,27 +1,19 @@
-import { Hero } from "../objects/characters/Hero";
-import { EventType } from "./Enumeration";
+import { Hero, Enemy, Character } from "../objects/characters/Hero";
+import { EventType, SceneType } from "./Enumeration";
 
 export class Party{
 
-    group: Hero[] = [];
-    warrior: Hero;
-    mage: Hero;
-    ranger: Hero;
+    public emitter: Phaser.Events.EventEmitter;
+    group: Character[] = [];
 
-    constructor(warrior: Hero, mage: Hero, ranger: Hero)
+    constructor()
     {
-        this.warrior = warrior;
-        this.mage = mage;
-        this.ranger = ranger;
-
-        this.group[0] = this.warrior;
-        this.group[1] = this.mage;
-        this.group[2] = this.ranger;
+        this.emitter = new Phaser.Events.EventEmitter();
     }
 
-    addToScene(){
+    addToScene(sceneType: SceneType){
         this.group.forEach(member =>{
-            member.addToScene();
+            member.addToScene(sceneType);
         });
     }
 
@@ -30,35 +22,35 @@ export class Party{
             member.changeScene(scene);
         })
     }
-}
-export class BattleParty extends Party{
-
-    public emitter: Phaser.Events.EventEmitter;
-
-    constructor(warrior: Hero, mage: Hero, ranger: Hero)
-    {
-        super(warrior, mage, ranger);
-        this.emitter = new Phaser.Events.EventEmitter();
-
-        this.warrior.on(EventType.attacking, this.emitAttacking, this);
-        this.mage.on(EventType.attacking, this.emitAttacking, this);
-        this.ranger.on(EventType.attacking, this.emitAttacking, this);
-
-        this.warrior.on(EventType.attackComplete, this.emitAttackComplete, this);
-        this.mage.on(EventType.attackComplete, this.emitAttackComplete, this);
-        this.ranger.on(EventType.attackComplete, this.emitAttackComplete, this);
-    }
 
     memberIsAttacking()
     {
-        return this.warrior.isAttacking || this.mage.isAttacking || this.ranger.isAttacking;
+        this.group.forEach( member => {
+
+            if(member.isAttacking) { return true; }
+        });
+
+        return false;
+    }
+
+    hasBeenDefeated()
+    {
+        let hasBeenDefeated:boolean = true;
+
+        this.group.forEach( member => {
+
+            if(member.isAlive) { hasBeenDefeated = false; }
+        });
+
+        return hasBeenDefeated;
     }
 
     setInitialPositions()
     {
-        this.warrior.setInitialPosition();
-        this.mage.setInitialPosition();
-        this.ranger.setInitialPosition();
+        this.group.forEach( member => {
+
+            member.setInitialPosition();
+        });
     }
 
     emitAttacking()
@@ -68,13 +60,47 @@ export class BattleParty extends Party{
 
     emitAttackComplete()
     {
-        this.emitter.emit(EventType.playerAttackComplete);
+        this.emitter.emit(EventType.attackComplete);
     }
+}
+export class BattleParty extends Party{
 
-    static createFromParty(party: Party)
+    warrior: Hero;
+    mage: Hero;
+    ranger: Hero;
+
+    constructor(warrior: Hero, mage: Hero, ranger: Hero)
     {
-        return new BattleParty(party.warrior, party.mage, party.ranger);
+        super();
+
+        this.group[0] = this.warrior = warrior;
+        this.group[1] = this.mage = mage;
+        this.group[2] = this.ranger = ranger;
+
+        this.warrior.on(EventType.attacking, this.emitAttacking, this);
+        this.mage.on(EventType.attacking, this.emitAttacking, this);
+        this.ranger.on(EventType.attacking, this.emitAttacking, this);
+
+        this.warrior.on(EventType.attackComplete, this.emitAttackComplete, this);
+        this.mage.on(EventType.attackComplete, this.emitAttackComplete, this);
+        this.ranger.on(EventType.attackComplete, this.emitAttackComplete, this);
     }
+}
 
+export class EnemyParty extends Party{
 
+    public emitter: Phaser.Events.EventEmitter;
+
+    constructor(enemies: Enemy[])
+    {
+        super();
+        this.emitter = new Phaser.Events.EventEmitter();
+
+        this.group = enemies;
+
+        this.group.forEach(member =>{
+            member.on(EventType.attacking, this.emitAttacking, this);
+            member.on(EventType.attackComplete, this.emitAttackComplete, this);
+        });
+    }
 }

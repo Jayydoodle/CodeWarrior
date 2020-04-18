@@ -1,10 +1,10 @@
-import { Party } from "./Party";
+import { BattleParty } from "./Party";
 
 export class GameState{
 
-    party: Party;
+    party: BattleParty;
 
-    constructor(party: Party)
+    constructor(party: BattleParty)
     {
         this.party = party;
     }

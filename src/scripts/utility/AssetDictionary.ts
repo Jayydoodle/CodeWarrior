@@ -18,7 +18,8 @@ export class AssetDictionary{
         //#region: Sprites
         let mageBattleSprite = new Asset("mage_battle", "assets/sprites/mage_battle.png", [192, 100], 8, AssetType.Sprite, false);
         let rangerBattleSprite = new Asset("ranger_battle", "assets/sprites/ranger_battle.png",[64, 74], 13, AssetType.Sprite, false);
-        let warriorBattleSprite = new Asset("warrior_battle", "assets/sprites/warrior_battle2.png", [195, 100], 6, AssetType.Sprite, false);
+        let warriorBattleSprite = new Asset("warrior_battle", "assets/sprites/warrior_battle.png", [195, 100], 6, AssetType.Sprite, false);
+        let warriorDeathSprite = new Asset("warrior_death", "assets/sprites/warrior_death.png", [64, 90], 6, AssetType.Sprite, false);
         //#endregion
 
         //#region: Add Background Images
@@ -32,6 +33,7 @@ export class AssetDictionary{
         this.add(mageBattleSprite);
         this.add(rangerBattleSprite);
         this.add(warriorBattleSprite);
+        this.add(warriorDeathSprite);
         //#endregion
     }
 

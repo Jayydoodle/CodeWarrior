@@ -24,7 +24,7 @@ export default class UIScene extends Phaser.Scene {
   {
     this.scene.bringToTop();
     this.parentScene = data.parentScene;
-    this.isBattleScene = data.isBattleScene;
+    this.isBattleScene = data.sceneType == Enum.SceneType.BattleScene;
   }
 
   create() {
@@ -41,6 +41,7 @@ export default class UIScene extends Phaser.Scene {
       this.scene.get(this.parentScene).events.on(Enum.EventType.turnEnded, this.togglePlayerTurn, this);
       this.scene.get(this.parentScene).events.on(Enum.EventType.correctAnswer, this.resetCodeEditor, this);
       this.isPlayerTurn = true;
+      this.codeEditor.editor.setValue("this.attack(\"Earth\");");
     }
     else
       this.codeEditor.editor.setValue("this.createParty();");
