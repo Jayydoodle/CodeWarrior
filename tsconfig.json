@@ -6,7 +6,6 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "allowUnreachableCode": false,
-    "allowJs": true,
     "sourceMap": true,
     "strictPropertyInitialization": false,
     "lib": ["dom", "es5", "esnext", "scripthost"]

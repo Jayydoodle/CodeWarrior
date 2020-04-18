@@ -2,7 +2,7 @@
   "name": "educational-game-project-team-12-jason-and-shabir",
   "version": "0.0.2",
   "description": "Fight monsters with code",
-  "homepage": "https://github.com/acbart/educational-game-project-team-12-jason-and-shabir#readme",
+  "homepage": "https://github.com/UD-CISC374/educational-game-project-team-12-jason-and-shabir#readme",
   "main": "index.js",
   "game": {
     "url": "educational-game-project-team-12-jason-and-shabir",
@@ -10,8 +10,8 @@
     "name": "Code Warrior"
   },
   "author": {
-    "name": "Jason Allen",
-    "url": "https://github.com/jayydoodle"
+    "name": "Austin Cory Bart",
+    "url": "https://github.com/acbart"
   },
   "repository": {
     "type": "git",

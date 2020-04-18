@@ -12,7 +12,7 @@ export class AssetDictionary{
         let backGroundImage = new Asset("background", "assets/backgrounds/map.png", [1280, 512], 0, AssetType.Image, false);
         let earthBackground = new Asset("earth_battle", "assets/backgrounds/earth.jpg", [640, 440], 0, AssetType.Image, false);
         let fireBackground = new Asset("fire_battle", "assets/backgrounds/fire.jpg", [640, 440], 0, AssetType.Image, false);
-        let startSceneBackground = new Asset("start_scene", "../../assets/start_scene.jpg", [1200,720], 0, AssetType.Image, false);
+        let startSceneBackground = new Asset("start_scene", "assets/start_scene.jpg", [1200,720], 0, AssetType.Image, false);
         //#endregion
 
         //#region: Sprites
