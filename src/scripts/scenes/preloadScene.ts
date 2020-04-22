@@ -31,11 +31,11 @@ export default class PreloadScene extends Phaser.Scene {
 
       if(asset.type == AssetType.Image)
       {
-        this.load.image(asset.key, asset.image);
+        this.load.image(asset.key, asset.path);
       }
       else if(asset.type == AssetType.Sprite)
       {
-        this.load.spritesheet(asset.key, asset.image, { 
+        this.load.spritesheet(asset.key, asset.path, { 
     
         frameWidth: asset.width,
         frameHeight: asset.height
@@ -43,7 +43,11 @@ export default class PreloadScene extends Phaser.Scene {
       }
       else if(asset.type == AssetType.BitmapFont)
       {
-        this.load.bitmapFont(asset.key, asset.image, asset.getFontData());
+        this.load.bitmapFont(asset.key, asset.path, asset.getFontData());
+      }
+      else if(asset.type == AssetType.Text)
+      {
+        this.load.text(asset.key, asset.path);
       }
   }
 }

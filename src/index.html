@@ -18,6 +18,9 @@
     <meta name="apple-mobile-web-app-title" content="<%= htmlWebpackPlugin.options.gameName %>" />
     <meta name="msapplication-starturl" content="./" />
 
+    <span style="font-family:'Aniron'"></span>
+    <span style="font-family:'Aniron'"></span>
+
     <link rel="icon" type="image/png" sizes="192x192" href="./icons/icons-192.png" />
     <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="./icons/icons-192.png" />
 
@@ -40,12 +43,20 @@
     </script> -->
 
     <style>
+      @font-face {
+        font-family: "Aniron";
+        src: url(../assets/font/aniron/anirm___.ttf) format("truetype");
+      }
+      @font-face {
+        font-family: "FontleroyBrownNF";
+        src: url("./assets/font/fontleroybrown/FontleroyBrownNF.ttf") format("truetype");
+      }
       #gameRules{
         position: absolute;
         background-color:rgb(49, 46, 46);
-        background-image: url("assets/dirt-clipart-background-15.png");
-        background-size: cover;
-        background-repeat: no-repeat;
+        background-image: url("./assets/ui/dirt-clipart-background-15.png"), url("./assets/ui/wood.jpg");
+        background-size: cover, auto;
+        background-repeat: no-repeat, repeat;
         font-family: 'Courier New', Courier, monospace;
         border-bottom: solid white;
         width: 100%;
@@ -69,7 +80,7 @@
   </div>
   <div id ="rightScreen">
     <div id="gameRules">
-      <div id = "book">Hello</div>
+      <div id = "book"></div>
     </div>
     <div id="console"></div>  
   </div>

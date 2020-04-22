@@ -15,3 +15,10 @@ export type BattleConfig =
     backgroundAssetKey: string,
     enemyConfigs: EnemyConfig[]
 }
+
+export type HudConfig = {
+
+    warriorName: string,
+    mageName: string,
+    rangerName: string
+}

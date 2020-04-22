@@ -17,7 +17,7 @@ export class ChallengeManager{
         let newChallenge = new AssignmentChallenge(1);
         
         this.challenge = newChallenge;
-        this.emitter.emit(EventType.infoTextUpdated, this.challenge.infoText);
+        this.emitter.emit(EventType.InfoTextUpdated, this.challenge.infoText);
     }
 
     public evaluateAnswer(code)

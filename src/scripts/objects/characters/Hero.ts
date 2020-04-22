@@ -1,12 +1,14 @@
 import { CharacterType, Depth, EventType, 
          ObjectScale, HeroType, ArmorType, 
-         WeaponType, GridPosition, SceneType, Value} from "../../utility/Enumeration";
+         WeaponType, GridPosition, SceneType, Value, ElementType} from "../../utility/Enumeration";
 import { Weapon, Armor } from "../items/Item";
+import { Spell } from "../spells_and_abilities/Spell";
 
 export class Character extends Phaser.Physics.Arcade.Sprite{
 
     protected imageKey: string;
     protected battleImageKey: string;
+    protected castImageKey: string;
     protected deathImageKey: string;
     public characterType: CharacterType;
 
@@ -15,15 +17,17 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     protected hitpoints: number;
     protected weapon: Weapon;
     protected armor: Armor;
+    protected spellBook: Map<string, Spell>
 
     public isAttacking: boolean = false;
     public actedThisTurn: boolean = false;
     public isAlive: boolean = true;
     public priority: number = 0;
-    public gridPosition: GridPosition;
 
     protected initialX: number;
     protected initialY: number;
+    protected castEffectOffset;
+    public gridPosition: GridPosition;
     protected animationFrames: number;
     protected animationFrameRate: number;
     protected battleAnimationFrames: number;
@@ -33,6 +37,8 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
     constructor(scene: Phaser.Scene, x: number, y: number, imageKey: string){
         super(scene, x, y, imageKey);
+        this.spellBook = new Map<string, Spell>();
+
     }
 
     addToScene(sceneType: SceneType)
@@ -58,14 +64,37 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     resetPosition()
     {
         this.x = this.initialX;
-        this.y= this.initialY;
-        this.setDepth(Depth.characterSprite);
+        this.y = this.initialY;
+        this.setDepth(Depth.CharacterSprite);
+    }
+
+    learnSpell(spell: Spell)
+    {
+        this.spellBook.set(spell.name, spell);
+    }
+
+    cast(spellName: string, target: Character)
+    {
+        let spell:Spell | undefined = this.spellBook.get(spellName);
+
+        if(spell == undefined)
+            throw "Spell "+ "'" +spellName+ "'" +" Undefined";
+        else{
+            this.playCastAnimation(spell, target);
+        }
+    }
+    
+    finishCast()
+    {
+        this.setTexture(this.battleImageKey);
+        this.resetPosition();
+        this.emit(EventType.AttackComplete, this);
     }
 
     configureAttack()
     {
         this.isAttacking = true;
-        this.setDepth(Depth.attacker);
+        this.setDepth(Depth.Attacker);
     }
 
     getBaseAttack()
@@ -78,6 +107,11 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         return this.armor.mitigation;
     }
 
+    getCurrentHP()
+    {
+        return this.hitpoints;
+    }
+
     takeDamage(damage: number)
     {
         this.hitpoints -= damage;
@@ -88,9 +122,9 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         }
     }
 
-    getHp()
+    recoverHitpoints(hitpoints: number)
     {
-        return this.hitpoints;
+        this.hitpoints += hitpoints;
     }
 
     PlayAttackAnimation()
@@ -106,7 +140,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             repeat: 0
         });
         
-        this.emit(EventType.attacking);
+        this.emit(EventType.Attacking);
         this.actedThisTurn = true;
 
         this.play(this.name+"_attack", true).once("animationcomplete-"+this.name+"_attack", () =>
@@ -114,7 +148,55 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             this.setFrame(0);
             this.resetPosition();
             this.isAttacking = false;
-            this.emit(EventType.attackComplete, this);
+            this.emit(EventType.AttackComplete, this);
+        });
+    }
+
+    playCastAnimation(spell: Spell, target: Character)
+    {
+        if(this.actedThisTurn)
+            return;
+
+        this.actedThisTurn = true;
+        this.setTexture(this.castImageKey);
+        
+        spell.emitter.on(EventType.CastComplete, this.finishCast, this);
+
+        this.anims.animationManager.create(
+        {
+            key: this.name+"_cast",
+            frames: this.anims.animationManager.generateFrameNumbers(this.castImageKey, { start: 0, end: Value.CastFrames }),
+            frameRate: Value.CastFrameRate,
+            repeat: 0
+        });
+
+        this.playCastAnimationEffect();
+
+        this.play(this.name+"_cast", true).once("animationcomplete-"+this.name+"_cast", () =>
+        {
+            spell.playAnimation(this.scene, this.x, this.y, target);
+            this.isAttacking = false;
+        });
+    }
+
+    playCastAnimationEffect()
+    {
+        let castAnimation: Phaser.Physics.Arcade.Sprite = new Phaser.Physics.Arcade.Sprite(this.scene, this.x + this.castEffectOffset, this.y + 20, "cast_white");
+
+        this.scene.add.existing(castAnimation);
+        castAnimation.setDepth(Depth.Effect);
+        castAnimation.setScale(1.5);
+        
+        castAnimation.anims.animationManager.create(
+        {
+            key: "cast",
+            frames: castAnimation.anims.animationManager.generateFrameNumbers("cast_white", { start: 0, end: Value.SpellFrames }),
+            frameRate: Value.SpellFrameRate,
+            repeat: 0
+        });
+
+        castAnimation.play("cast", true).once("animationcomplete-"+"cast", () =>{
+            castAnimation.destroy();
         });
     }
 
@@ -158,28 +240,31 @@ export class Hero extends Character {
         this.imageKey = config.imageKey;
         this.battleImageKey = config.battleImageKey;
         this.deathImageKey = config.deathImageKey;
+        this.castImageKey = config.castImageKey;
         this.battleAnimationFrames = config.battleAnimationFrames;
         this.battleAnimationFrameRate = config.battleAnimationFrameRate;
         this.gridPosition = config.gridPosition;
 
+        this.castEffectOffset = Value.CastEffectOffset;
+
         this.determineEquipmentTypes();
 
         this.setScale(ObjectScale.battleScale, ObjectScale.battleScale);
-        this.setDepth(Depth.characterSprite);
+        this.setDepth(Depth.CharacterSprite);
     }
 
     determineEquipmentTypes()
     {
         switch (this.heroType) {
-            case HeroType.Warrior:
+            case HeroType.Melee:
                 this.allowedWeaponType = WeaponType.Melee;
                 this.allowedArmorType = ArmorType.Heavy;
                 break;
-            case HeroType.Mage:
+            case HeroType.Magic:
                 this.allowedWeaponType = WeaponType.Magic;
                 this.allowedArmorType = ArmorType.Robe;
                 break;
-            case HeroType.Ranger:
+            case HeroType.Ranged:
                 this.allowedWeaponType = WeaponType.Ranged;
                 this.allowedArmorType = ArmorType.Light;
                 break;
@@ -208,14 +293,15 @@ export class Enemy extends Character{
         this.imageKey = config.imageKey;
         this.battleImageKey = config.battleImageKey;
         this.deathImageKey = config.deathImageKey;
-        //this.animationFrames = config.animationFrames;
-        //this.animationFrameRate = config.animationFrameRate;
+        this.castImageKey = config.castImageKey;
         this.battleAnimationFrames = config.battleAnimationFrames;
         this.battleAnimationFrameRate = config.battleAnimationFrameRate;
         this.gridPosition = config.gridPosition;
 
+        this.castEffectOffset = -Value.CastEffectOffset;
+
         this.setScale(-ObjectScale.battleScale, ObjectScale.battleScale);
-        this.setDepth(Depth.characterSprite);
+        this.setDepth(Depth.CharacterSprite);
     }
 }
 
@@ -229,6 +315,7 @@ export type CharacterConfig  = {
     imageKey: string,
     battleImageKey: string,
     deathImageKey: string,
+    castImageKey: string,
     battleAnimationFrames: number,
     battleAnimationFrameRate: number,
     gridPosition: GridPosition
@@ -241,6 +328,7 @@ export type EnemyConfig = {
     imageKey: string,
     battleImageKey: string,
     deathImageKey: string,
+    castImageKey: string,
     weaponName: string,
     armorName: string,
     gridPosition: number

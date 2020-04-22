@@ -4,15 +4,18 @@ import { CharacterType, EventType, AttackDelay, HeroType, Message } from "./Enum
 import { TypedPriorityQueue } from "../../../node_modules/typedpriorityqueue";
 import { Queue } from "../../../node_modules/queue-typescript";
 import { ConsoleLogger } from "./ConsoleLogger";
+import { Hud } from "./Hud";
 
 export class BattleManager{
 
     private scene: Phaser.Scene;
+    private hud: Hud;
     private timer: Phaser.Time.TimerEvent;
     private consoleLogger: ConsoleLogger;
     private turnCount: number = 1;
     private code: string;
     private functionCalled: boolean;
+    private isPaused: boolean = false;
 
     private playerAttackOffset: number = 300;
     private enemyAttackOffset: number = -300;
@@ -27,9 +30,10 @@ export class BattleManager{
 
     private queue: Queue<Character>;
 
-    constructor(scene: Phaser.Scene, battleParty: BattleParty, enemyParty: EnemyParty)
+    constructor(scene: Phaser.Scene, hud: Hud, battleParty: BattleParty, enemyParty: EnemyParty)
     {
         this.scene = scene;
+        this.hud = hud;
         this.battleParty = battleParty;
         this.enemyParty = enemyParty;
 
@@ -43,15 +47,26 @@ export class BattleManager{
             this.queue.enqueue(member);
         });
 
+        this.hud.updateAll(battleParty);
+
         this.enemyParty.group.forEach(member => {
             this.queue.enqueue(member);
         });
 
-        //this.enemy.on(EventType.attacking, this.reset, this);
-        this.enemyParty.emitter.on(EventType.attackComplete, this.nextTurn, this);
+        this.enemyParty.emitter.on(EventType.AttackComplete, this.nextTurn, this);
+        this.enemyParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
+        this.battleParty.emitter.on(EventType.AttackComplete, this.nextTurn, this);
+        this.battleParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
+    }
 
-        //this.battleParty.emitter.on(EventType.attacking, this.reset, this);
-        this.battleParty.emitter.on(EventType.attackComplete, this.nextTurn, this);
+    logMessage(message: string)
+    {
+        this.consoleLogger.log(message);
+    }
+
+    pause()
+    {
+        this.isPaused = !this.isPaused;
     }
 
     update()
@@ -60,19 +75,34 @@ export class BattleManager{
             this.currentAttacker.body.velocity.setTo(0, 0);
             this.currentAttacker.PlayAttackAnimation();
         }
+        
+        this.hud.updateAll(this.battleParty);
     }
 
-    startBattle(code)
+    startBattle(code: string)
     {
         this.code = code;
 
+        var searchForWhile = /while/gi;
+
+        if(code.search(searchForWhile) != -1)
+        {
+            this.consoleLogger.log(Message.WhileNotAllowedError);
+            return;
+        }
+        
         if(this.currentAttacker == null){
             this.currentAttacker = this.queue.dequeue() as Character;
             this.firstAttacker = this.currentAttacker;
             this.currentTarget = this.enemyParty.group[0]; // default target
         }
         else
-            return;
+        {
+            if(this.isPaused)
+                this.pause();
+            else
+                return;
+        }
 
         this.handleTurn();
     }
@@ -81,23 +111,42 @@ export class BattleManager{
     {
         this.functionCalled = false;
 
+        if(this.isPaused)
+            return;
+
         var isPlayer = this.currentAttacker.characterType == CharacterType.player;
         
         if(isPlayer){
 
+            var player = this.currentAttacker as Hero;
+
+            /* player variables */
+            var warriorTurn = player.heroType == HeroType.Melee;
+            var mageTurn = player.heroType == HeroType.Magic;
+            var rangerTurn = player.heroType == HeroType.Ranged;
+            var turn = this.turnCount;
+
             try {
                 eval(this.code); 
-            } catch (e) {
+            } catch (e) { // required for all custom battle builds
                 
               this.consoleLogger.logTurn(this.turnCount, Message.SyntaxError);
             }
         }
         else{
             this.currentTarget = this.determineTarget(this.battleParty.group);
+
+            //this.cast("fire", this.currentTarget.name);
             this.meleeAttack(this.currentAttacker, this.currentTarget);
-            this.consoleLogger.logAttack(this.turnCount, this.currentAttacker.name, this.currentTarget.name, 100);
+
+
+            let damage = this.calculateDamage(this.currentAttacker, this.currentTarget);
+
+            // required for all custom battle builds
+            this.consoleLogger.logAttack(this.turnCount, this.currentAttacker.name, this.currentTarget.name, damage);
         }
 
+        // required for all custom battle builds
         if(isPlayer && !this.functionCalled)
         {
             this.consoleLogger.logTurn(this.turnCount, Message.SyntaxError);
@@ -158,7 +207,10 @@ export class BattleManager{
 
     calculateDamage(attacker: Character, target: Character)
     {
-        return attacker.getBaseAttack() - target.getBaseDefense();
+        let damage = attacker.getBaseAttack() - target.getBaseDefense();
+        target.takeDamage(damage);
+
+        return damage;
     }
 
     isMeleeAttacker()
@@ -183,24 +235,19 @@ export class BattleManager{
         this.scene.physics.moveToObject(attacker, target as Character, this.movementSpeed);
     }
 
-    checkTarget(name: String, type: CharacterType)
+    checkTarget(name: String)
     {
 
         let target: Character | undefined;
 
-        switch(type)
-        {
-            case CharacterType.player:
-                this.battleParty.group.forEach( member => {
-                    if(member.name === name) target = member;
-                });
+        this.battleParty.group.forEach( member => {
+            if(member.name === name) target = member;
+        });
             
-            case CharacterType.enemy:
-                this.enemyParty.group.forEach( member => {
-                    if(member.name === name) target = member;
-                });
-        }
-
+        this.enemyParty.group.forEach( member => {
+            if(member.name === name) target = member;
+        });
+        
         if(name === "random")
             target = this.determineTarget(this.enemyParty.group);
 
@@ -214,7 +261,7 @@ export class BattleManager{
             return;
         }
         
-        let target = this.checkTarget(enemyName, CharacterType.enemy);
+        let target = this.checkTarget(enemyName);
 
         if(!target)
         {
@@ -229,7 +276,7 @@ export class BattleManager{
         let currentHero = this.currentAttacker as Hero;
         this.currentTarget = target;
 
-        if(currentHero.heroType == HeroType.Warrior)
+        if(currentHero.heroType == HeroType.Melee)
         {
             this.meleeAttack(currentHero, this.currentTarget);
         }
@@ -238,9 +285,36 @@ export class BattleManager{
         }
 
         let damage = this.calculateDamage(currentHero, this.currentTarget);
-        this.currentTarget.takeDamage(damage);
 
         this.consoleLogger.logAttack(this.turnCount, currentHero.name, this.currentTarget.name, damage);
+
+        this.functionCalled = true;
+    }
+
+    cast(spellName: string, targetName: string)
+    {
+        if(this.functionCalled)
+        {
+            return;
+        }
+
+        let target = this.checkTarget(targetName);
+
+        if(!target)
+        {
+            return;
+        }
+
+        if(!target.isAlive)
+        {
+            return;
+        }
+        
+        this.currentTarget = target;
+
+        this.currentAttacker.cast(spellName, target);
+
+        this.consoleLogger.logAttack(this.turnCount, this.currentAttacker.name, this.currentTarget.name, 100);
 
         this.functionCalled = true;
     }

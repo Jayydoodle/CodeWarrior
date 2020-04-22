@@ -1,5 +1,12 @@
 //#region Game
 
+export enum ActionType{
+
+    Offense,
+    Defense,
+    Recovery
+}
+
 export enum ArmorType{
 
     Heavy,
@@ -16,6 +23,13 @@ export enum AttackDelay
     verySlow = 1600
 }
 
+export enum HeroType{
+    
+    Magic = "mage",
+    Melee = "warrior",
+    Ranged = "ranger"
+}
+
 export enum CharacterType
 {
     enemy,
@@ -24,6 +38,7 @@ export enum CharacterType
 
 export enum ElementType
 {
+    Dark,
     Earth,
     Fire,
     Ice,
@@ -34,17 +49,47 @@ export enum ElementType
     Wind
 }
 
-export enum HeroType{
-    Warrior = "warrior",
-    Mage = "mage",
-    Ranger = "ranger"
+export enum EffectType
+{
+    AutoRevive,
+    BuffDamage,
+    BuffDefense,
+    BuffMagicDamage,
+    BuffMagicDefense,
+    CureStatusEffects,
+    DamageOverTime,
+    DebuffDamage,
+    DebuffDefense,
+    MagicRecoveryOverTime,
+    MagicRestoration,
+    RecoveryOverTime,
+    Restoration,
+    Revive
 }
-
 
 export enum ItemType{
 
     Weapon,
     Armor
+}
+
+export enum BlackMagicLevel{
+
+    I = 100,
+    II = 200,
+    III = 300
+}
+
+export enum Value{
+
+    CastEffectOffset = 20,
+    CastFrames = 5,
+    CastFrameRate = 12,
+    DeathFrames = 6,
+    DeathFrameRate = 10,
+    SpellFrames = 100,
+    SpellFrameRate = 30,
+    StartingPlayerHealth = 1000
 }
 
 export enum WeaponType{
@@ -54,43 +99,48 @@ export enum WeaponType{
     Magic
 }
 
-export enum Value{
+export enum WhiteMagicLevel{
 
-    DeathFrames = 6,
-    DeathFrameRate = 10,
-    StartingPlayerHealth = 100
+    I = 100,
+    II = 200,
+    III = 300
 }
+
 
 //#endregion
 
 //#region Utility
 
-export enum AssetType{
-
+//#endregion
+//#region Utility
+export enum AssetType {
     Image,
     Sprite,
     BitmapFont,
-
+    Text
 }
 
 export enum Depth
 {
     background = 0,
     overlay = 1,
-    characterSprite = 2,
-    attacker = 3
+    CharacterSprite = 2,
+    Attacker = 3,
+    Effect = 4,
+    GUI = 5
 }
 
 export enum EventType
 {
-    attacking = "attacking",
-    attackComplete = "attackComplete",
-    btnApplyClicked = "btnApplyClicked",
-    correctAnswer = "correctAnswer",
-    infoTextUpdated = "infoTextUpdated",
-    playerAttackComplete = "playerAttackComplete",
-    turnEnded = "turnEnded",
-    uiLoaded = "uiLoaded"
+    AnimationComplete = "animationComplete",
+    ApplyEffects = "applyEffects",
+    Attacking = "attacking",
+    AttackComplete = "attackComplete",
+    BtnApplyClicked = "btnApplyClicked",
+    CastComplete = "castComplete",
+    EffectApplied = "effectApplied",
+    InfoTextUpdated = "infoTextUpdated",
+    UILoaded = "uiLoaded"
 }
 
 export enum GridPosition
@@ -105,6 +155,7 @@ export enum GridPosition
 
 export enum Message
 {
+    WhileNotAllowedError = "Keyword 'while' is not allowed",
     SyntaxError = "There is an error with your code, please try again.",
 }
 

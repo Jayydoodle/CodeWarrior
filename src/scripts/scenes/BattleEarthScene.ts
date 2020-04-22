@@ -15,6 +15,7 @@ export default class BattleEarthScene extends BattleScene {
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
+              castImageKey: "warrior_cast",
               weaponName: "wooden_sword",
               armorName: "warrior_clothes",
               gridPosition: GridPosition.enemyTop
@@ -25,6 +26,7 @@ export default class BattleEarthScene extends BattleScene {
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
+              castImageKey: "warrior_cast",
               weaponName: "wooden_sword",
               armorName: "warrior_clothes",
               gridPosition: GridPosition.enemyMiddle
@@ -35,6 +37,7 @@ export default class BattleEarthScene extends BattleScene {
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
+              castImageKey: "warrior_cast",
               weaponName: "wooden_sword",
               armorName: "warrior_clothes",
               gridPosition: GridPosition.enemyBottom

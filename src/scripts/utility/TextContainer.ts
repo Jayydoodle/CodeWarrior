@@ -10,6 +10,7 @@ export class TextContainer
     updateText(text: string)
     {
         this.htmlElement.innerText = text;
+        this.htmlElement.style.cssText = "font-family: FontleroyBrownNF; ";
     }
 
     addText(text:string)

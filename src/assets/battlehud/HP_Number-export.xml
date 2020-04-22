@@ -1,0 +1,14 @@
+<font>
+	<info face="C:\Users\Jay\Documents\Programming\CISC374\educational-game-project-team-12-jason-and-shabir\src\assets\battlehud\HP_Number-export" size="17" />
+	<common lineHeight="17" scaleW="131" scaleH="18" pages="1" />
+	<pages>
+		<page id="0" file="C:\Users\Jay\Documents\Programming\CISC374\educational-game-project-team-12-jason-and-shabir\src\assets\battlehud\HP_Number-export.png" />
+	</pages>
+	<chars count="96">
+		<char id="33" x="0" y="0" width="130" height="17" xoffset="0" yoffset="0" xadvance="143" /><!-- ! -->
+		<char id="32" x="0" y="0" width="0" height="0" xoffset="0" yoffset="0" xadvance="91" /><!--   -->
+		<char id="9" x="0" y="0" width="0" height="0" xoffset="0" yoffset="0" xadvance="728" /><!-- 	 -->
+	</chars>
+	<kernings count="0">
+	</kernings>
+</font>

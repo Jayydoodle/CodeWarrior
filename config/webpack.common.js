@@ -12,7 +12,7 @@ module.exports = {
     chunkFilename: '[name].chunk.js'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.css']
+    extensions: ['.ts', '.tsx', '.js', '.css', '.ttf']
   },
   module: {
     rules: [
@@ -21,7 +21,7 @@ module.exports = {
         path.join(__dirname, '../node_modules/codemirror/lib'),
         path.join(__dirname, '../node_modules/codemirror/theme')], 
         use: ['style-loader', 'css-loader'] },
-      //{ test: /\.png$/, use: 'file-loader' }
+      { test: /\.ttf$/, use: 'ttf-loader' }
     ]
   },
   optimization: {

@@ -1,3 +1,4 @@
+
 html, body {
     margin: 0;
     background-color: #000000;
@@ -23,9 +24,14 @@ html, body {
 }
 #book{
   margin-top: 8%;
-  margin-left: 25%;
-  font-size: calc(1.5vh + 1.5vh);
+  margin-left: 18%;
+  font-size: calc(2.3vh + 2.3vh);
+  display: inline-block;
   overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+  line-break: strict;
+  hyphens: none;
   overflow-y: scroll;
   width: 60%;
   height: 80%;

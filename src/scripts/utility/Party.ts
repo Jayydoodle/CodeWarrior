@@ -55,12 +55,17 @@ export class Party{
 
     emitAttacking()
     {
-        this.emitter.emit(EventType.attacking)
+        this.emitter.emit(EventType.Attacking)
     }
 
     emitAttackComplete()
     {
-        this.emitter.emit(EventType.attackComplete);
+        this.emitter.emit(EventType.AttackComplete);
+    }
+
+    emitEffectApplied(message: string)
+    {
+        this.emitter.emit(EventType.EffectApplied, message);
     }
 }
 export class BattleParty extends Party{
@@ -77,13 +82,11 @@ export class BattleParty extends Party{
         this.group[1] = this.mage = mage;
         this.group[2] = this.ranger = ranger;
 
-        this.warrior.on(EventType.attacking, this.emitAttacking, this);
-        this.mage.on(EventType.attacking, this.emitAttacking, this);
-        this.ranger.on(EventType.attacking, this.emitAttacking, this);
-
-        this.warrior.on(EventType.attackComplete, this.emitAttackComplete, this);
-        this.mage.on(EventType.attackComplete, this.emitAttackComplete, this);
-        this.ranger.on(EventType.attackComplete, this.emitAttackComplete, this);
+        this.group.forEach(member =>{
+            member.on(EventType.Attacking, this.emitAttacking, this);
+            member.on(EventType.AttackComplete, this.emitAttackComplete, this);
+            member.on(EventType.EffectApplied, this.emitEffectApplied, this);
+        });
     }
 }
 
@@ -99,8 +102,9 @@ export class EnemyParty extends Party{
         this.group = enemies;
 
         this.group.forEach(member =>{
-            member.on(EventType.attacking, this.emitAttacking, this);
-            member.on(EventType.attackComplete, this.emitAttackComplete, this);
+            member.on(EventType.Attacking, this.emitAttacking, this);
+            member.on(EventType.AttackComplete, this.emitAttackComplete, this);
+            member.on(EventType.EffectApplied, this.emitEffectApplied, this);
         });
     }
 }

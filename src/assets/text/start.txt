@@ -1,0 +1,7 @@
+Welcome to Code Warrior!
+
+To begin, type: 
+
+this.createParty( "warrior name", "mage name", "ranger name");
+
+Where "warrior name", "mage name", and "ranger name" are names of your choosing.

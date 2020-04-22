@@ -6,42 +6,66 @@ import { EventType, HeroType, GridPosition, Value, SceneType } from '../utility/
 import { GameState } from '../utility/GameState';
 import { ItemDatabase } from '../objects/items/ItemDatabase';
 import { Weapon, Armor } from '../objects/items/Item';
+import { SpellDatabase } from '../objects/spells_and_abilities/SpellDatabase';
 
 export default class StartScene extends Phaser.Scene {
 
-  public assetDictionary: AssetDictionary;
-  public itemDatabase: ItemDatabase;
+  private assetDictionary: AssetDictionary;
+  private itemDatabase: ItemDatabase;
+  private spellDatabase: SpellDatabase;
   private gameState: GameState;
   private sceneType: SceneType = SceneType.WorldScene;
 
   private background: Background;
+  private infoText: string;
+  private infoTextSet: boolean = false;
 
   constructor() {
     super({ key: 'StartScene' });
     this.assetDictionary = new AssetDictionary();
     this.itemDatabase = new ItemDatabase();
+    this.spellDatabase = new SpellDatabase();
   }
 
   create() {
 
     this.background = new Background(this.findAsset("start_scene").key, this, 0, 0);
 
-    this.scene.get('UIScene').events.on(EventType.btnApplyClicked, this.evaluateCode, this);
+    this.scene.get('UIScene').events.on(EventType.BtnApplyClicked, this.evaluateCode, this);
 
     this.scene.launch('UIScene', {parentScene: this.scene.key, sceneType: this.sceneType});
+
+    this.infoText = this.cache.text.get(this.findAsset("start_text").key);
+
+    this.add.text(100, 100, "Code Warrior", { color:'#000000', font: '80pt Aniron'} );
   }
 
-  createParty(warriorName, mageName, rangerName)
+  update(){
+
+      if(!this.infoTextSet)
+      {
+        this.updateInfoText(this.infoText);
+      }
+  }
+
+  protected updateInfoText(text)
+  {
+    this.events.emit(EventType.InfoTextUpdated, text);
+    this.infoTextSet = true;
+  }
+
+  createParty(warriorName: string, mageName: string, rangerName: string)
   {
       let warrior = new Hero(0, 0, this, {
         name: warriorName,
-        heroType: HeroType.Warrior,
+        heroType: HeroType.Melee,
         hitpoints: Value.StartingPlayerHealth,
         weapon: this.findItem("wooden_sword") as Weapon,
         armor: this.findItem("warrior_clothes") as Armor,
         imageKey: "",
         battleImageKey: this.findAsset("warrior_battle").key,
         deathImageKey: this.findAsset("warrior_death").key,
+        castImageKey: this.findAsset("warrior_cast").key,
         battleAnimationFrames: this.findAsset("warrior_battle").frames,
         battleAnimationFrameRate: 10,
         gridPosition: GridPosition.playerMiddle
@@ -49,13 +73,14 @@ export default class StartScene extends Phaser.Scene {
 
       let mage = new Hero(0, 0, this, {
         name: mageName,
-        heroType: HeroType.Mage,
+        heroType: HeroType.Magic,
         hitpoints: Value.StartingPlayerHealth,
         weapon: this.findItem("wooden_staff") as Weapon,
         armor: this.findItem("mage_clothes") as Armor,
         imageKey: "",
         battleImageKey: this.findAsset("mage_battle").key,
-        deathImageKey: "",
+        deathImageKey: this.findAsset("mage_death").key,
+        castImageKey: this.findAsset("mage_cast").key,
         battleAnimationFrames: this.findAsset("mage_battle").frames,
         battleAnimationFrameRate: 13,
         gridPosition: GridPosition.playerBottom
@@ -63,19 +88,27 @@ export default class StartScene extends Phaser.Scene {
 
       let ranger = new Hero(0, 0, this, {
         name: rangerName,
-        heroType: HeroType.Ranger,
+        heroType: HeroType.Ranged,
         hitpoints: Value.StartingPlayerHealth,
         weapon: this.findItem("wooden_bow") as Weapon,
         armor: this.findItem("ranger_clothes") as Armor,
         imageKey: "",
         battleImageKey: this.findAsset("ranger_battle").key,
-        deathImageKey: "",
+        deathImageKey: this.findAsset("ranger_death").key,
+        castImageKey: this.findAsset("ranger_cast").key,
         battleAnimationFrames: this.findAsset("ranger_battle").frames,
         battleAnimationFrameRate: 13,
         gridPosition: GridPosition.playerTop
       });
 
       let party = new BattleParty(warrior, mage, ranger);
+
+      party.group.forEach(member => {
+          this.spellDatabase.spells.forEach(spell =>
+          {
+              member.learnSpell(spell);
+          });
+      });
       this.gameState = new GameState(party);
 
       this.scene.get('UIScene').children.destroy();
@@ -103,5 +136,10 @@ export default class StartScene extends Phaser.Scene {
   findItem(key: string)
   {
     return this.itemDatabase.findItemByKey(key);
+  }
+
+  setInfoText()
+  {
+
   }
 }

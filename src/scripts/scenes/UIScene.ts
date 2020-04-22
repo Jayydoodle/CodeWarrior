@@ -5,14 +5,12 @@ import { TextContainer } from "../utility/TextContainer";
 
 export default class UIScene extends Phaser.Scene {
   
-  private textDisplay: Phaser.GameObjects.Text;
   private btnReset: Button;
   private btnApply: Button;
   private infoText: TextContainer;
   private codeEditor: CodeEditor;
 
   private parentScene: string;
-  private isPlayerTurn: boolean;
   private isBattleScene: boolean;
 
   constructor() {
@@ -29,28 +27,22 @@ export default class UIScene extends Phaser.Scene {
 
   create() {
     this.codeEditor = new CodeEditor();
-    this.textDisplay = this.add.text(20,20,"Jason",{ color:'#ffffff', font: '50pt Arial'});
     this.infoText =  new TextContainer("book");
     this.btnReset = new Button("reset", this.codeEditor.clear, this.codeEditor);
     this.btnApply = new Button("apply", this.onBtnApplyClicked, this);
 
-    this.scene.get(this.parentScene).events.on(Enum.EventType.infoTextUpdated, this.updateInfotext, this);
+    this.scene.get(this.parentScene).events.on(Enum.EventType.InfoTextUpdated, this.updateInfotext, this);
 
     if(this.isBattleScene)
     {
-      this.scene.get(this.parentScene).events.on(Enum.EventType.turnEnded, this.togglePlayerTurn, this);
-      this.scene.get(this.parentScene).events.on(Enum.EventType.correctAnswer, this.resetCodeEditor, this);
-      this.isPlayerTurn = true;
-      this.codeEditor.editor.setValue("this.attack(\"Earth\");");
+      this.codeEditor.editor.setValue("if(warriorTurn) this.cast(\"cure\", \"random\");\nif(mageTurn) this.cast(\"ice\", \"random\");\nif(rangerTurn) this.cast(\"lightning\", \"random\");");
     }
     else
-      this.codeEditor.editor.setValue("this.createParty();");
-
-    this.events.emit(Enum.EventType.uiLoaded);
+      this.codeEditor.editor.setValue("this.createParty(\"Jason\", \"Amaad\", \"Shabir\");");
   }
 
   update() {
-    this.textDisplay.text = this.codeEditor.getValue();
+   // this.textDisplay.text = this.codeEditor.getValue();
   }
 
   updateInfotext(text){
@@ -60,23 +52,12 @@ export default class UIScene extends Phaser.Scene {
 
   onBtnApplyClicked(){
 
-    if(!this.isBattleScene)
-    {
-      this.events.emit(Enum.EventType.btnApplyClicked, this.codeEditor.getValue());
-    }
-    else if(this.isPlayerTurn)
-    {
-      //this.isPlayerTurn = false;
-      this.events.emit(Enum.EventType.btnApplyClicked, this.codeEditor.getValue());
-    }
+    this.events.emit(Enum.EventType.BtnApplyClicked, this.codeEditor.getValue());
+    
   }
 
   resetCodeEditor()
   {
     this.codeEditor.clear();
-  }
-
-  togglePlayerTurn(){
-    this.isPlayerTurn = true;
   }
 }

@@ -1,4 +1,3 @@
-import { GameObjects } from 'phaser';
 import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Enemy } from '../objects/characters/Hero';
@@ -10,11 +9,14 @@ import { GameState } from '../utility/GameState';
 import { BattleConfig } from '../utility/Configuration';
 import { ItemDatabase } from '../objects/items/ItemDatabase';
 import { Weapon, Armor } from '../objects/items/Item';
+import { SpellDatabase } from '../objects/spells_and_abilities/SpellDatabase';
+import { Hud } from '../utility/Hud';
 
 export default class BattleScene extends Phaser.Scene {
 
   public assetDictionary: AssetDictionary;
   public itemDatabase: ItemDatabase;
+  public spellDatabase: SpellDatabase;
   protected gameState: GameState;
   protected sceneType: Enum.SceneType = Enum.SceneType.BattleScene;
 
@@ -27,13 +29,16 @@ export default class BattleScene extends Phaser.Scene {
 
   protected battleParty: BattleParty;
   protected enemyParty: EnemyParty;
-  protected currentTurn: number = 0;
+
+  private hud: Hud;
+  private infoTextSet = false;
   
   constructor(sceneKey: string, config: BattleConfig) {
     super({ key: sceneKey });
     this.config = config;
     this.assetDictionary = new AssetDictionary();
     this.itemDatabase = new ItemDatabase();
+    this.spellDatabase = new SpellDatabase();
   }
 
   init(data)
@@ -56,22 +61,31 @@ export default class BattleScene extends Phaser.Scene {
       showNumbers: false
     });
 
+    this.hud = new Hud(this, {
+      warriorName: this.gameState.party.warrior.name,
+      mageName: this.gameState.party.mage.name,
+      rangerName: this.gameState.party.ranger.name
+    });
+
+    this.alignGrid.placeAtIndex(86, this.hud);
+
     let enemies:Enemy[] = [];
 
     this.config.enemyConfigs.forEach(config => {
 
         enemies.push(new Enemy(0, 0, this, {
-          name: config.name,
-          heroType: Enum.HeroType.Warrior,
-          hitpoints: config.hitpoints, 
-          weapon: this.findItem(config.weaponName) as Weapon,
-          armor: this.findItem(config.armorName) as Armor,
-          imageKey: "",
-          battleImageKey: this.findAsset(config.battleImageKey).key,
-          deathImageKey: this.findAsset(config.deathImageKey).key,
-          battleAnimationFrames: this.findAsset(config.battleImageKey).frames,
-          battleAnimationFrameRate: 10,
-          gridPosition: config.gridPosition
+            name: config.name,
+            heroType: Enum.HeroType.Melee,
+            hitpoints: config.hitpoints, 
+            weapon: this.findItem(config.weaponName) as Weapon,
+            armor: this.findItem(config.armorName) as Armor,
+            imageKey: "",
+            battleImageKey: this.findAsset(config.battleImageKey).key,
+            deathImageKey: this.findAsset(config.deathImageKey).key,
+            castImageKey: this.findAsset(config.castImageKey).key,
+            battleAnimationFrames: this.findAsset(config.battleImageKey).frames,
+            battleAnimationFrameRate: 10,
+            gridPosition: config.gridPosition
         }));
     });
     
@@ -88,13 +102,19 @@ export default class BattleScene extends Phaser.Scene {
     this.enemyParty.group.forEach(member => {
       this.alignGrid.placeAtIndex(member.gridPosition, member);
     });
+
+    this.enemyParty.group.forEach(member => {
+      this.spellDatabase.spells.forEach(spell =>
+      {
+          member.learnSpell(spell);
+      });
+    });
     
     this.battleParty.setInitialPositions();
     this.enemyParty.setInitialPositions();
+    this.battleManager = new BattleManager(this, this.hud, this.battleParty, this.enemyParty);
     
-    this.battleManager = new BattleManager(this, this.battleParty, this.enemyParty);
-    
-    this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.btnApplyClicked, this.startBattle, this);
+    this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.BtnApplyClicked, this.startBattle, this);
 
     this.turnCountText = this.add.text(0, 0, "", { color:'#000000', font: '80pt Arial'});
 
@@ -107,12 +127,17 @@ export default class BattleScene extends Phaser.Scene {
   {
     this.turnCountText.text = this.battleManager.getTurnCount().toString();
     this.battleManager.update();
-    this.updateInfoText("Available Actions: this.attack(enemy);\n\nAvailable target: this.enemy");
+
+    if(!this.infoTextSet)
+    {
+      this.updateInfoText("Available Actions: this.attack(enemy);\n\nAvailable target: this.enemy");
+    }
   }
 
   protected updateInfoText(text)
   {
-    this.events.emit(Enum.EventType.infoTextUpdated, text);
+    this.events.emit(Enum.EventType.InfoTextUpdated, text);
+    this.infoTextSet = true;
   }
 
   protected startBattle(code)
