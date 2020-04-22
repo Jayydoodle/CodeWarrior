@@ -35,12 +35,13 @@ export default class UIScene extends Phaser.Scene {
 
     if(this.isBattleScene)
     {
-      this.codeEditor.editor.setValue("if(warriorTurn) this.cast(\"cure\", \"random\");\nif(mageTurn) this.cast(\"ice\", \"random\");\nif(rangerTurn) this.cast(\"lightning\", \"random\");");
+      //this.codeEditor.editor.setValue("if(warriorTurn) this.cast(\"cure\", \"random\");\nif(mageTurn) this.cast(\"ice\", \"random\");\nif(rangerTurn) this.cast(\"lightning\", \"random\");");
     }
-    else
-      this.codeEditor.editor.setValue("this.createParty(\"Jason\", \"Amaad\", \"Shabir\");");
-  }
+    else{
+      this.codeEditor.editor.setValue("this.createParty(\"warrior\", \"mage\", \"ranger\");");
+    }
 
+  }
   update() {
    // this.textDisplay.text = this.codeEditor.getValue();
   }

@@ -10,7 +10,7 @@ export default class BattleEarthScene extends BattleScene {
           backgroundAssetKey: "earth_battle",
           enemyConfigs: [
             {
-              name: "Earth",
+              name: "Enemy1",
               hitpoints: Value.StartingPlayerHealth,
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
@@ -21,7 +21,7 @@ export default class BattleEarthScene extends BattleScene {
               gridPosition: GridPosition.enemyTop
             },
             {
-              name: "Earth1",
+              name: "Enemy2",
               hitpoints: Value.StartingPlayerHealth,
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
@@ -32,7 +32,7 @@ export default class BattleEarthScene extends BattleScene {
               gridPosition: GridPosition.enemyMiddle
             },
             {
-              name: "Earth2",
+              name: "Enemy3",
               hitpoints: Value.StartingPlayerHealth,
               imageKey: "warrior",
               battleImageKey: "warrior_battle",

@@ -148,6 +148,7 @@ export class AssetDictionary{
 
         ///#region: Text
 
+            this.add(new Asset('battle_text', '../../assets/text/battle.txt', [0, 0], 0, AssetType.Text, false));
             this.add(new Asset('start_text', '../../assets/text/start.txt', [0, 0], 0, AssetType.Text, false));
 
         ///#endregion

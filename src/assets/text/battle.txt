@@ -1,0 +1,41 @@
+Available Actions:
+
+~ this.attack(target); ~
+perform a standard attack on the specified target (scroll to view target list).
+
+~ this.cast(spell, target); ~
+cast the specified spell on the specified target (scroll to view spell and target lists).
+
+Available Variables:
+
+~ warriorTurn ~
+returns true or false if it is your warrior's turn
+
+~ mageTurn ~
+returns true or false if it is your mage's turn
+
+~ rangerTurn ~
+returns true or false if it is your ranger's turn
+
+~ turn ~
+returns an integer representing the current turn number
+
+Available Spells:
+
+<<< Black Magic >>>
+"earth", "dark", "fire",  "lighting", "water", "wind"
+
+<<< White Magic >>>
+"cure", "protect", "remedy", "revive"
+
+Available Targets:
+
+"warrior name"
+"mage name"
+"ranger name"
+"Enemy1"
+"Enemy2"
+"Enemy3"
+"random" - chooses a random enemy
+
+

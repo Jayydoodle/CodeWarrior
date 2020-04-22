@@ -130,7 +130,7 @@ export default class BattleScene extends Phaser.Scene {
 
     if(!this.infoTextSet)
     {
-      this.updateInfoText("Available Actions: this.attack(enemy);\n\nAvailable target: this.enemy");
+      this.updateInfoText(this.cache.text.get("battle_text"));
     }
   }
 
