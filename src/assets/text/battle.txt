@@ -26,7 +26,7 @@ Available Spells:
 "earth", "dark", "fire",  "lighting", "water", "wind"
 
 <<< White Magic >>>
-"cure", "protect", "remedy", "revive"
+"cure", "protect", "remedy", "raise"
 
 Available Targets:
 

@@ -1,5 +1,5 @@
-import { Hero, Enemy, Character } from "../objects/characters/Hero";
-import { EventType, SceneType } from "./Enumeration";
+import { Hero, Enemy, Character } from "./Hero";
+import { EventType, SceneType } from "../../utility/Enumeration";
 
 export class Party{
 

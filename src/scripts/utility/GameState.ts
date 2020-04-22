@@ -1,4 +1,4 @@
-import { BattleParty } from "./Party";
+import { BattleParty } from "../objects/characters/Party";
 
 export class GameState{
 

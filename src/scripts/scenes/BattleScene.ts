@@ -3,7 +3,7 @@ import { Background } from '../objects/world_space/background';
 import { Enemy } from '../objects/characters/Hero';
 import * as Enum from '../utility/Enumeration';
 import { AlignGrid } from '../utility/AlignGrid';
-import { BattleParty, EnemyParty } from '../utility/Party';
+import { BattleParty, EnemyParty } from '../objects/characters/Party';
 import { BattleManager } from '../utility/BattleManager';
 import { GameState } from '../utility/GameState';
 import { BattleConfig } from '../utility/Configuration';
@@ -76,7 +76,7 @@ export default class BattleScene extends Phaser.Scene {
         enemies.push(new Enemy(0, 0, this, {
             name: config.name,
             heroType: Enum.HeroType.Melee,
-            hitpoints: config.hitpoints, 
+            health: config.health, 
             weapon: this.findItem(config.weaponName) as Weapon,
             armor: this.findItem(config.armorName) as Armor,
             imageKey: "",

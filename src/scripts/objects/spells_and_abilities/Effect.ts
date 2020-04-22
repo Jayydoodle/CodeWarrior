@@ -27,7 +27,8 @@ export class Effect{
 
     heal(target: Character)
     {
-        target.recoverHitpoints(this.value);
-        target.emit(EventType.EffectApplied, target.name + " recovered " + this.value + " HP ");
+        target.recoverHealth(this.value);
+        let message = target.name + " recovered " + this.value + " HP ";
+        target.emitEffectApplied(message);
     }
 }

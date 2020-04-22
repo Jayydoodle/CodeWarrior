@@ -1,19 +1,16 @@
-import { AlignGrid } from "./AlignGrid";
 import { HudConfig } from "./Configuration";
 import { Depth } from "./Enumeration";
 import { Character } from "../objects/characters/Hero";
-import { BattleParty } from "./Party";
+import { BattleParty } from "../objects/characters/Party";
 
 export class Hud extends Phaser.GameObjects.Container{
 
-    map: Map<string, HudElement>;
-    alignGrid: AlignGrid;
-    scene: Phaser.Scene;
+    private map: Map<string, HudElement>;
 
     constructor(scene: Phaser.Scene, config: HudConfig)
     {
         super(scene);
-        scene.add.existing(this);
+        this.scene.add.existing(this);
 
         this.map = new Map<string, HudElement>();
 
@@ -40,8 +37,8 @@ export class Hud extends Phaser.GameObjects.Container{
     {
         let HudElement = this.findElementByKey(character.name);
 
-        HudElement.healthText.text = character.getCurrentHP().toString();
-        //HudElement.mpText.text
+        HudElement.healthText.text = character.getCurrentHp().toString();
+        HudElement.mpText.text = character.getCurrentMp().toString();
     }
 
     updateAll(battleParty: BattleParty)

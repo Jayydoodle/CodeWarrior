@@ -1,10 +1,12 @@
-import { BattleParty, EnemyParty } from "./Party";
+import { BattleParty, EnemyParty } from "../objects/characters/Party";
 import { Character, Hero, Enemy } from "../objects/characters/Hero";
-import { CharacterType, EventType, AttackDelay, HeroType, Message } from "./Enumeration";
+import { CharacterType, EventType, AttackDelay, HeroType, Message, ActionType } from "./Enumeration";
 import { TypedPriorityQueue } from "../../../node_modules/typedpriorityqueue";
 import { Queue } from "../../../node_modules/queue-typescript";
 import { ConsoleLogger } from "./ConsoleLogger";
 import { Hud } from "./Hud";
+import { Spell } from "../objects/spells_and_abilities/Spell";
+import { DamageCalculator } from "./DamageCalculator";
 
 export class BattleManager{
 
@@ -14,7 +16,8 @@ export class BattleManager{
     private consoleLogger: ConsoleLogger;
     private turnCount: number = 1;
     private code: string;
-    private functionCalled: boolean;
+    private functionCalled: boolean = false;
+    private errorLogged: boolean = false;
     private isPaused: boolean = false;
 
     private playerAttackOffset: number = 300;
@@ -110,6 +113,7 @@ export class BattleManager{
     handleTurn()
     {
         this.functionCalled = false;
+        this.errorLogged = false;
 
         if(this.isPaused)
             return;
@@ -121,10 +125,10 @@ export class BattleManager{
             var player = this.currentAttacker as Hero;
 
             /* player variables */
-            var warriorTurn = player.heroType == HeroType.Melee;
-            var mageTurn = player.heroType == HeroType.Magic;
-            var rangerTurn = player.heroType == HeroType.Ranged;
-            var turn = this.turnCount;
+            let warriorTurn = player.heroType == HeroType.Melee;
+            let mageTurn = player.heroType == HeroType.Magic;
+            let rangerTurn = player.heroType == HeroType.Ranged;
+            let turn = this.turnCount;
 
             try {
                 eval(this.code); 
@@ -140,7 +144,7 @@ export class BattleManager{
             this.meleeAttack(this.currentAttacker, this.currentTarget);
 
 
-            let damage = this.calculateDamage(this.currentAttacker, this.currentTarget);
+            let damage = DamageCalculator.CalculateDamage(this.currentAttacker, this.currentTarget);
 
             // required for all custom battle builds
             this.consoleLogger.logAttack(this.turnCount, this.currentAttacker.name, this.currentTarget.name, damage);
@@ -149,7 +153,9 @@ export class BattleManager{
         // required for all custom battle builds
         if(isPlayer && !this.functionCalled)
         {
-            this.consoleLogger.logTurn(this.turnCount, Message.SyntaxError);
+            if(!this.errorLogged)
+                this.consoleLogger.logTurn(this.turnCount, Message.SyntaxError);
+
             this.nextTurn();
         }
             
@@ -229,10 +235,10 @@ export class BattleManager{
         }
     }
 
-    meleeAttack(attacker: Character, target: Character | null)
+    meleeAttack(attacker: Character, target: Character)
     {
         attacker.configureAttack();
-        this.scene.physics.moveToObject(attacker, target as Character, this.movementSpeed);
+        this.scene.physics.moveToObject(attacker, target, this.movementSpeed);
     }
 
     checkTarget(name: String)
@@ -284,7 +290,9 @@ export class BattleManager{
             currentHero.PlayAttackAnimation();
         }
 
-        let damage = this.calculateDamage(currentHero, this.currentTarget);
+        
+
+        let damage = DamageCalculator.CalculateDamage(currentHero, this.currentTarget);
 
         this.consoleLogger.logAttack(this.turnCount, currentHero.name, this.currentTarget.name, damage);
 
@@ -311,10 +319,22 @@ export class BattleManager{
         }
         
         this.currentTarget = target;
+        let spell:Spell;
 
-        this.currentAttacker.cast(spellName, target);
+        try {
+            spell = this.currentAttacker.cast(spellName, target);
+        } catch (error) {
 
-        this.consoleLogger.logAttack(this.turnCount, this.currentAttacker.name, this.currentTarget.name, 100);
+            this.consoleLogger.logTurn(this.turnCount, error);
+            this.errorLogged = true;
+            return;
+        }
+
+        if(spell.actionType == ActionType.Offense)
+        {
+            let damage = DamageCalculator.CalculateDamage(this.currentAttacker, this.currentTarget, spell);
+            this.consoleLogger.logAttack(this.turnCount, this.currentAttacker.name, this.currentTarget.name, damage);
+        }
 
         this.functionCalled = true;
     }

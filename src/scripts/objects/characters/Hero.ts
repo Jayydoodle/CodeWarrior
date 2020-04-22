@@ -14,10 +14,16 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
     protected allowedWeaponType: WeaponType;
     protected allowedArmorType: ArmorType;
-    protected hitpoints: number;
+    protected maxHealth: number;
+    protected maxMP: number;
+    protected maxTP: number = Value.MaxTP;
+    protected health: number;
+    public mp: number;
+    public tp: number = 0;
     protected weapon: Weapon;
     protected armor: Armor;
     protected spellBook: Map<string, Spell>
+    protected activeSpell: Spell;
 
     public isAttacking: boolean = false;
     public actedThisTurn: boolean = false;
@@ -26,7 +32,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
     protected initialX: number;
     protected initialY: number;
-    protected castEffectOffset;
+    protected castEffectOffset: number;
     public gridPosition: GridPosition;
     protected animationFrames: number;
     protected animationFrameRate: number;
@@ -78,10 +84,20 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         let spell:Spell | undefined = this.spellBook.get(spellName);
 
         if(spell == undefined)
-            throw "Spell "+ "'" +spellName+ "'" +" Undefined";
+            throw "Spell "+ "'" +spellName+ "'" +" is undefined";
+        else if(spell.mpCost > this.mp)
+            throw this.name+" does not have enough mp to cast "+ "'" +spellName+ "'";
         else{
+            this.mp -= spell.mpCost;
+            this.activeSpell = spell;
             this.playCastAnimation(spell, target);
         }
+        return this.activeSpell;
+    }
+
+    emitEffectApplied(message: string)
+    {
+        this.emit(EventType.EffectApplied, message);
     }
     
     finishCast()
@@ -107,25 +123,33 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         return this.armor.mitigation;
     }
 
-    getCurrentHP()
+    getCurrentHp()
     {
-        return this.hitpoints;
+        return this.health;
+    }
+
+    getCurrentMp()
+    {
+        return this.mp;
     }
 
     takeDamage(damage: number)
     {
-        this.hitpoints -= damage;
+        this.health -= damage;
 
-        if(this.hitpoints <= 0)
+        if(this.health <= 0)
         {
+            this.health = 0;
             this.isAlive = false;
         }
     }
 
-    recoverHitpoints(hitpoints: number)
+    recoverHealth(health: number)
     {
-        this.hitpoints += hitpoints;
+        this.health += health;
     }
+
+    //#region: Animation
 
     PlayAttackAnimation()
     {
@@ -174,7 +198,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
         this.play(this.name+"_cast", true).once("animationcomplete-"+this.name+"_cast", () =>
         {
-            spell.playAnimation(this.scene, this.x, this.y, target);
+            spell.playAnimation(this.scene, target);
             this.isAttacking = false;
         });
     }
@@ -185,7 +209,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
         this.scene.add.existing(castAnimation);
         castAnimation.setDepth(Depth.Effect);
-        castAnimation.setScale(1.5);
+        castAnimation.setScale(ObjectScale.castAnimation);
         
         castAnimation.anims.animationManager.create(
         {
@@ -214,6 +238,8 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
         this.play(this.name+"_death");
     }
+
+    //#endregion
 }
 export class Hero extends Character {
 
@@ -236,7 +262,8 @@ export class Hero extends Character {
                     ? config.armor
                     : this.armor;           
 
-        this.hitpoints = config.hitpoints;
+        this.maxHealth = this.health = config.health;
+        this.maxMP = this.mp = Value.StartingPlayerMP;
         this.imageKey = config.imageKey;
         this.battleImageKey = config.battleImageKey;
         this.deathImageKey = config.deathImageKey;
@@ -249,7 +276,7 @@ export class Hero extends Character {
 
         this.determineEquipmentTypes();
 
-        this.setScale(ObjectScale.battleScale, ObjectScale.battleScale);
+        this.setScale(ObjectScale.battle, ObjectScale.battle);
         this.setDepth(Depth.CharacterSprite);
     }
 
@@ -282,7 +309,8 @@ export class Enemy extends Character{
 
         this.name = config.name;
         this.characterType = CharacterType.enemy;
-        this.hitpoints = config.hitpoints;
+        this.maxHealth = this.health = config.health;
+        this.maxMP = this.mp = Value.MaxEnemyMP;
         this.weapon = config.weapon != null
                     ? config.weapon
                     : this.weapon;
@@ -300,7 +328,7 @@ export class Enemy extends Character{
 
         this.castEffectOffset = -Value.CastEffectOffset;
 
-        this.setScale(-ObjectScale.battleScale, ObjectScale.battleScale);
+        this.setScale(-ObjectScale.battle, ObjectScale.battle);
         this.setDepth(Depth.CharacterSprite);
     }
 }
@@ -309,7 +337,7 @@ export type CharacterConfig  = {
 
     name: string,
     heroType: HeroType,
-    hitpoints: number,
+    health: number,
     weapon: Weapon | null,
     armor: Armor | null,
     imageKey: string,
@@ -324,7 +352,7 @@ export type CharacterConfig  = {
 export type EnemyConfig = {
 
     name: string,
-    hitpoints: number,
+    health: number,
     imageKey: string,
     battleImageKey: string,
     deathImageKey: string,

@@ -10,7 +10,7 @@ export class ConsoleLogger{
 
     log(message: string)
     {
-        this.textContainer.addText(message + "<br></br>");
+        this.textContainer.addText(message);
     }
 
     logTurn(turn: number, message: string)

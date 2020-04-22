@@ -1,7 +1,7 @@
 import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Hero } from '../objects/characters/Hero';
-import { BattleParty } from '../utility/Party';
+import { BattleParty } from '../objects/characters/Party';
 import { EventType, HeroType, GridPosition, Value, SceneType } from '../utility/Enumeration';
 import { GameState } from '../utility/GameState';
 import { ItemDatabase } from '../objects/items/ItemDatabase';
@@ -59,7 +59,7 @@ export default class StartScene extends Phaser.Scene {
       let warrior = new Hero(0, 0, this, {
         name: warriorName,
         heroType: HeroType.Melee,
-        hitpoints: Value.StartingPlayerHealth,
+        health: Value.StartingPlayerHealth,
         weapon: this.findItem("wooden_sword") as Weapon,
         armor: this.findItem("warrior_clothes") as Armor,
         imageKey: "",
@@ -74,7 +74,7 @@ export default class StartScene extends Phaser.Scene {
       let mage = new Hero(0, 0, this, {
         name: mageName,
         heroType: HeroType.Magic,
-        hitpoints: Value.StartingPlayerHealth,
+        health: Value.StartingPlayerHealth,
         weapon: this.findItem("wooden_staff") as Weapon,
         armor: this.findItem("mage_clothes") as Armor,
         imageKey: "",
@@ -89,7 +89,7 @@ export default class StartScene extends Phaser.Scene {
       let ranger = new Hero(0, 0, this, {
         name: rangerName,
         heroType: HeroType.Ranged,
-        hitpoints: Value.StartingPlayerHealth,
+        health: Value.StartingPlayerHealth,
         weapon: this.findItem("wooden_bow") as Weapon,
         armor: this.findItem("ranger_clothes") as Armor,
         imageKey: "",

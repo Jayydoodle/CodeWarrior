@@ -10,6 +10,7 @@ export class Action{
     imageFrames: number;
     frameRate: number = Value.SpellFrameRate;
     repeat: number = 0;
+    mpCost: number = 0;
     value: number = 0;
     public emitter: Phaser.Events.EventEmitter;
 
@@ -26,7 +27,7 @@ export class Action{
 
     }
 
-    playAnimation(scene: Phaser.Scene, x:number, y:number, target:Character)
+    playAnimation(scene: Phaser.Scene, target:Character)
     {
         let action: Phaser.Physics.Arcade.Sprite = new Phaser.Physics.Arcade.Sprite(scene, target.x, target.y, this.imageKey);
 
@@ -58,9 +59,10 @@ export class Action{
 
 export class Spell extends Action{
 
-    constructor(name: string, actionType: ActionType, value: number, imageKey: string, imageFrames: number){
+    constructor(name: string, actionType: ActionType, value: number, mpCost: number, imageKey: string, imageFrames: number){
         super(name, actionType, imageKey, imageFrames)
         this.value = value;
+        this.mpCost = mpCost;
     }
 }
 
@@ -69,9 +71,9 @@ export class BlackMagic extends Spell{
     attackPower: number
     element: ElementType;
 
-    constructor(name: string, element: ElementType, attackPower: number, imageKey: string, imageFrames: number){
+    constructor(name: string, element: ElementType, attackPower: number, mpCost: number, imageKey: string, imageFrames: number){
         
-        super(name, ActionType.Offense, attackPower, imageKey, imageFrames);
+        super(name, ActionType.Offense, attackPower, mpCost, imageKey, imageFrames);
 
         this.attackPower = attackPower;
         this.element = element;
@@ -82,9 +84,9 @@ export class WhiteMagic extends Spell{
 
     effect: Effect;
 
-    constructor(name: string, effectType: EffectType, value: number, imageKey: string, imageFrames: number)
+    constructor(name: string, effectType: EffectType, value: number, mpCost: number, imageKey: string, imageFrames: number)
     {
-        super(name, ActionType.Recovery, value, imageKey, imageFrames)
+        super(name, ActionType.Recovery, value, mpCost, imageKey, imageFrames)
 
         this.effect = new Effect(effectType, value);
         this.emitter.on(EventType.ApplyEffects, this.addEffect, this);

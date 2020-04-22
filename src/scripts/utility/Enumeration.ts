@@ -30,6 +30,13 @@ export enum HeroType{
     Ranged = "ranger"
 }
 
+export enum BlackMagicLevel{
+
+    I = 100,
+    II = 200,
+    III = 300
+}
+
 export enum CharacterType
 {
     enemy,
@@ -73,13 +80,6 @@ export enum ItemType{
     Armor
 }
 
-export enum BlackMagicLevel{
-
-    I = 100,
-    II = 200,
-    III = 300
-}
-
 export enum Value{
 
     CastEffectOffset = 20,
@@ -87,9 +87,15 @@ export enum Value{
     CastFrameRate = 12,
     DeathFrames = 6,
     DeathFrameRate = 10,
+    MaxEnemyMP = 999999,
+    MaxTP = 100,
+    MPCostBeginner = 10,
+    MPCostIntermediate = 25,
+    MPCostAdvanced = 50,
     SpellFrames = 100,
     SpellFrameRate = 30,
-    StartingPlayerHealth = 1000
+    StartingPlayerHealth = 1000,
+    StartingPlayerMP = 50
 }
 
 export enum WeaponType{
@@ -161,7 +167,9 @@ export enum Message
 
 export enum ObjectScale
 {
-    battleScale = 3.5
+    battle = 3.5,
+    castAnimation = 1.5
+
 }
 
 export enum Scene

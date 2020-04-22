@@ -11,7 +11,7 @@ export default class BattleEarthScene extends BattleScene {
           enemyConfigs: [
             {
               name: "Enemy1",
-              hitpoints: Value.StartingPlayerHealth,
+              health: Value.StartingPlayerHealth + 200,
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
@@ -22,7 +22,7 @@ export default class BattleEarthScene extends BattleScene {
             },
             {
               name: "Enemy2",
-              hitpoints: Value.StartingPlayerHealth,
+              health: Value.StartingPlayerHealth + 200,
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
@@ -33,7 +33,7 @@ export default class BattleEarthScene extends BattleScene {
             },
             {
               name: "Enemy3",
-              hitpoints: Value.StartingPlayerHealth,
+              health: Value.StartingPlayerHealth + 200,
               imageKey: "warrior",
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",

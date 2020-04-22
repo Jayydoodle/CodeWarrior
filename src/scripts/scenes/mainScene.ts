@@ -1,7 +1,7 @@
 import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Hero } from '../objects/characters/Hero';
-import { Party } from '../utility/Party';
+import { Party } from '../objects/characters/Party';
 import { GameState } from '../utility/GameState';
 
 export default class MainScene extends Phaser.Scene {
