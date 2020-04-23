@@ -8,16 +8,16 @@ cast the specified spell on the specified target (scroll to view spell and targe
 
 Available Variables:
 
-~ warriorTurn ~
+~ this.warriorTurn ~
 returns true or false if it is your warrior's turn
 
-~ mageTurn ~
+~ this.mageTurn ~
 returns true or false if it is your mage's turn
 
-~ rangerTurn ~
+~ this.rangerTurn ~
 returns true or false if it is your ranger's turn
 
-~ turn ~
+~ this.turn ~
 returns an integer representing the current turn number
 
 Available Spells:

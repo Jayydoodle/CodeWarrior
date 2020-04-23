@@ -46,6 +46,22 @@ export class AssetDictionary{
         let warriorCastSprite = new Asset("warrior_cast", "assets/sprites/warrior_cast.png", [63, 70], 7, AssetType.Sprite, false);
         ///#endregion
 
+        ///#region: Limit Burst Sprites
+
+        this.add(new Asset("lb_benediction", "assets/spells/limit_burst/Benediction.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_collapse", "assets/spells/limit_burst/Collapse.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_discharge", "assets/spells/limit_burst/Discharge.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_freeze", "assets/spells/limit_burst/Freeze.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_inferno", "assets/spells/limit_burst/Inferno.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_luminescence", "assets/spells/limit_burst/Luminescence.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_nova", "assets/spells/limit_burst/Nova.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_resurrection", "assets/spells/limit_burst/Resurrection.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_tempest", "assets/spells/limit_burst/Tempest.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_torrent", "assets/spells/limit_burst/Torrent.png", [192,192], 100, AssetType.Sprite, false));
+        this.add(new Asset("lb_upheaval", "assets/spells/limit_burst/Upheaval.png", [192,192], 100, AssetType.Sprite, false));
+
+        ///#endregion
+
         ///#region: Spell Sprites
 
             ////#region: Animation

@@ -1,10 +1,11 @@
 //#region Game
 
-export enum ActionType{
-
+//#region Game
+export enum ActionType {
     Offense,
     Defense,
-    Recovery
+    Recovery,
+    Special
 }
 
 export enum ArmorType{
@@ -71,7 +72,7 @@ export enum EffectType
     MagicRestoration,
     RecoveryOverTime,
     Restoration,
-    Revive
+    Revival
 }
 
 export enum ItemType{
@@ -94,7 +95,7 @@ export enum Value{
     MPCostAdvanced = 50,
     SpellFrames = 100,
     SpellFrameRate = 30,
-    StartingPlayerHealth = 1000,
+    StartingPlayerHealth = 10000,
     StartingPlayerMP = 50
 }
 
@@ -144,6 +145,7 @@ export enum EventType
     AttackComplete = "attackComplete",
     BtnApplyClicked = "btnApplyClicked",
     CastComplete = "castComplete",
+    CharacterDefeated = "characterDefeated",
     EffectApplied = "effectApplied",
     InfoTextUpdated = "infoTextUpdated",
     UILoaded = "uiLoaded"

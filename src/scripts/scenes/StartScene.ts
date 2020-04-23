@@ -106,7 +106,7 @@ export default class StartScene extends Phaser.Scene {
       party.group.forEach(member => {
           this.spellDatabase.spells.forEach(spell =>
           {
-              member.learnSpell(spell);
+              member.learn(spell);
           });
       });
       this.gameState = new GameState(party);

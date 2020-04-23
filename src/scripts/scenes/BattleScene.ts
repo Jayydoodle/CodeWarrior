@@ -106,7 +106,7 @@ export default class BattleScene extends Phaser.Scene {
     this.enemyParty.group.forEach(member => {
       this.spellDatabase.spells.forEach(spell =>
       {
-          member.learnSpell(spell);
+          member.learn(spell);
       });
     });
     

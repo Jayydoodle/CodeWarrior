@@ -103,7 +103,7 @@ export class SpellDatabase{
         this.add(shell3);*/
 
         let remedy:WhiteMagic = new WhiteMagic("remedy", EffectType.CureStatusEffects, 0, Value.MPCostIntermediate, "remedy_spell", 100);
-        let revive:WhiteMagic = new WhiteMagic("raise", EffectType.Revive, 0, Value.MPCostAdvanced, "revive_spell", 100);
+        let revive:WhiteMagic = new WhiteMagic("raise", EffectType.Revival, 0, Value.MPCostAdvanced, "revive_spell", 100);
 
         this.add(revive);
         this.add(remedy);
@@ -147,7 +147,7 @@ export class SpellDatabase{
         let cure:WhiteMagic = new WhiteMagic("cure", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_3", 100);
         let protect:WhiteMagic = new WhiteMagic("protect", EffectType.BuffDefense, WhiteMagicLevel.I, Value.MPCostBeginner, "protect_spell_2", 100);
         let remedy:WhiteMagic = new WhiteMagic("remedy", EffectType.CureStatusEffects, 0, Value.MPCostIntermediate, "remedy_spell", 100);
-        let revive:WhiteMagic = new WhiteMagic("raise", EffectType.Revive, 0, Value.MPCostAdvanced, "revive_spell", 100);
+        let revive:WhiteMagic = new WhiteMagic("raise", EffectType.Revival, 0, Value.MPCostAdvanced, "revive_spell", 100);
 
         this.add(cure);
         this.add(protect);

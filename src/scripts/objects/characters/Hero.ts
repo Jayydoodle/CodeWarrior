@@ -1,8 +1,9 @@
 import { CharacterType, Depth, EventType, 
          ObjectScale, HeroType, ArmorType, 
-         WeaponType, GridPosition, SceneType, Value, ElementType} from "../../utility/Enumeration";
+         WeaponType, GridPosition, SceneType, Value, ElementType, ActionType} from "../../utility/Enumeration";
 import { Weapon, Armor } from "../items/Item";
 import { Spell } from "../spells_and_abilities/Spell";
+import { LimitBurst } from "../spells_and_abilities/Action";
 
 export class Character extends Phaser.Physics.Arcade.Sprite{
 
@@ -24,10 +25,12 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     protected armor: Armor;
     protected spellBook: Map<string, Spell>
     protected activeSpell: Spell;
+    protected lb: LimitBurst;
 
     public isAttacking: boolean = false;
     public actedThisTurn: boolean = false;
     public isAlive: boolean = true;
+    public limitBurstReady: boolean = false;
     public priority: number = 0;
 
     protected initialX: number;
@@ -74,9 +77,17 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         this.setDepth(Depth.CharacterSprite);
     }
 
-    learnSpell(spell: Spell)
+    learn(action: Spell | LimitBurst)
     {
-        this.spellBook.set(spell.name, spell);
+        if(action.actionType == ActionType.Offense)
+            this.spellBook.set(action.name, action);
+        else if(action.actionType == ActionType.Special)
+            this.lb = action;
+    }
+
+    limitBurst()
+    {
+        this.playCastAnimation(this.lb, undefined);
     }
 
     cast(spellName: string, target: Character)
@@ -133,6 +144,22 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         return this.mp;
     }
 
+    getCurrentTp()
+    {
+        return this.tp;
+    }
+
+    addTP(damage: number)
+    {
+        this.tp += damage * .10;
+
+        if(this.tp >= this.maxTP)
+        {
+            this.tp = this.maxTP;
+            this.limitBurstReady = true;
+        }
+    }
+
     takeDamage(damage: number)
     {
         this.health -= damage;
@@ -141,12 +168,17 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         {
             this.health = 0;
             this.isAlive = false;
+            this.playDeathAnimation();
+            this.emit(EventType.CharacterDefeated, this.name + " has been defeated.");
         }
     }
 
     recoverHealth(health: number)
     {
         this.health += health;
+        
+        if(this.health > this.maxHealth)
+            this.health = this.maxHealth;
     }
 
     //#region: Animation
@@ -176,7 +208,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         });
     }
 
-    playCastAnimation(spell: Spell, target: Character)
+    playCastAnimation(spell: Spell | LimitBurst, target?: Character)
     {
         if(this.actedThisTurn)
             return;
@@ -216,7 +248,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             key: "cast",
             frames: castAnimation.anims.animationManager.generateFrameNumbers("cast_white", { start: 0, end: Value.SpellFrames }),
             frameRate: Value.SpellFrameRate,
-            repeat: 0
+            repeat: 1
         });
 
         castAnimation.play("cast", true).once("animationcomplete-"+"cast", () =>{

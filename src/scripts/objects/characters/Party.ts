@@ -53,6 +53,16 @@ export class Party{
         });
     }
 
+    setEmitters()
+    {
+        this.group.forEach(member =>{
+            member.on(EventType.Attacking, this.emitAttacking, this);
+            member.on(EventType.AttackComplete, this.emitAttackComplete, this);
+            member.on(EventType.EffectApplied, this.emitEffectApplied, this);
+            member.on(EventType.CharacterDefeated, this.emitCharacterDefeated, this);
+        });
+    }
+
     emitAttacking()
     {
         this.emitter.emit(EventType.Attacking)
@@ -61,6 +71,11 @@ export class Party{
     emitAttackComplete()
     {
         this.emitter.emit(EventType.AttackComplete);
+    }
+
+    emitCharacterDefeated(message: string)
+    {
+        this.emitter.emit(EventType.CharacterDefeated, message);
     }
 
     emitEffectApplied(message: string)
@@ -82,11 +97,7 @@ export class BattleParty extends Party{
         this.group[1] = this.mage = mage;
         this.group[2] = this.ranger = ranger;
 
-        this.group.forEach(member =>{
-            member.on(EventType.Attacking, this.emitAttacking, this);
-            member.on(EventType.AttackComplete, this.emitAttackComplete, this);
-            member.on(EventType.EffectApplied, this.emitEffectApplied, this);
-        });
+        this.setEmitters();
     }
 }
 
@@ -101,10 +112,6 @@ export class EnemyParty extends Party{
 
         this.group = enemies;
 
-        this.group.forEach(member =>{
-            member.on(EventType.Attacking, this.emitAttacking, this);
-            member.on(EventType.AttackComplete, this.emitAttackComplete, this);
-            member.on(EventType.EffectApplied, this.emitEffectApplied, this);
-        });
+        this.setEmitters();
     }
 }

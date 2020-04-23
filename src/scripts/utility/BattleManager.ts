@@ -7,6 +7,7 @@ import { ConsoleLogger } from "./ConsoleLogger";
 import { Hud } from "./Hud";
 import { Spell } from "../objects/spells_and_abilities/Spell";
 import { DamageCalculator } from "./DamageCalculator";
+import { LimitBurstDatabase } from "../objects/spells_and_abilities/LimitBurstDatabase";
 
 export class BattleManager{
 
@@ -33,12 +34,22 @@ export class BattleManager{
 
     private queue: Queue<Character>;
 
+    // player variables
+    private warriorTurn: boolean;
+    private mageTurn: boolean;
+    private rangerTurn: boolean;
+    private turn: number;
+
+    private limitBurstDatabase: LimitBurstDatabase;
+
     constructor(scene: Phaser.Scene, hud: Hud, battleParty: BattleParty, enemyParty: EnemyParty)
     {
         this.scene = scene;
         this.hud = hud;
         this.battleParty = battleParty;
         this.enemyParty = enemyParty;
+
+        this.limitBurstDatabase = new LimitBurstDatabase();
 
        /* this.queue = new TypedPriorityQueue<Character>
         (function(a: Character, b: Character){ return a.priority > b.priority });*/
@@ -58,8 +69,10 @@ export class BattleManager{
 
         this.enemyParty.emitter.on(EventType.AttackComplete, this.nextTurn, this);
         this.enemyParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
+        this.enemyParty.emitter.on(EventType.CharacterDefeated, this.logMessage, this);
         this.battleParty.emitter.on(EventType.AttackComplete, this.nextTurn, this);
         this.battleParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
+        this.battleParty.emitter.on(EventType.CharacterDefeated, this.logMessage, this);
     }
 
     logMessage(message: string)
@@ -125,10 +138,10 @@ export class BattleManager{
             var player = this.currentAttacker as Hero;
 
             /* player variables */
-            let warriorTurn = player.heroType == HeroType.Melee;
-            let mageTurn = player.heroType == HeroType.Magic;
-            let rangerTurn = player.heroType == HeroType.Ranged;
-            let turn = this.turnCount;
+            this.warriorTurn = player.heroType == HeroType.Melee;
+            this.mageTurn = player.heroType == HeroType.Magic;
+            this.rangerTurn = player.heroType == HeroType.Ranged;
+            this.turn = this.turnCount;
 
             try {
                 eval(this.code); 
@@ -142,7 +155,6 @@ export class BattleManager{
 
             //this.cast("fire", this.currentTarget.name);
             this.meleeAttack(this.currentAttacker, this.currentTarget);
-
 
             let damage = DamageCalculator.CalculateDamage(this.currentAttacker, this.currentTarget);
 
@@ -163,11 +175,6 @@ export class BattleManager{
 
     nextTurn()
     {
-        if(this.currentTarget && !this.currentTarget.isAlive)
-        {
-            this.currentTarget.playDeathAnimation();
-        }
-
         if(this.enemyParty.hasBeenDefeated() || this.battleParty.hasBeenDefeated()) return;
         
         var previousAttacker = this.currentAttacker;
@@ -176,7 +183,7 @@ export class BattleManager{
         this.currentAttacker = this.queue.dequeue() as Character;
         this.queue.enqueue(previousAttacker);
 
-        while(!this.currentAttacker.isAlive)
+        while(!this.currentAttacker.isAlive) // remove dead characters from queue
         {
             this.currentAttacker = this.queue.dequeue() as Character;
         }
@@ -211,14 +218,6 @@ export class BattleManager{
         return target;
     }
 
-    calculateDamage(attacker: Character, target: Character)
-    {
-        let damage = attacker.getBaseAttack() - target.getBaseDefense();
-        target.takeDamage(damage);
-
-        return damage;
-    }
-
     isMeleeAttacker()
     {
         switch(this.currentAttacker.characterType)
@@ -238,7 +237,13 @@ export class BattleManager{
     meleeAttack(attacker: Character, target: Character)
     {
         attacker.configureAttack();
+        
         this.scene.physics.moveToObject(attacker, target, this.movementSpeed);
+    }
+
+    attackValidation()
+    {
+
     }
 
     checkTarget(name: String)
@@ -290,9 +295,8 @@ export class BattleManager{
             currentHero.PlayAttackAnimation();
         }
 
-        
-
         let damage = DamageCalculator.CalculateDamage(currentHero, this.currentTarget);
+        this.currentAttacker.addTP(damage);
 
         this.consoleLogger.logAttack(this.turnCount, currentHero.name, this.currentTarget.name, damage);
 
@@ -333,8 +337,23 @@ export class BattleManager{
         if(spell.actionType == ActionType.Offense)
         {
             let damage = DamageCalculator.CalculateDamage(this.currentAttacker, this.currentTarget, spell);
+            this.currentAttacker.addTP(damage);
             this.consoleLogger.logAttack(this.turnCount, this.currentAttacker.name, this.currentTarget.name, damage);
         }
+
+        this.functionCalled = true;
+    }
+
+    limitBurst(name: string)
+    {
+        if(this.functionCalled)
+        {
+            return;
+        }
+        
+        this.currentAttacker.learn(this.limitBurstDatabase.findByName(name));
+
+        this.currentAttacker.limitBurst();
 
         this.functionCalled = true;
     }

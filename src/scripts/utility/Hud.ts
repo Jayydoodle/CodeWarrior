@@ -39,6 +39,7 @@ export class Hud extends Phaser.GameObjects.Container{
 
         HudElement.healthText.text = character.getCurrentHp().toString();
         HudElement.mpText.text = character.getCurrentMp().toString();
+        HudElement.tpText.text = character.getCurrentTp().toString();
     }
 
     updateAll(battleParty: BattleParty)

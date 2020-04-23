@@ -1,21 +1,21 @@
-if(warriorTurn) 
+if(this.warriorTurn) 
 {
-  if(turn % 2 == 0)
+  if(this.turn % 2 == 0)
       this.cast("fire", "random");
   else
       this.attack("random");
 }
-if(mageTurn)
+if(this.mageTurn)
 {
-  if(turn == 2)
+  if(this.turn % 2 == 0)
       this.cast("cure", "warrior");
-  else if (turn % 3 == 0)
+  else if (this.turn % 3 == 0)
       this.cast("earth", "random")
   else
       this.cast("ice", "random");
 }
-if(rangerTurn)
+if(this.rangerTurn)
 {
-  if(turn )
-  this.cast("lightning", "random");
+  if(this.turn % 2 == 0)
+  this.cast("water", "random");
 }
