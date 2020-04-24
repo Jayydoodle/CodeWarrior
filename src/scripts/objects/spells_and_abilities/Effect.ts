@@ -24,6 +24,8 @@ export class Effect{
             case EffectType.Restoration:
                 this.heal(target);
                 break;
+            case EffectType.Revival:
+                this.revive(target);
             default:
                 break;
         }
@@ -41,5 +43,16 @@ export class Effect{
         target.recoverHealth(this.value);
         let message = target.name + " recovered " + this.value + " HP ";
         target.emitEffectApplied(message);
+    }
+
+    revive(target: Character)
+    {
+        if(!target.isAlive)
+        {
+            target.revive();
+            let message = target.name + " was brought back to life!";
+            target.emitEffectApplied(message);
+            target.emitRevived();
+        }
     }
 }

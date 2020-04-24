@@ -33,7 +33,6 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     public isAttacking: boolean = false;
     public actedThisTurn: boolean = false;
     public isAlive: boolean = true;
-    public limitBurstReady: boolean = false;
     public isLimitBursting = false;
     public priority: number = 0;
 
@@ -95,6 +94,8 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             this.playCastAnimation(this.lb, enemyParty);
         else
             this.playCastAnimation(this.lb, playerParty);
+
+        this.tp = 0;
     }
 
     cast(spellName: string, target: Character)
@@ -115,6 +116,11 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     emitEffectApplied(message: string)
     {
         this.emit(EventType.EffectApplied, message);
+    }
+
+    emitRevived()
+    {
+        this.emit(EventType.Revived, this);
     }
     
     finishCast()
@@ -174,14 +180,18 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         return this.activeSpell.actionType;
     }
 
+    limitBurstReady()
+    {
+        return this.tp >= 100 ? true : false;
+    }
+
     addTP(damage: number)
     {
-        this.tp += damage * .10;
+        this.tp += damage * .3;
 
         if(this.tp >= this.maxTP)
         {
             this.tp = this.maxTP;
-            this.limitBurstReady = true;
         }
     }
 
@@ -202,6 +212,13 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         
         if(this.health > this.maxHealth)
             this.health = this.maxHealth;
+    }
+
+    revive()
+    {
+        this.health = this.maxHealth;
+        this.setTexture(this.battleImageKey);
+        this.isAlive = true;
     }
 
     //#region: Animation

@@ -35,7 +35,7 @@ export default class UIScene extends Phaser.Scene {
 
     if(this.isBattleScene)
     {
-      //this.codeEditor.editor.setValue("if(warriorTurn) this.cast(\"cure\", \"random\");\nif(mageTurn) this.cast(\"ice\", \"random\");\nif(rangerTurn) this.cast(\"lightning\", \"random\");");
+      this.codeEditor.editor.setValue(this.cache.text.get("test_script"));
     }
     else{
       this.codeEditor.editor.setValue("this.createParty(\"warrior\", \"mage\", \"ranger\");");

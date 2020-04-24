@@ -19,14 +19,14 @@ export default class PreloadScene extends Phaser.Scene {
       let progressBar = this.add.graphics();
       let progressBox = this.add.graphics();
       progressBox.fillStyle(0x222222, 0.8);
-      progressBox.fillRect(width/2 - 180, height/2, 500, 100);
+      progressBox.fillRect(width/2 + 180, height/2, 500, 100);
 
-      let loadingText = this.add.text(width / 2 - 120, height / 2 - 100, 'Loading...', { 
+      let loadingText = this.add.text(width / 2 + 200, height / 2 - 100, 'Loading...', { 
         font: '80px monospace',
         fill: '#ffffff'
       });
 
-      let percentText = this.add.text(width / 2, height / 2, '0%', {
+      let percentText = this.add.text(width / 2 + 330, height / 2 + 10, '0%', {
           font: '80px monospace',
           fill: '#ffffff'
       });
@@ -35,7 +35,7 @@ export default class PreloadScene extends Phaser.Scene {
         console.log(value);
         progressBar.clear();
         progressBar.fillStyle(0xffffff, 1);
-        progressBar.fillRect(width/2 - 180, height/2, 500 * value, 100);
+        progressBar.fillRect(width/2 + 180, height/2, 500 * value, 100);
         percentText.setText(Math.floor(value * 100) + '%');
       });
                 

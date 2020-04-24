@@ -105,7 +105,7 @@ export enum Value{
     SpellFrames = 100,
     SpellFrameRate = 30,
     StartingPlayerHealth = 20000,
-    StartingPlayerMP = 50
+    StartingPlayerMP = 1000
 }
 
 export enum WeaponType{
@@ -160,6 +160,7 @@ export enum EventType
     CharacterDefeated = "characterDefeated",
     EffectApplied = "effectApplied",
     InfoTextUpdated = "infoTextUpdated",
+    Revived = "revived",
     UILoaded = "uiLoaded"
 }
 

@@ -4,7 +4,7 @@ Available Actions:
 standard attack on the specified target (scroll to view target list).
 
 ~ this.cast(spell, target); ~
-cast the specified spell on the specified target (scroll to view spell and target lists).
+cast the specified spell on the specified target (scroll to view spell lists).
 
 ~ this.limitBurst(name); ~
 use the specified limit burst

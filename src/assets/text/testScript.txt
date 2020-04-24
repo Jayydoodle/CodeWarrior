@@ -1,0 +1,44 @@
+if(this.warriorTurn) 
+{
+  if(this.limitBurstReady)
+  {
+      this.limitBurst("inferno");
+  }
+  else if(this.turn % 2 == 0)
+      this.cast("fire", "random");
+  else
+      this.attack("random");
+}
+if(this.mageTurn)
+{
+  if(this.limitBurstReady)
+  {
+    if(!this.warriorIsAlive && !this.rangerIsAlive)
+      this.limitBurst("resurrection");
+    else
+      this.limitBurst("discharge");
+  }
+  else if(this.warriorHp < 100 && this.warriorIsAlive)
+      this.cast("cure", "warrior");
+  else if(this.turn % 8 == 0 && this.warriorIsAlive)
+      this.cast("protect", "warrior");
+  else if (this.turn % 3 == 0)
+      this.cast("earth", "random")
+  else if (this.turn % 2 == 0)
+      this.cast("ice", "random");
+  else
+      this.cast("dark", "random");
+}
+if(this.rangerTurn)
+{
+  if(this.limitBurstReady)
+  {
+    this.limitBurst("tempest");
+  }
+  else if(this.turn % 2 == 0)
+  {
+    this.cast("wind", "random");
+  }
+  else
+    this.attack("random");
+}

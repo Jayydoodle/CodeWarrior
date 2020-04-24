@@ -178,6 +178,7 @@ export class AssetDictionary{
 
             this.add(new Asset('battle_text', 'assets/text/battle.txt', [0, 0], 0, AssetType.Text, false));
             this.add(new Asset('start_text', 'assets/text/start.txt', [0, 0], 0, AssetType.Text, false));
+            this.add(new Asset("test_script", 'assets/text/testScript.txt', [0, 0], 0, AssetType.Text, false));
 
         ///#endregion
 

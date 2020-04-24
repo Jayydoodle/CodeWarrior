@@ -60,6 +60,7 @@ export class Party{
             member.on(EventType.AttackComplete, this.emitAttackComplete, this);
             member.on(EventType.EffectApplied, this.emitEffectApplied, this);
             member.on(EventType.CharacterDefeated, this.emitCharacterDefeated, this);
+            member.on(EventType.Revived, this.emitRevived, this);
         });
     }
 
@@ -81,6 +82,11 @@ export class Party{
     emitEffectApplied(message: string)
     {
         this.emitter.emit(EventType.EffectApplied, message);
+    }
+
+    emitRevived(character: Character)
+    {
+        this.emitter.emit(EventType.Revived, character);
     }
 }
 export class BattleParty extends Party{

@@ -39,6 +39,8 @@ export class BattleManager{
     private currentAttacker: Character;
 
     private queue: Queue<Character>;
+    private seenCharacters: Map<string, Character>;
+    private battleSize: number = 0;
 
     // player variables
     private limitBurstReady: boolean;
@@ -68,6 +70,7 @@ export class BattleManager{
         this.gameHeight = this.scene.game.config.height as number;
 
         this.limitBurstDatabase = new LimitBurstDatabase();
+        this.seenCharacters = new Map<string, Character>();
 
         this.lbBackground = new Phaser.GameObjects.Rectangle(this.scene, this.gameWidth/2, this.gameHeight/2, this.gameWidth, this.gameHeight, 0x000000);
         this.lbBackground.setDepth(Depth.Effect);
@@ -82,20 +85,24 @@ export class BattleManager{
 
         this.battleParty.group.forEach(member => {
             this.queue.enqueue(member);
+            this.battleSize++;
         });
 
         this.hud.updateAll(battleParty);
 
         this.enemyParty.group.forEach(member => {
             this.queue.enqueue(member);
+            this.battleSize++;
         });
 
         this.enemyParty.emitter.on(EventType.AttackComplete, this.completeTurn, this);
         this.enemyParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
         this.enemyParty.emitter.on(EventType.CharacterDefeated, this.logMessage, this);
+        this.enemyParty.emitter.on(EventType.Revived, this.revive, this);
         this.battleParty.emitter.on(EventType.AttackComplete, this.completeTurn, this);
         this.battleParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
         this.battleParty.emitter.on(EventType.CharacterDefeated, this.logMessage, this);
+        this.battleParty.emitter.on(EventType.Revived, this.revive, this)
     }
 
     logMessage(message: string)
@@ -121,6 +128,12 @@ export class BattleManager{
         }
 
         this.hud.updateAll(this.battleParty);
+    }
+
+    revive(character: Character)
+    {
+        this.queue.enqueue(character);
+        this.battleSize++;
     }
 
     startBattle(code: string)
@@ -178,7 +191,7 @@ export class BattleManager{
 
             this.hp = player.getCurrentHp();
             this.mp = player.getCurrentMp();
-            this.limitBurstReady = player.limitBurstReady;
+            this.limitBurstReady = player.limitBurstReady();
             this.turn = this.turnCount;
 
             try {
@@ -241,6 +254,9 @@ export class BattleManager{
         var previousAttacker = this.currentAttacker;
         previousAttacker.actedThisTurn = false;
         previousAttacker.resetPosition();
+        
+        if(!this.seenCharacters.has(previousAttacker.name))
+            this.seenCharacters.set(previousAttacker.name, previousAttacker);
 
         this.currentAttacker = this.queue.dequeue() as Character;
         this.queue.enqueue(previousAttacker);
@@ -248,12 +264,14 @@ export class BattleManager{
         while(!this.currentAttacker.isAlive) // remove dead characters from queue
         {
             this.currentAttacker = this.queue.dequeue() as Character;
+            this.battleSize--;
         }
         
-        if(this.currentAttacker.name == this.firstAttacker.name)
+        if(this.seenCharacters.size >= this.battleSize)
         {
             this.turnCount++;
             this.consoleLogger.log("<br>Turn: " + this.turnCount);
+            this.seenCharacters.clear();
         }
 
         this.timer = this.scene.time.delayedCall(this.attackDelay, this.handleTurn, [], this);
@@ -317,7 +335,7 @@ export class BattleManager{
         this.scene.physics.moveToObject(attacker, target, this.movementSpeed);
     }
 
-    checkTarget(name: String)
+    checkTarget(name: String, allowDead = false)
     {
         let target: Character | undefined;
 
@@ -335,11 +353,11 @@ export class BattleManager{
         return target;
     }
 
-    validateTarget(enemyName: string)
+    validateTarget(enemyName: string, allowDead = false)
     {
-        let target = this.checkTarget(enemyName);
+        let target = this.checkTarget(enemyName, allowDead);
        
-        if(!target || !target.isAlive) 
+        if(!target || (!target.isAlive && !allowDead)) 
             throw enemyName + " is not a valid target";
         else
             return target;
@@ -377,7 +395,13 @@ export class BattleManager{
         if(!isEnemy)
         {   
             try {
-                let target = this.validateTarget(targetName);
+                let target;
+
+                if(spellName === "raise")
+                    target = this.validateTarget(targetName, true);
+                else
+                    target = this.validateTarget(targetName);
+                
                 this.currentTarget = target;
             } 
             catch (error) { 

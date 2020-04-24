@@ -134,7 +134,7 @@ export class SpellDatabase{
         let ice:BlackMagic = new BlackMagic("ice", ElementType.Ice, BlackMagicLevel.I, Value.MPCostBeginner, "ice_spell_1", 100);
         let lightning:BlackMagic = new BlackMagic("lightning", ElementType.Lightning, BlackMagicLevel.I, Value.MPCostBeginner, "lightning_spell_1", 100);
         let water:BlackMagic = new BlackMagic("water", ElementType.Water, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_2", 100);
-        let wind:BlackMagic = new BlackMagic("wind", ElementType.Wind, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_2", 100);
+        let wind:BlackMagic = new BlackMagic("wind", ElementType.Wind, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100);
 
         this.add(earth);
         this.add(dark);
