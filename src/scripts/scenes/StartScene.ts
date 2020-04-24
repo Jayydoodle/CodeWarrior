@@ -17,6 +17,7 @@ export default class StartScene extends Phaser.Scene {
   private sceneType: SceneType = SceneType.WorldScene;
 
   private background: Background;
+  private backgroundMusic: Phaser.Sound.BaseSound;
   private infoText: string;
   private infoTextSet: boolean = false;
 
@@ -30,6 +31,8 @@ export default class StartScene extends Phaser.Scene {
   create() {
 
     this.background = new Background(this.findAsset("start_scene").key, this, 0, 0);
+    this.backgroundMusic = this.sound.add("start_music", { loop: true });
+    this.backgroundMusic.play();
 
     this.scene.get('UIScene').events.on(EventType.BtnApplyClicked, this.evaluateCode, this);
 
@@ -113,6 +116,8 @@ export default class StartScene extends Phaser.Scene {
 
       this.scene.get('UIScene').children.destroy();
       this.scene.get('UIScene').events.shutdown();
+      this.background.destroy();
+      this.backgroundMusic.destroy();
 
       this.scene.start('BattleEarthScene', {gameState: this.gameState});
   }

@@ -1,12 +1,24 @@
 Available Actions:
 
 ~ this.attack(target); ~
-perform a standard attack on the specified target (scroll to view target list).
+standard attack on the specified target (scroll to view target list).
 
 ~ this.cast(spell, target); ~
 cast the specified spell on the specified target (scroll to view spell and target lists).
 
+~ this.limitBurst(name); ~
+use the specified limit burst
+
 Available Variables:
+
+~ this.hp ~
+returns the current hero's current hp
+
+~ this.mp ~
+returns the current hero's current mp
+
+~ this.limitBurstReady ~
+returns true or false if the current hero can use a limit burst
 
 ~ this.warriorTurn ~
 returns true or false if it is your warrior's turn
@@ -18,15 +30,41 @@ returns true or false if it is your mage's turn
 returns true or false if it is your ranger's turn
 
 ~ this.turn ~
-returns an integer representing the current turn number
+returns the current turn number
+
+~ this.warriorIsAlive ~
+returns true or false if your warrior is alive
+
+~ this.mageIsAlive ~
+returns true or false if your mage is alive
+
+~ this.rangerIsAlive ~
+returns true or false if your ranger is alive
+
+~ this.warriorHp ~
+returns your warrior's current hp
+
+~ this.mageHp ~
+returns your mage's current hp
+
+~ this.rangerHp ~
+returns your ranger's current hp
 
 Available Spells:
 
 <<< Black Magic >>>
-"earth", "dark", "fire",  "lighting", "water", "wind"
+"earth" - earth magic
+"dark" - dark magic
+"fire" - fire magic
+"lighting" - lightning magic
+"water" - water magic
+"wind" - wind magic
 
 <<< White Magic >>>
-"cure", "protect", "remedy", "raise"
+"cure" - restore hp
+"protect" - increase defense
+"remedy" - remove status effect
+"raise" - ressurect fallen ally
 
 Available Targets:
 

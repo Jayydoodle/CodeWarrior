@@ -1,9 +1,10 @@
 import { CharacterType, Depth, EventType, 
          ObjectScale, HeroType, ArmorType, 
-         WeaponType, GridPosition, SceneType, Value, ElementType, ActionType} from "../../utility/Enumeration";
+         WeaponType, GridPosition, SceneType, Value, ElementType, ActionType, AttackType} from "../../utility/Enumeration";
 import { Weapon, Armor } from "../items/Item";
 import { Spell } from "../spells_and_abilities/Spell";
 import { LimitBurst } from "../spells_and_abilities/Action";
+import { BattleParty, EnemyParty } from "./Party";
 
 export class Character extends Phaser.Physics.Arcade.Sprite{
 
@@ -12,6 +13,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     protected castImageKey: string;
     protected deathImageKey: string;
     public characterType: CharacterType;
+    public heroType: HeroType;
 
     protected allowedWeaponType: WeaponType;
     protected allowedArmorType: ArmorType;
@@ -19,30 +21,32 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     protected maxMP: number;
     protected maxTP: number = Value.MaxTP;
     protected health: number;
-    public mp: number;
-    public tp: number = 0;
     protected weapon: Weapon;
     protected armor: Armor;
     protected spellBook: Map<string, Spell>
-    protected activeSpell: Spell;
     protected lb: LimitBurst;
+    public currentAttackType: AttackType;
+    public activeSpell: Spell;
+    public mp: number;
+    public tp: number = 0;
 
     public isAttacking: boolean = false;
     public actedThisTurn: boolean = false;
     public isAlive: boolean = true;
     public limitBurstReady: boolean = false;
+    public isLimitBursting = false;
     public priority: number = 0;
 
     protected initialX: number;
     protected initialY: number;
     protected castEffectOffset: number;
-    public gridPosition: GridPosition;
     protected animationFrames: number;
     protected animationFrameRate: number;
     protected battleAnimationFrames: number;
     protected battleAnimationFrameRate: number;
     protected deathAnimationFrames: number;
     protected deathAnimationFrameRate: number;
+    public gridPosition: GridPosition;
 
     constructor(scene: Phaser.Scene, x: number, y: number, imageKey: string){
         super(scene, x, y, imageKey);
@@ -79,15 +83,18 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
     learn(action: Spell | LimitBurst)
     {
-        if(action.actionType == ActionType.Offense)
+        if(action instanceof LimitBurst)
+            this.lb = action as LimitBurst;
+        else
             this.spellBook.set(action.name, action);
-        else if(action.actionType == ActionType.Special)
-            this.lb = action;
     }
 
-    limitBurst()
+    limitBurst(enemyParty: EnemyParty, playerParty:BattleParty)
     {
-        this.playCastAnimation(this.lb, undefined);
+        if(this.lb.actionType == ActionType.Offense)
+            this.playCastAnimation(this.lb, enemyParty);
+        else
+            this.playCastAnimation(this.lb, playerParty);
     }
 
     cast(spellName: string, target: Character)
@@ -95,7 +102,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         let spell:Spell | undefined = this.spellBook.get(spellName);
 
         if(spell == undefined)
-            throw "Spell "+ "'" +spellName+ "'" +" is undefined";
+            throw "Spell "+ "'" +spellName+ "'" +" is undefined or has not been learned";
         else if(spell.mpCost > this.mp)
             throw this.name+" does not have enough mp to cast "+ "'" +spellName+ "'";
         else{
@@ -103,7 +110,6 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             this.activeSpell = spell;
             this.playCastAnimation(spell, target);
         }
-        return this.activeSpell;
     }
 
     emitEffectApplied(message: string)
@@ -113,8 +119,8 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     
     finishCast()
     {
+        this.isLimitBursting = false;
         this.setTexture(this.battleImageKey);
-        this.resetPosition();
         this.emit(EventType.AttackComplete, this);
     }
 
@@ -122,6 +128,20 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     {
         this.isAttacking = true;
         this.setDepth(Depth.Attacker);
+        this.currentAttackType = AttackType.Regular;
+    }
+
+    configureCast()
+    {
+        this.setDepth(Depth.Cast);
+        this.currentAttackType = AttackType.Cast;
+    }
+
+    configureLimitBurst()
+    {
+        this.isLimitBursting = true;
+        this.setDepth(Depth.Cast);
+        this.currentAttackType = AttackType.LimitBurst;
     }
 
     getBaseAttack()
@@ -149,6 +169,11 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         return this.tp;
     }
 
+    getSpellType()
+    {
+        return this.activeSpell.actionType;
+    }
+
     addTP(damage: number)
     {
         this.tp += damage * .10;
@@ -168,8 +193,6 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         {
             this.health = 0;
             this.isAlive = false;
-            this.playDeathAnimation();
-            this.emit(EventType.CharacterDefeated, this.name + " has been defeated.");
         }
     }
 
@@ -202,19 +225,19 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         this.play(this.name+"_attack", true).once("animationcomplete-"+this.name+"_attack", () =>
         {
             this.setFrame(0);
-            this.resetPosition();
             this.isAttacking = false;
             this.emit(EventType.AttackComplete, this);
         });
     }
 
-    playCastAnimation(spell: Spell | LimitBurst, target?: Character)
+    playCastAnimation(spell: Spell | LimitBurst, target: Character | BattleParty | EnemyParty)
     {
         if(this.actedThisTurn)
             return;
 
         this.actedThisTurn = true;
         this.setTexture(this.castImageKey);
+        this.setDepth(Depth.Cast);
         
         spell.emitter.on(EventType.CastComplete, this.finishCast, this);
 
@@ -269,13 +292,12 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         });
 
         this.play(this.name+"_death");
+        this.emit(EventType.CharacterDefeated, this.name + " has been defeated.");
     }
 
     //#endregion
 }
 export class Hero extends Character {
-
-    public heroType: HeroType;
 
     constructor(x: number, y: number, scene: Phaser.Scene, config: CharacterConfig) {
         super(scene, x, y, config.imageKey);
@@ -341,8 +363,10 @@ export class Enemy extends Character{
 
         this.name = config.name;
         this.characterType = CharacterType.enemy;
+        this.heroType = config.heroType;
         this.maxHealth = this.health = config.health;
         this.maxMP = this.mp = Value.MaxEnemyMP;
+
         this.weapon = config.weapon != null
                     ? config.weapon
                     : this.weapon;
@@ -350,6 +374,7 @@ export class Enemy extends Character{
         this.armor = config.armor != null
                     ? config.armor
                     : this.armor; 
+                    
         this.imageKey = config.imageKey;
         this.battleImageKey = config.battleImageKey;
         this.deathImageKey = config.deathImageKey;
@@ -386,6 +411,7 @@ export type EnemyConfig = {
     name: string,
     health: number,
     imageKey: string,
+    class: HeroType,
     battleImageKey: string,
     deathImageKey: string,
     castImageKey: string,

@@ -17,5 +17,27 @@ if(this.mageTurn)
 if(this.rangerTurn)
 {
   if(this.turn % 2 == 0)
-  this.cast("water", "random");
+    this.cast("water", "random");
+  else
+    this.limitBurst("tempest");
 }
+
+if(this.warriorTurn) 
+{
+  this.limitBurst("inferno");
+}
+if(this.mageTurn)
+{
+  this.limitBurst("discharge");
+}
+if(this.rangerTurn)
+{
+  this.limitBurst("tempest");
+}
+
+if(this.warriorTurn)
+    this.attack("random");
+if(this.mageTurn)
+    this.cast("fire", "random");
+if(this.rangerTurn)
+    this.attack("random");

@@ -1,5 +1,7 @@
-import { ActionType, EventType, Depth, Value, EffectType, ElementType } from "../../utility/Enumeration";
+import { ActionType, EventType, Depth, Value, EffectType, ElementType, ObjectScale } from "../../utility/Enumeration";
 import { Character } from "../characters/Hero";
+import { Effect } from "./Effect";
+import { BattleParty, EnemyParty } from "../characters/Party";
 
 export class Action{
 
@@ -21,27 +23,20 @@ export class Action{
         this.emitter = new Phaser.Events.EventEmitter();
     }
 
-    update()
+    playAnimation(scene: Phaser.Scene, target:Character | BattleParty | EnemyParty)
     {
-
-    }
-
-    playAnimation(scene: Phaser.Scene, target?:Character)
-    {
-        let action = target != null ? new Phaser.Physics.Arcade.Sprite(scene, target.x, target.y, this.imageKey)
+        let action = target instanceof Character ? new Phaser.Physics.Arcade.Sprite(scene, target.x, target.y, this.imageKey)
                                     : new Phaser.Physics.Arcade.Sprite(scene, scene.game.config.width as number / 2, 
                                                                        scene.game.config.height as number / 2, this.imageKey)
-
+        
         scene.add.existing(action);
         scene.physics.add.existing(action);
         action.setDepth(Depth.Effect);
 
-        if(target)
-            action.setScale(2);
+        if(target instanceof Character)
+            action.setScale(ObjectScale.spell);
         else
             action.setDisplaySize(scene.game.canvas.width, scene.game.canvas.height);
-
-        //scene.physics.moveToObject(action, target, 2000);
 
         action.anims.animationManager.create(
         {
@@ -55,8 +50,8 @@ export class Action{
         {
             action.body.velocity.setTo(0,0);
             action.destroy();
+            this.emitter.emit(EventType.ApplyEffects, target);
             this.emitter.emit(EventType.CastComplete);
-            this.emitter.emit(EventType.ApplyEffects, target)
             this.emitter.removeAllListeners(EventType.CastComplete);
         });
     }
@@ -64,9 +59,29 @@ export class Action{
 
 export class LimitBurst extends Action{
 
-    constructor(name: string, value: number, effectType: EffectType, elementType: ElementType, imageKey: string, imageFrames: number){
-        super(name, ActionType.Special, imageKey, imageFrames);
+    effects: Effect[] = [];
+    elementType: ElementType;
+
+    constructor(name: string, value: number, actionType: ActionType, effectTypes: EffectType[], elementType: ElementType, imageKey: string, imageFrames: number){
+        super(name, actionType, imageKey, imageFrames);
         this.value = value;
+        this.elementType = elementType;
+
+        effectTypes.forEach(effectType => {
+            this.effects.push(new Effect(this.value, effectType, elementType));
+        })
+
+        this.emitter.on(EventType.ApplyEffects, this.addEffects, this);
+    }
+
+    addEffects(party: BattleParty | EnemyParty)
+    {
+        party.group.forEach(member => {
+
+            this.effects.forEach(effect => {
+                effect.addEffect(member);
+            });
+        });
     }
 }
 

@@ -24,4 +24,11 @@ export class ConsoleLogger{
         
         this.logTurn(turn, message);
     }
+
+    logDamage(target: string, damage: number)
+    {
+        let message = target + " took " + damage + " damage";
+
+        this.log(message);
+    }
 }

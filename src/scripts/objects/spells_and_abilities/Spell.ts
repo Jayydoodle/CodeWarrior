@@ -4,6 +4,7 @@ import { Effect } from "./Effect";
 import { Action } from "./Action";
 
 export class Spell extends Action {
+    
     constructor(name: string, actionType: ActionType, value: number, mpCost: number, imageKey: string, imageFrames: number) {
         super(name, actionType, imageKey, imageFrames);
         this.value = value;
@@ -11,8 +12,10 @@ export class Spell extends Action {
     }
 }
 export class BlackMagic extends Spell {
+
     attackPower: number;
     element: ElementType;
+
     constructor(name: string, element: ElementType, attackPower: number, mpCost: number, imageKey: string, imageFrames: number) {
         super(name, ActionType.Offense, attackPower, mpCost, imageKey, imageFrames);
         this.attackPower = attackPower;
@@ -20,10 +23,12 @@ export class BlackMagic extends Spell {
     }
 }
 export class WhiteMagic extends Spell {
+
     effect: Effect;
+
     constructor(name: string, effectType: EffectType, value: number, mpCost: number, imageKey: string, imageFrames: number) {
-        super(name, ActionType.Recovery, value, mpCost, imageKey, imageFrames);
-        this.effect = new Effect(effectType, value);
+        super(name, ActionType.Defense, value, mpCost, imageKey, imageFrames);
+        this.effect = new Effect(value, effectType);
         this.emitter.on(EventType.ApplyEffects, this.addEffect, this);
     }
     addEffect(target: Character) {

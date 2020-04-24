@@ -50,6 +50,9 @@ export default class BattleScene extends Phaser.Scene {
 
     this.background = new Background(this.findAsset(this.config.backgroundAssetKey).key, this, 0, 0);
 
+    let backgroundMusic = this.sound.add("battle_music", { loop: true });
+    backgroundMusic.play();
+
     this.gameState.changeScene(this);
 
     this.alignGrid = new AlignGrid({
@@ -75,7 +78,7 @@ export default class BattleScene extends Phaser.Scene {
 
         enemies.push(new Enemy(0, 0, this, {
             name: config.name,
-            heroType: Enum.HeroType.Melee,
+            heroType: config.class,
             health: config.health, 
             weapon: this.findItem(config.weaponName) as Weapon,
             armor: this.findItem(config.armorName) as Armor,

@@ -1,5 +1,5 @@
 import BattleScene from "./BattleScene";
-import { GridPosition, Value } from "../utility/Enumeration";
+import { GridPosition, Value, HeroType } from "../utility/Enumeration";
 
 export default class BattleEarthScene extends BattleScene {
 
@@ -13,6 +13,7 @@ export default class BattleEarthScene extends BattleScene {
               name: "Enemy1",
               health: Value.StartingPlayerHealth + 200,
               imageKey: "warrior",
+              class: HeroType.Melee,
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
               castImageKey: "warrior_cast",
@@ -24,6 +25,7 @@ export default class BattleEarthScene extends BattleScene {
               name: "Enemy2",
               health: Value.StartingPlayerHealth + 200,
               imageKey: "warrior",
+              class: HeroType.Melee,
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
               castImageKey: "warrior_cast",
@@ -35,6 +37,7 @@ export default class BattleEarthScene extends BattleScene {
               name: "Enemy3",
               health: Value.StartingPlayerHealth + 200,
               imageKey: "warrior",
+              class: HeroType.Melee,
               battleImageKey: "warrior_battle",
               deathImageKey: "warrior_death",
               castImageKey: "warrior_cast",

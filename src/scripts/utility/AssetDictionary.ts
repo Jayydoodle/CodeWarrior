@@ -30,6 +30,18 @@ export class AssetDictionary{
 
     //#endregion
 
+    //#region: Sound
+
+        ///#region: Music
+
+        this.add(new Asset("start_music", "assets/sounds/StartScreen.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("battle_music", "assets/sounds/battle_music.mp3", [0,0], 0, AssetType.Sound, false));
+
+        ///#endregion
+
+    
+    //#endregion
+
     //#region: Sprites
 
         ///#region: Character Sprites

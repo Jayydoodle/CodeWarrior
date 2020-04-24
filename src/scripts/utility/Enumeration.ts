@@ -24,6 +24,14 @@ export enum AttackDelay
     verySlow = 1600
 }
 
+export enum AttackType
+{
+    Ability,
+    Cast,
+    LimitBurst,
+    Regular
+}
+
 export enum HeroType{
     
     Magic = "mage",
@@ -65,6 +73,7 @@ export enum EffectType
     BuffMagicDamage,
     BuffMagicDefense,
     CureStatusEffects,
+    Damage,
     DamageOverTime,
     DebuffDamage,
     DebuffDefense,
@@ -95,7 +104,7 @@ export enum Value{
     MPCostAdvanced = 50,
     SpellFrames = 100,
     SpellFrameRate = 30,
-    StartingPlayerHealth = 10000,
+    StartingPlayerHealth = 20000,
     StartingPlayerMP = 50
 }
 
@@ -121,9 +130,11 @@ export enum WhiteMagicLevel{
 //#endregion
 //#region Utility
 export enum AssetType {
-    Image,
-    Sprite,
+    
     BitmapFont,
+    Image,
+    Sound,
+    Sprite,
     Text
 }
 
@@ -134,7 +145,8 @@ export enum Depth
     CharacterSprite = 2,
     Attacker = 3,
     Effect = 4,
-    GUI = 5
+    Cast = 5,
+    GUI = 6
 }
 
 export enum EventType
@@ -170,8 +182,8 @@ export enum Message
 export enum ObjectScale
 {
     battle = 3.5,
-    castAnimation = 1.5
-
+    castAnimation = 1.5,
+    spell = 2,
 }
 
 export enum Scene
