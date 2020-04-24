@@ -19,6 +19,7 @@ export class CodeEditor
             theme: "lucario",
             autoCloseBrackets: true,
             extraKeys: {
+               
                // the following Tab key mapping is from http://codemirror.net/doc/manual.html#keymaps
                Tab: function(cm) {
                   var spaces = new Array(cm.getOption("indentUnit") + 1).join(" ");
