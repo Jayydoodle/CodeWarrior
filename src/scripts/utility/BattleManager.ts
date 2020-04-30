@@ -141,12 +141,22 @@ export class BattleManager{
         this.code = code;
 
         var searchForWhile = /while/gi;
+        var searchForFor = /for/gi;
 
         if(code.search(searchForWhile) != -1)
         {
             this.consoleLogger.log(Message.WhileNotAllowedError);
             return;
         }
+
+        if(code.search(searchForFor) != -1)
+        {
+            this.consoleLogger.log(Message.ForNotAllowedError);
+            return;
+        }
+
+        if(this.scene.scene.isPaused())
+            this.scene.scene.resume();
         
         if(this.currentAttacker == null){
             this.currentAttacker = this.queue.dequeue() as Character;
@@ -200,7 +210,8 @@ export class BattleManager{
                 
               this.consoleLogger.logTurn(this.turnCount, error);
               this.errorLogged = true;
-              this.nextTurn();
+
+              if(error != Message.MultipleActionError){ this.nextTurn(); }
             }
         }
         else{
@@ -335,7 +346,7 @@ export class BattleManager{
         this.scene.physics.moveToObject(attacker, target, this.movementSpeed);
     }
 
-    checkTarget(name: String, allowDead = false)
+    checkTarget(name: String)
     {
         let target: Character | undefined;
 
@@ -349,22 +360,27 @@ export class BattleManager{
         
         if(name === "random")
             target = this.determineTarget(this.enemyParty.group);
+        else if(name === "random ally")
+            target = this.determineTarget(this.battleParty.group);
 
         return target;
     }
 
-    validateTarget(enemyName: string, allowDead = false)
+    validateTarget(targetName: string, allowDead = false)
     {
-        let target = this.checkTarget(enemyName, allowDead);
+        let target = this.checkTarget(targetName);
        
         if(!target || (!target.isAlive && !allowDead)) 
-            throw enemyName + " is not a valid target";
+            throw this.currentAttacker.name + " cannot perform this action, " + 
+            "'" + targetName + "'" + " is not a valid target";
         else
             return target;
     }
 
     attack(enemyName: string, isEnemy?: boolean)
     {
+        if(this.functionCalled) { throw Message.MultipleActionError; }
+        
         this.functionCalled = true;
         
         if(!isEnemy)
@@ -390,6 +406,8 @@ export class BattleManager{
 
     cast(spellName: string, targetName: string, isEnemy?: boolean)
     {
+        if(this.functionCalled) { throw Message.MultipleActionError; }
+        
         this.functionCalled = true;
         
         if(!isEnemy)
@@ -405,7 +423,7 @@ export class BattleManager{
                 this.currentTarget = target;
             } 
             catch (error) { 
-                throw(error); 
+                throw(error + " for " + "'" + spellName + "'"); 
             }
         }
 
@@ -421,6 +439,10 @@ export class BattleManager{
 
     limitBurst(name: string)
     {
+        if(this.functionCalled) { throw Message.MultipleActionError; }
+        
+        this.functionCalled = true;
+
         try {
             this.currentAttacker.learn(this.limitBurstDatabase.findByName(name));
         } 
@@ -432,6 +454,5 @@ export class BattleManager{
         this.scene.physics.moveTo(this.currentAttacker, this.gameWidth / 2, this. gameHeight / 2, this.movementSpeed);
         this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " used " + name);
 
-        this.functionCalled = true;
     }
 }

@@ -104,8 +104,8 @@ export enum Value{
     MPCostAdvanced = 50,
     SpellFrames = 100,
     SpellFrameRate = 30,
-    StartingPlayerHealth = 20000,
-    StartingPlayerMP = 1000
+    StartingPlayerHealth = 1000,
+    StartingPlayerMP = 200
 }
 
 export enum WeaponType{
@@ -153,7 +153,6 @@ export enum EventType
 {
     AnimationComplete = "animationComplete",
     ApplyEffects = "applyEffects",
-    Attacking = "attacking",
     AttackComplete = "attackComplete",
     BtnApplyClicked = "btnApplyClicked",
     CastComplete = "castComplete",
@@ -176,6 +175,8 @@ export enum GridPosition
 
 export enum Message
 {
+    ForNotAllowedError = "Keyword 'for' is not allowed",
+    MultipleActionError = "You may only perform one action per turn",
     WhileNotAllowedError = "Keyword 'while' is not allowed",
     SyntaxError = "There is an error with your code, please try again.",
 }

@@ -227,6 +227,8 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     {
         if(this.actedThisTurn)
             return;
+
+        this.actedThisTurn = true;
             
         this.anims.animationManager.create(
         {
@@ -235,9 +237,6 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             frameRate: this.battleAnimationFrameRate,
             repeat: 0
         });
-        
-        this.emit(EventType.Attacking);
-        this.actedThisTurn = true;
 
         this.play(this.name+"_attack", true).once("animationcomplete-"+this.name+"_attack", () =>
         {

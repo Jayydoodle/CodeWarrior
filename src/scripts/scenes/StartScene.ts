@@ -2,7 +2,7 @@ import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Hero } from '../objects/characters/Hero';
 import { BattleParty } from '../objects/characters/Party';
-import { EventType, HeroType, GridPosition, Value, SceneType } from '../utility/Enumeration';
+import { EventType, HeroType, GridPosition, Value, SceneType, Message } from '../utility/Enumeration';
 import { GameState } from '../utility/GameState';
 import { ItemDatabase } from '../objects/items/ItemDatabase';
 import { Weapon, Armor } from '../objects/items/Item';
@@ -18,8 +18,13 @@ export default class StartScene extends Phaser.Scene {
 
   private background: Background;
   private backgroundMusic: Phaser.Sound.BaseSound;
+  private title: Phaser.GameObjects.Text;
   private infoText: string;
   private infoTextSet: boolean = false;
+
+  private tutorialIndex = 1;
+  private totalTutorials = 13;
+
 
   constructor() {
     super({ key: 'StartScene' });
@@ -40,7 +45,7 @@ export default class StartScene extends Phaser.Scene {
 
     this.infoText = this.cache.text.get(this.findAsset("start_text").key);
 
-    this.add.text(100, 100, "Code Warrior", { color:'#000000', font: '80pt Aniron'} );
+    this.title = this.add.text(100, 100, "Code Warrior", { color:'#000000', font: '80pt Aniron'} );
   }
 
   update(){
@@ -55,6 +60,41 @@ export default class StartScene extends Phaser.Scene {
   {
     this.events.emit(EventType.InfoTextUpdated, text);
     this.infoTextSet = true;
+  }
+
+  tutorial()
+  {
+    this.title.visible = false;
+    this.background.setImage("tutorial_"+1, 400, 200);
+    this.updateInfoText("To continue, enter:\nthis.next();\nor\nthis.previous();\n\nTo exit:\nthis.endTutorial();");
+  }
+
+  endTutorial()
+  {
+    this.title.visible = true;
+    this.tutorialIndex = 1;
+    this.background.setImage("start_scene");
+    this.updateInfoText(this.infoText);
+  }
+
+  next()
+  {
+    this.tutorialIndex++;
+
+    if(this.tutorialIndex == this.totalTutorials + 1)
+      this.endTutorial();
+    else
+      this.background.setImage("tutorial_"+this.tutorialIndex, 400, 200);
+  }
+
+  previous()
+  {
+    this.tutorialIndex--;
+
+    if(this.tutorialIndex == 0)
+      this.endTutorial();
+    else
+      this.background.setImage("tutorial_"+this.tutorialIndex, 400, 200);
   }
 
   createParty(warriorName: string, mageName: string, rangerName: string)
@@ -124,6 +164,21 @@ export default class StartScene extends Phaser.Scene {
 
   evaluateCode(code)
   {
+      var searchForWhile = /while/gi;
+      var searchForFor = /for/gi;
+
+      if(code.search(searchForWhile) != -1)
+      {
+          alert(Message.WhileNotAllowedError);
+          return;
+      }
+
+      if(code.search(searchForFor) != -1)
+      {
+          alert(Message.ForNotAllowedError);
+          return;
+      }
+      
       try {
           eval(code); 
       } catch (e) {

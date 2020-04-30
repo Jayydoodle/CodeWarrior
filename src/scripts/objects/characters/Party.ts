@@ -56,17 +56,11 @@ export class Party{
     setEmitters()
     {
         this.group.forEach(member =>{
-            member.on(EventType.Attacking, this.emitAttacking, this);
             member.on(EventType.AttackComplete, this.emitAttackComplete, this);
             member.on(EventType.EffectApplied, this.emitEffectApplied, this);
             member.on(EventType.CharacterDefeated, this.emitCharacterDefeated, this);
             member.on(EventType.Revived, this.emitRevived, this);
         });
-    }
-
-    emitAttacking()
-    {
-        this.emitter.emit(EventType.Attacking)
     }
 
     emitAttackComplete()

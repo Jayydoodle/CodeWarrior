@@ -22,6 +22,24 @@ export class AssetDictionary{
         let startSceneBackground = new Asset("start_scene", "assets/start_scene.jpg", [1200,720], 0, AssetType.Image, false);
         ///#endregion
 
+        ///#region: Tutorial
+
+        this.add(new Asset("tutorial_1", "assets/backgrounds/tutorial/tutorial_1.png", [1920, 1080], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_2", "assets/backgrounds/tutorial/tutorial_2.png", [1961, 976], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_3", "assets/backgrounds/tutorial/tutorial_3.png", [1920, 959], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_4", "assets/backgrounds/tutorial/tutorial_4.png", [1920, 959], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_5", "assets/backgrounds/tutorial/tutorial_5.png", [1920, 959], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_6", "assets/backgrounds/tutorial/tutorial_6.png", [1920, 1080], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_7", "assets/backgrounds/tutorial/tutorial_7.png", [1920, 1119], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_8", "assets/backgrounds/tutorial/tutorial_8.png", [1920, 954], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_9", "assets/backgrounds/tutorial/tutorial_9.png", [1947, 951], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_10", "assets/backgrounds/tutorial/tutorial_10.png", [1920, 951], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_11", "assets/backgrounds/tutorial/tutorial_11.png", [1920, 951], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_12", "assets/backgrounds/tutorial/tutorial_12.png", [1920, 951], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_13", "assets/backgrounds/tutorial/tutorial_13.png", [1920, 1080], 0, AssetType.Image, false));
+
+        ///#endregion
+
         ///#region: HUD
 
         this.add(new Asset("hud_layout", "assets/battlehud/Layout.png", [573, 32], 0, AssetType.Image, false));
