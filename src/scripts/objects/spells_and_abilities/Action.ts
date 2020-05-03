@@ -1,4 +1,4 @@
-import { ActionType, EventType, Depth, Value, EffectType, ElementType, ObjectScale } from "../../utility/Enumeration";
+import { ActionType, EventType, Depth, Value, EffectType, ElementType, ObjectScale, FrameRate } from "../../utility/Enumeration";
 import { Character } from "../characters/Hero";
 import { Effect } from "./Effect";
 import { BattleParty, EnemyParty } from "../characters/Party";
@@ -9,7 +9,7 @@ export class Action{
     actionType: ActionType;
     imageKey: string;
     imageFrames: number;
-    frameRate: number = Value.SpellFrameRate;
+    frameRate: number = FrameRate.Spell;
     repeat: number = 0;
     mpCost: number = 0;
     value: number = 0;
@@ -34,7 +34,7 @@ export class Action{
         action.setDepth(Depth.Effect);
 
         if(target instanceof Character)
-            action.setScale(ObjectScale.spell);
+            action.setScale(ObjectScale.Spell);
         else
             action.setDisplaySize(scene.game.canvas.width, scene.game.canvas.height);
 
@@ -52,7 +52,9 @@ export class Action{
             action.destroy();
             this.emitter.emit(EventType.ApplyEffects, target);
             this.emitter.emit(EventType.CastComplete);
-            this.emitter.removeAllListeners(EventType.CastComplete);
+            this.emitter.removeAllListeners(EventType.CastComplete); /* must remove listeners to
+            cast complete because there is only one instance of each spell via the spell database,
+            which is used by everyone in the game.  Maybe this should be rethought? */
         });
     }
 }
@@ -68,7 +70,7 @@ export class LimitBurst extends Action{
         this.elementType = elementType;
 
         effectTypes.forEach(effectType => {
-            this.effects.push(new Effect(this.value, effectType, elementType));
+            this.effects.push(new Effect(this.name, this.value, effectType, elementType));
         })
 
         this.emitter.on(EventType.ApplyEffects, this.addEffects, this);

@@ -20,4 +20,13 @@ export class TextContainer
         innerDiv.innerHTML = text;
         this.htmlElement.scrollTop += this.htmlElement.lastElementChild?.scrollHeight as number;
     }
+
+    clear()
+    {
+        this.htmlElement.childNodes.forEach(node => {
+            this.htmlElement.removeChild(node);
+        })
+
+        this.htmlElement.innerHTML = "";
+    }
 }

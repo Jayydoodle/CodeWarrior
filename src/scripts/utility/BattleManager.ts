@@ -5,10 +5,8 @@ import { TypedPriorityQueue } from "../../../node_modules/typedpriorityqueue";
 import { Queue } from "../../../node_modules/queue-typescript";
 import { ConsoleLogger } from "./ConsoleLogger";
 import { Hud } from "./Hud";
-import { Spell } from "../objects/spells_and_abilities/Spell";
 import { DamageCalculator } from "./DamageCalculator";
 import { LimitBurstDatabase } from "../objects/spells_and_abilities/LimitBurstDatabase";
-import { Background } from "../objects/world_space/background";
 
 export class BattleManager{
 
@@ -18,14 +16,14 @@ export class BattleManager{
     private gameWidth: number;
     private gameHeight: number;
 
-    private timer: Phaser.Time.TimerEvent;
     private consoleLogger: ConsoleLogger;
+    public emitter: Phaser.Events.EventEmitter;
     private turnCount: number = 1;
     private code: string;
     private functionCalled: boolean = false;
     private errorLogged: boolean = false;
     private isPaused: boolean = false;
-    private battleStarted: boolean = false;
+    private isContinuous: boolean = true;
 
     private meleeAttackOffset: number = 300;
     private limitBurstOffset: number = 100;
@@ -34,7 +32,6 @@ export class BattleManager{
 
     private battleParty: BattleParty;
     private enemyParty: EnemyParty;
-    private firstAttacker: Character;
     private currentTarget: Character;
     private currentAttacker: Character;
 
@@ -59,7 +56,7 @@ export class BattleManager{
 
     private limitBurstDatabase: LimitBurstDatabase;
 
-    constructor(scene: Phaser.Scene, hud: Hud, battleParty: BattleParty, enemyParty: EnemyParty)
+    constructor(scene: Phaser.Scene, consoleLogger: ConsoleLogger, hud: Hud, battleParty: BattleParty, enemyParty: EnemyParty)
     {
         this.scene = scene;
         this.hud = hud;
@@ -70,6 +67,7 @@ export class BattleManager{
         this.gameHeight = this.scene.game.config.height as number;
 
         this.limitBurstDatabase = new LimitBurstDatabase();
+        this.emitter = new Phaser.Events.EventEmitter();
         this.seenCharacters = new Map<string, Character>();
 
         this.lbBackground = new Phaser.GameObjects.Rectangle(this.scene, this.gameWidth/2, this.gameHeight/2, this.gameWidth, this.gameHeight, 0x000000);
@@ -81,10 +79,11 @@ export class BattleManager{
         (function(a: Character, b: Character){ return a.priority > b.priority });*/
 
         this.queue = new Queue();
-        this.consoleLogger = new ConsoleLogger();
+        this.consoleLogger = consoleLogger;
 
         this.battleParty.group.forEach(member => {
             this.queue.enqueue(member);
+            member.tp = 100;
             this.battleSize++;
         });
 
@@ -99,10 +98,13 @@ export class BattleManager{
         this.enemyParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
         this.enemyParty.emitter.on(EventType.CharacterDefeated, this.logMessage, this);
         this.enemyParty.emitter.on(EventType.Revived, this.revive, this);
+        this.enemyParty.emitter.on(EventType.PartyDefeated, this.endBattle, this);
         this.battleParty.emitter.on(EventType.AttackComplete, this.completeTurn, this);
         this.battleParty.emitter.on(EventType.EffectApplied, this.logMessage, this);
+        this.battleParty.emitter.on(EventType.EffectsUpdated, this.updateEffects, this);
         this.battleParty.emitter.on(EventType.CharacterDefeated, this.logMessage, this);
-        this.battleParty.emitter.on(EventType.Revived, this.revive, this)
+        this.battleParty.emitter.on(EventType.Revived, this.revive, this);
+        this.battleParty.emitter.on(EventType.PartyDefeated, this.endBattle, this);
     }
 
     logMessage(message: string)
@@ -119,21 +121,40 @@ export class BattleManager{
     {
         if(this.currentAttacker != null && this.isMeleeAttacker()){
             this.currentAttacker.body.velocity.setTo(0, 0);
-            this.currentAttacker.PlayAttackAnimation();
+            this.currentAttacker.playAttackAnimation(this.currentTarget);
         }
         else if(this.currentAttacker != null && this.isLimitBursting()){
             this.currentAttacker.body.velocity.setTo(0,0);
             this.lbBackground.setVisible(true);
-            this.currentAttacker.limitBurst(this.enemyParty, this.battleParty);
+            
+            if(this.currentAttacker.characterType == CharacterType.player)
+                this.currentAttacker.limitBurst(this.enemyParty, this.battleParty);
+            else
+                this.currentAttacker.limitBurst(this.battleParty, this.enemyParty);
         }
 
         this.hud.updateAll(this.battleParty);
+    }
+
+    updateEffects(character: Character)
+    {
+        this.hud.updateStatusAnimation(character);
     }
 
     revive(character: Character)
     {
         this.queue.enqueue(character);
         this.battleSize++;
+    }
+
+    endBattle()
+    {
+        this.battleParty.emitter.removeAllListeners();
+        this.battleParty.emitter.destroy();
+        this.enemyParty.emitter.removeAllListeners();
+        this.enemyParty.emitter.destroy();
+        this.emitter.emit(EventType.BattleEnded, !this.battleParty.hasBeenDefeated());
+        this.emitter.destroy();
     }
 
     startBattle(code: string)
@@ -160,14 +181,13 @@ export class BattleManager{
         
         if(this.currentAttacker == null){
             this.currentAttacker = this.queue.dequeue() as Character;
-            this.firstAttacker = this.currentAttacker;
             this.currentTarget = this.enemyParty.group[0]; // default target
         }
         else
         {
             if(this.isPaused)
                 this.pause();
-            else
+            else if(this.isContinuous)
                 return;
         }
 
@@ -181,6 +201,26 @@ export class BattleManager{
 
         if(this.isPaused)
             return;
+
+        if(this.currentAttacker.isAsleep) // refactor
+        {
+            this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " is asleep");
+            this.nextTurn();
+            return;
+        }
+
+        if(this.currentAttacker.isConfused) // refactor
+        {
+            this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " is confused!");
+            
+            if(this.currentAttacker.characterType == CharacterType.player)
+                this.currentTarget = this.determineTarget(this.battleParty.group);
+            else
+                this.currentTarget = this.determineTarget(this.enemyParty.group);
+
+            this.attack(this.currentTarget.name);
+            return;
+        }
 
         var isPlayer = this.currentAttacker.characterType == CharacterType.player;
         
@@ -215,9 +255,25 @@ export class BattleManager{
             }
         }
         else{
+
+            // Create a function here that can be implemented differently
+            // in different battles to invoke different enemy behavior
+
+            var enemy1Turn = this.currentAttacker == this.enemyParty.group[0];
+            var enemy2Turn = this.currentAttacker == this.enemyParty.group[1];
+            var enemy3Turn = this.currentAttacker == this.enemyParty.group[2];
+
             this.currentTarget = this.determineTarget(this.battleParty.group);
 
-            this.attack("", true);
+            this.currentTarget = this.battleParty.warrior;
+
+            if(this.turnCount == 1 || this.turnCount % 4 == 0){
+                if(enemy1Turn)this.cast("sleep", "", true);
+                else if(enemy2Turn)this.cast("poison", "", true);
+                else if(enemy3Turn)this.cast("confuse", "", true);
+            }
+            else
+                this.attack("", true);
         }
 
         if(isPlayer && !this.functionCalled && !this.errorLogged ) // required for all custom battle builds
@@ -250,21 +306,20 @@ export class BattleManager{
             }
         }
         this.lbBackground.setVisible(false);
+
+        this.currentAttacker.actedThisTurn = false;
+        this.currentAttacker.resetPosition();
+
         this.nextTurn();
     }
 
     nextTurn()
     {
-        if(!this.currentTarget.isAlive)
-        {
-            this.currentTarget.playDeathAnimation();
-        }
-
-        if(this.enemyParty.hasBeenDefeated() || this.battleParty.hasBeenDefeated()) return;
         
         var previousAttacker = this.currentAttacker;
-        previousAttacker.actedThisTurn = false;
-        previousAttacker.resetPosition();
+        previousAttacker.handleStatusEffects();
+
+        if(this.enemyParty.hasBeenDefeated() || this.battleParty.hasBeenDefeated()){ return; } 
         
         if(!this.seenCharacters.has(previousAttacker.name))
             this.seenCharacters.set(previousAttacker.name, previousAttacker);
@@ -283,30 +338,17 @@ export class BattleManager{
             this.turnCount++;
             this.consoleLogger.log("<br>Turn: " + this.turnCount);
             this.seenCharacters.clear();
+
+            if(!this.isContinuous)
+                return;
         }
 
-        this.timer = this.scene.time.delayedCall(this.attackDelay, this.handleTurn, [], this);
+        this.scene.time.delayedCall(this.attackDelay, this.handleTurn, [], this);
     }
 
     getTurnCount(){
 
         return this.turnCount;
-    }
-
-    determineTarget(targetParty: Character[])
-    {
-        let target: Character
-
-        var random = Math.floor(Math.random() * (2 - 0 + 1) + 0);
-        target = targetParty[random];
-
-        while(!target.isAlive)
-        {
-            var random = Math.floor(Math.random() * (2 - 0 + 1) + 0);
-            target = targetParty[random];
-        }
-
-        return target;
     }
 
     isMeleeAttacker()
@@ -344,6 +386,22 @@ export class BattleManager{
     meleeAttack(attacker: Character, target: Character)
     {
         this.scene.physics.moveToObject(attacker, target, this.movementSpeed);
+    }
+
+    determineTarget(targetParty: Character[])
+    {
+        let target: Character
+
+        var random = Math.floor(Math.random() * (2 - 0 + 1) + 0);
+        target = targetParty[random];
+
+        while(!target.isAlive) // if you change this to prevent self targeting you must handle the confuse spell or game will freeze
+        {
+            var random = Math.floor(Math.random() * (2 - 0 + 1) + 0);
+            target = targetParty[random];
+        }
+
+        return target;
     }
 
     checkTarget(name: String)
@@ -400,7 +458,7 @@ export class BattleManager{
             this.meleeAttack(this.currentAttacker, this.currentTarget);
         } 
         else{
-            this.currentAttacker.PlayAttackAnimation();
+            this.currentAttacker.playAttackAnimation(this.currentTarget);
         }
     }
 
@@ -428,7 +486,6 @@ export class BattleManager{
         }
 
         try {    
-            this.currentAttacker.configureCast();
             this.currentAttacker.cast(spellName, this.currentTarget);
             this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " cast " + spellName);
         } 
@@ -453,6 +510,5 @@ export class BattleManager{
         this.currentAttacker.configureLimitBurst();
         this.scene.physics.moveTo(this.currentAttacker, this.gameWidth / 2, this. gameHeight / 2, this.movementSpeed);
         this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " used " + name);
-
     }
 }

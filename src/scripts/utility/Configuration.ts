@@ -7,7 +7,7 @@ export type AlignConfig = {
     cols: number,
     height: number,
     width: number,
-    showNumbers: boolean
+    showGrid: boolean
 }
 
 export type BattleConfig = 

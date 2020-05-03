@@ -11,6 +11,7 @@ import { ItemDatabase } from '../objects/items/ItemDatabase';
 import { Weapon, Armor } from '../objects/items/Item';
 import { SpellDatabase } from '../objects/spells_and_abilities/SpellDatabase';
 import { Hud } from '../utility/Hud';
+import { ConsoleLogger } from '../utility/ConsoleLogger';
 
 export default class BattleScene extends Phaser.Scene {
 
@@ -19,16 +20,21 @@ export default class BattleScene extends Phaser.Scene {
   public spellDatabase: SpellDatabase;
   protected gameState: GameState;
   protected sceneType: Enum.SceneType = Enum.SceneType.BattleScene;
+  protected gamewidth: number;
+  protected gameHeight: number;
 
   protected background: Background;
+  protected backgroundMusic: Phaser.Sound.BaseSound;
   protected alignGrid: AlignGrid;
   protected battleManager: BattleManager;
   private config: BattleConfig;
 
   protected turnCountText: Phaser.GameObjects.Text;
+  protected consoleLogger: ConsoleLogger;
 
   protected battleParty: BattleParty;
   protected enemyParty: EnemyParty;
+  protected battleWon: boolean;
 
   private hud: Hud;
   private infoTextSet = false;
@@ -44,14 +50,17 @@ export default class BattleScene extends Phaser.Scene {
   init(data)
   {
     this.gameState = data.gameState;
+    this.gamewidth = this.game.config.width as number;
+    this.gameHeight = this.game.config.height as number;
   }
 
   create() {
 
     this.background = new Background(this.findAsset(this.config.backgroundAssetKey).key, this, 0, 0);
+    this.consoleLogger = new ConsoleLogger();
 
-    let backgroundMusic = this.sound.add("battle_music", { loop: true });
-    backgroundMusic.play();
+    this.backgroundMusic = this.sound.add("battle_music", { loop: true });
+    this.backgroundMusic.play();
 
     this.gameState.changeScene(this);
 
@@ -59,9 +68,9 @@ export default class BattleScene extends Phaser.Scene {
       scene: this,
       cols: 10,
       rows: 10,
-      height: this.game.config.height as number,
-      width: this.game.config.width as number,
-      showNumbers: false
+      height: this.gameHeight,
+      width: this.gamewidth,
+      showGrid: false
     });
 
     this.hud = new Hud(this, {
@@ -115,15 +124,15 @@ export default class BattleScene extends Phaser.Scene {
     
     this.battleParty.setInitialPositions();
     this.enemyParty.setInitialPositions();
-    this.battleManager = new BattleManager(this, this.hud, this.battleParty, this.enemyParty);
-    
+    this.battleManager = new BattleManager(this, this.consoleLogger, this.hud, this.battleParty, this.enemyParty);
+    this.battleManager.emitter.on(Enum.EventType.BattleEnded, this.endBattle, this);
+
     this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.BtnApplyClicked, this.startBattle, this);
+    this.scene.get(Enum.Scene.UIScene).scene.restart({parentScene: this.scene.key, sceneType: this.sceneType});
 
     this.turnCountText = this.add.text(0, 0, "", { color:'#000000', font: '80pt Arial'});
-
     this.alignGrid.placeAtIndex(8, this.turnCountText);
 
-    this.scene.get(Enum.Scene.UIScene).scene.restart({parentScene: this.scene.key, sceneType: this.sceneType});
   }
 
   update() 
@@ -148,6 +157,67 @@ export default class BattleScene extends Phaser.Scene {
       this.battleManager.startBattle(code);
   }
 
+  protected endBattle(battleWon)
+  {
+      this.battleWon = battleWon;
+      this.backgroundMusic.stop();
+      var result = this.add.text(0, 0, "", { color:'#ffffff', font: '250pt FontleroyBrownNF'});
+      this.alignGrid.placeAtIndex(23, result);
+      result.setDepth(Enum.Depth.GUI);
+
+      if(this.battleWon)
+      {
+        result.text = "Victory";
+        this.backgroundMusic = this.sound.add("victory_music", { loop: false });
+        this.backgroundMusic.play();
+        this.updateInfoText("You won the battle!\nTo continue enter:\n\nthis.continue();");
+      }
+      else
+      {
+        result.text = "Defeat";
+        this.backgroundMusic = this.sound.add("defeat_music", { loop: false });
+        this.backgroundMusic.play();
+        this.updateInfoText("Your party was defeated.\nTo try again enter:\n\nthis.tryAgain();");
+      }
+
+      this.scene.get(Enum.Scene.UIScene).events.removeAllListeners(Enum.EventType.BtnApplyClicked);
+      this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.BtnApplyClicked, this.handleButtonClick, this);
+  }
+
+  protected handleButtonClick(code)
+  {
+      try {
+        eval(code)
+      } catch (error) {
+        this.consoleLogger.log(error);
+      }
+  }
+
+  protected continue()
+  {
+    if(!this.battleWon)
+      throw "Your party was defeated, cannot continue";
+    
+    this.consoleLogger.clear();
+    this.scene.get('UIScene').events.shutdown();
+    this.background.destroy();
+    this.backgroundMusic.destroy();
+    this.scene.start('BattleFireScene', {gameState: this.gameState} );
+  }
+
+  protected tryAgain()
+  {
+    if(this.battleWon)
+      throw "This enemy has already been defeated";
+
+    this.consoleLogger.clear();
+    this.battleParty.reset();
+    this.enemyParty.reset();
+    this.backgroundMusic.stop();
+    this.infoTextSet = false;
+    this.scene.restart();
+  }
+  
   protected findAsset(key: string)
   {
     return this.assetDictionary.findAssetByKey(key);

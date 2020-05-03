@@ -8,6 +8,11 @@ export class ConsoleLogger{
         this.textContainer = new TextContainer("console");
     }
 
+    clear()
+    {
+        this.textContainer.clear();
+    }
+
     log(message: string)
     {
         this.textContainer.addText(message);

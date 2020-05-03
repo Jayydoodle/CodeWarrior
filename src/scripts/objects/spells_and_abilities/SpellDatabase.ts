@@ -18,40 +18,43 @@ export class SpellDatabase{
 
     //#region: Black Magic
 
-        this.add(new BlackMagic("earth1", ElementType.Earth, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100));
-        this.add(new BlackMagic("earth2", ElementType.Earth, BlackMagicLevel.II, Value.MPCostIntermediate, "earth_spell_2", 100));
-        //this.add(new BlackMagic("earth3", ElementType.Earth, SpellLevel.III, Value.MPCostAdvanced, "earth_spell_3", 100));
+        this.add(new BlackMagic("earth1", ElementType.Earth, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100));
+        this.add(new BlackMagic("earth2", ElementType.Earth, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "earth_spell_2", 100));
+        //this.add(new BlackMagic("earth3", ElementType.Earth, EffectType.None, SpellLevel.III, Value.MPCostAdvanced, "earth_spell_3", 100));
 
         
 
-        this.add(new BlackMagic("dark1", ElementType.Dark, BlackMagicLevel.I, Value.MPCostBeginner, "dark_spell_1", 100));
-        this.add(new BlackMagic("dark2", ElementType.Dark, BlackMagicLevel.II, Value.MPCostIntermediate, "dark_spell_2", 100));
-        this.add(new BlackMagic("dark3", ElementType.Dark, BlackMagicLevel.III, Value.MPCostAdvanced, "dark_spell_3", 100));
+        this.add(new BlackMagic("dark1", ElementType.Dark, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "dark_spell_1", 100));
+        this.add(new BlackMagic("dark2", ElementType.Dark, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "dark_spell_2", 100));
+        this.add(new BlackMagic("dark3", ElementType.Dark, EffectType.None, BlackMagicLevel.III, Value.MPCostAdvanced, "dark_spell_3", 100));
 
 
-        this.add(new BlackMagic("fire1", ElementType.Fire, BlackMagicLevel.I, Value.MPCostBeginner, "fire_spell_1", 100));
-        //this.add(new BlackMagic("fire2", ElementType.Fire, SpellLevel.II, Value.MPCostIntermediate, "fire_spell_2", 100));
-        //this.add(new BlackMagic("fire3", ElementType.Fire, SpellLevel.III, Value.MPCostAdvanced "fire_spell_3", 100));
+        this.add(new BlackMagic("fire1", ElementType.Fire, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "fire_spell_1", 100));
+        //this.add(new BlackMagic("fire2", ElementType.Fire, EffectType.None, SpellLevel.II, Value.MPCostIntermediate, "fire_spell_2", 100));
+        //this.add(new BlackMagic("fire3", ElementType.Fire, EffectType.None, SpellLevel.III, Value.MPCostAdvanced "fire_spell_3", 100));
 
 
-        this.add(new BlackMagic("ice1", ElementType.Ice, BlackMagicLevel.I, Value.MPCostBeginner, "ice_spell_1", 100));
-        this.add(new BlackMagic("ice2", ElementType.Ice, BlackMagicLevel.II, Value.MPCostIntermediate, "ice_spell_2", 100));
-        this.add(new BlackMagic("ice3", ElementType.Ice, BlackMagicLevel.III, Value.MPCostAdvanced, "ice_spell_3", 100));
+        this.add(new BlackMagic("ice1", ElementType.Ice, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "ice_spell_1", 100));
+        this.add(new BlackMagic("ice2", ElementType.Ice, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "ice_spell_2", 100));
+        this.add(new BlackMagic("ice3", ElementType.Ice, EffectType.None, BlackMagicLevel.III, Value.MPCostAdvanced, "ice_spell_3", 100));
 
        
-        this.add(new BlackMagic("lightning1", ElementType.Lightning, BlackMagicLevel.I, Value.MPCostBeginner, "lightning_spell_1", 100));
-        this.add(new BlackMagic("lightning2", ElementType.Lightning, BlackMagicLevel.II, Value.MPCostIntermediate, "lightning_spell_2a", 100));
-        this.add(new BlackMagic("lightning3", ElementType.Lightning, BlackMagicLevel.III, Value.MPCostAdvanced, "lightning_spell_2b", 100));
+        this.add(new BlackMagic("lightning1", ElementType.Lightning, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "lightning_spell_1", 100));
+        this.add(new BlackMagic("lightning2", ElementType.Lightning, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "lightning_spell_2a", 100));
+        this.add(new BlackMagic("lightning3", ElementType.Lightning, EffectType.None, BlackMagicLevel.III, Value.MPCostAdvanced, "lightning_spell_2b", 100));
 
-        
-        this.add(new BlackMagic("water1", ElementType.Water, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_1", 100));
-        this.add(new BlackMagic("water2", ElementType.Water, BlackMagicLevel.II, Value.MPCostIntermediate, "water_spell_2", 100));
-        //this.add(new BlackMagic("water3", ElementType.Water, SpellLevel.III, Value.MPCostAdvanced "water_spell_3", 100));
+        this.add(new BlackMagic("confuse", ElementType.None, EffectType.Ailment, BlackMagicLevel.I, Value.MPCostIntermediate, "confuse", 100));
+        this.add(new BlackMagic("poison", ElementType.Dark, EffectType.DamageOverTime, BlackMagicLevel.I, Value.MPCostIntermediate, "poison", 100));
+        this.add(new BlackMagic("sleep", ElementType.None, EffectType.Ailment, BlackMagicLevel.I, Value.MPCostIntermediate, "sleep", 100));
+
+        this.add(new BlackMagic("water1", ElementType.Water, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_1", 100));
+        this.add(new BlackMagic("water2", ElementType.Water, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "water_spell_2", 100));
+        //this.add(new BlackMagic("water3", ElementType.Water, EffectType.None, SpellLevel.III, Value.MPCostAdvanced "water_spell_3", 100));
 
 
-        this.add(new BlackMagic("wind1", ElementType.Wind, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100));
-        this.add(new BlackMagic("wind2", ElementType.Wind, BlackMagicLevel.II, Value.MPCostIntermediate, "wind_spell_2", 100));
-        //this.add(new BlackMagic("wind3", ElementType.Wind, SpellLevel.III, Value.MPCostAdvanced "wind_spell_3", 100));
+        this.add(new BlackMagic("wind1", ElementType.Wind, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100));
+        this.add(new BlackMagic("wind2", ElementType.Wind, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "wind_spell_2", 100));
+        //this.add(new BlackMagic("wind3", ElementType.Wind, EffectType.None, SpellLevel.III, Value.MPCostAdvanced "wind_spell_3", 100));
 
 
     //#endregion
@@ -100,14 +103,16 @@ export class SpellDatabase{
 
     testSpells()
     {
-        this.add(new BlackMagic("earth", ElementType.Earth, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100));
-        this.add(new BlackMagic("dark", ElementType.Dark, BlackMagicLevel.I, Value.MPCostBeginner, "dark_spell_3", 100));
-        this.add(new BlackMagic("fire", ElementType.Fire, BlackMagicLevel.I, Value.MPCostBeginner, "fire_spell_1", 100));
-        this.add(new BlackMagic("ice", ElementType.Ice, BlackMagicLevel.I, Value.MPCostBeginner, "ice_spell_1", 100));
-        this.add(new BlackMagic("lightning", ElementType.Lightning, BlackMagicLevel.I, Value.MPCostBeginner, "lightning_spell_1", 100));
-        this.add(new BlackMagic("water", ElementType.Water, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_2", 100));
-        this.add(new BlackMagic("wind", ElementType.Wind, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100));
-
+        this.add(new BlackMagic("confuse", ElementType.None, EffectType.Ailment, 0, Value.MPCostIntermediate, "confuse", 100));
+        this.add(new BlackMagic("earth", ElementType.Earth, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100));
+        this.add(new BlackMagic("dark", ElementType.Dark,  EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "dark_spell_3", 100));
+        this.add(new BlackMagic("fire", ElementType.Fire, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "fire_spell_1", 100));
+        this.add(new BlackMagic("ice", ElementType.Ice, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "ice_spell_1", 100));
+        this.add(new BlackMagic("lightning", ElementType.Lightning, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "lightning_spell_1", 100));
+        this.add(new BlackMagic("poison", ElementType.Dark, EffectType.DamageOverTime, BlackMagicLevel.I, Value.MPCostIntermediate, "poison", 100));
+        this.add(new BlackMagic("sleep", ElementType.None, EffectType.Ailment, 0, Value.MPCostIntermediate, "sleep", 100));
+        this.add(new BlackMagic("water", ElementType.Water, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_2", 100));
+        this.add(new BlackMagic("wind", ElementType.Wind, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100));
 
         this.add(new WhiteMagic("cure", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_3", 100));
         this.add(new WhiteMagic("protect", EffectType.BuffDefense, WhiteMagicLevel.I, Value.MPCostBeginner, "protect_spell_2", 100));

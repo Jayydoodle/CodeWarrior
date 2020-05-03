@@ -1,11 +1,12 @@
 import { HudConfig } from "./Configuration";
-import { Depth } from "./Enumeration";
+import { Depth, EffectIconIndex } from "./Enumeration";
 import { Character } from "../objects/characters/Hero";
 import { BattleParty } from "../objects/characters/Party";
 
 export class Hud extends Phaser.GameObjects.Container{
 
     private map: Map<string, HudElement>;
+    private statusFrameMap: Map<Number, Phaser.Types.Animations.AnimationFrame>;
 
     constructor(scene: Phaser.Scene, config: HudConfig)
     {
@@ -13,6 +14,16 @@ export class Hud extends Phaser.GameObjects.Container{
         this.scene.add.existing(this);
 
         this.map = new Map<string, HudElement>();
+        this.statusFrameMap = new Map<Number, Phaser.Types.Animations.AnimationFrame>();
+        
+        let statusAnimationFrames = scene.anims.generateFrameNumbers("hud_icons", {
+            frames: [EffectIconIndex.Posion, EffectIconIndex.Confuse, EffectIconIndex.Sleep, EffectIconIndex.Curse]
+        }); 
+
+        statusAnimationFrames.forEach(frame =>
+        {
+            this.statusFrameMap.set(frame.frame as Number, frame);
+        });
 
         let warriorHud = new HudElement(scene, config.warriorName);
         let mageHud = new HudElement(scene, config.mageName);
@@ -29,7 +40,7 @@ export class Hud extends Phaser.GameObjects.Container{
         this.positionElement(mageHud, 0, 50);
         this.positionElement(rangerHud, 0, -50);
 
-        this.setScale(1.6, 1.5);
+        this.setScale(scene.game.config.width as number * .0009, scene.game.config.height as number * .0017);
         this.setDepth(Depth.GUI);
     }
 
@@ -40,6 +51,13 @@ export class Hud extends Phaser.GameObjects.Container{
         HudElement.healthText.text = character.getCurrentHp().toString();
         HudElement.mpText.text = character.getCurrentMp().toString();
         HudElement.tpText.text = character.getCurrentTp().toString();
+    }
+
+    updateStatusAnimation(character: Character)
+    {
+        let hudElement = this.findElementByKey(character.name);
+
+        hudElement.updateStatusAnimation(character, this.statusFrameMap);
     }
 
     updateAll(battleParty: BattleParty)
@@ -73,18 +91,28 @@ export class HudElement extends Phaser.GameObjects.Container{
     healthText: Phaser.GameObjects.Text;
     mpText: Phaser.GameObjects.Text;
     tpText: Phaser.GameObjects.Text;
+    statusIcon: Phaser.GameObjects.Sprite;
+    statusAnimationFrames: Phaser.Types.Animations.AnimationFrame[];
+    statusAnimation: Phaser.Animations.Animation;
 
     constructor(scene: Phaser.Scene, name: string)
     {
         super(scene);
         
         this.hudDisplay = new Phaser.GameObjects.Image(scene, 0, 0, "hud_layout");
+        this.statusIcon = new Phaser.GameObjects.Sprite(scene, 262, 0, "hud_icons");
+
+        this.statusIcon.setFrame(0);
+
         this.add(this.hudDisplay);
+        this.add(this.statusIcon);
 
         this.nameText = this.addText(scene, name, -205, -9);
-        this.healthText = this.addText(scene, "10000", -85, -13);
-        this.mpText = this.addText(scene, "200", 45, -13);
-        this.tpText = this.addText(scene, "100", 165, -13);
+        this.healthText = this.addText(scene, "", -85, -13);
+        this.mpText = this.addText(scene, "", 45, -13);
+        this.tpText = this.addText(scene, "", 165, -13);
+
+        this.createStatusAnimation(name, scene);
     }
 
     addText(scene: Phaser.Scene, value: string, xOffset: number, yOffset: number)
@@ -95,6 +123,40 @@ export class HudElement extends Phaser.GameObjects.Container{
         text.setY(this.y + yOffset);
 
         return text;
+    }
+
+    createStatusAnimation(name: string, scene: Phaser.Scene)
+    {
+        scene.add.existing(this.statusIcon);
+
+        this.statusAnimation = this.statusIcon.anims.animationManager.create(
+        {
+            key: "status_"+name,
+            frameRate: 1,
+            repeat: -1
+        }) as Phaser.Animations.Animation;
+    }
+
+    updateStatusAnimation(character: Character, statusFrameMap: Map<Number, Phaser.Types.Animations.AnimationFrame>)
+    {
+        this.statusIcon.anims.pause();
+        
+        this.statusAnimation.frames.forEach(frame => {
+            this.statusAnimation.removeFrame(frame);
+        });
+
+        console.log(character.statusEffects);
+
+        character.statusEffects.forEach(effect =>{
+            this.statusAnimation.addFrame([statusFrameMap.get(effect.effectIconIndex) as Phaser.Types.Animations.AnimationFrame]);
+        });
+
+        if(this.statusAnimation.frames.length > 0)
+            this.statusIcon.play(this.statusAnimation.key, true);
+        else{
+            this.statusIcon.anims.stop();
+            this.statusIcon.setFrame(0);
+        }
     }
 }
 

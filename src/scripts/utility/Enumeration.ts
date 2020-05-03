@@ -29,6 +29,7 @@ export enum AttackType
     Ability,
     Cast,
     LimitBurst,
+    None,
     Regular
 }
 
@@ -67,6 +68,7 @@ export enum ElementType
 
 export enum EffectType
 {
+    Ailment,
     AutoRevive,
     BuffDamage,
     BuffDefense,
@@ -79,9 +81,18 @@ export enum EffectType
     DebuffDefense,
     MagicRecoveryOverTime,
     MagicRestoration,
+    None,
     RecoveryOverTime,
     Restoration,
     Revival
+}
+
+export enum EffectIconIndex
+{
+    Posion = 2,
+    Confuse = 6,
+    Sleep = 8,
+    Curse = 10,
 }
 
 export enum ItemType{
@@ -94,16 +105,14 @@ export enum Value{
 
     CastEffectOffset = 20,
     CastFrames = 5,
-    CastFrameRate = 12,
     DeathFrames = 6,
-    DeathFrameRate = 10,
+    EffectDuration = 4,
     MaxEnemyMP = 999999,
     MaxTP = 100,
     MPCostBeginner = 10,
     MPCostIntermediate = 25,
     MPCostAdvanced = 50,
     SpellFrames = 100,
-    SpellFrameRate = 30,
     StartingPlayerHealth = 1000,
     StartingPlayerMP = 200
 }
@@ -154,13 +163,28 @@ export enum EventType
     AnimationComplete = "animationComplete",
     ApplyEffects = "applyEffects",
     AttackComplete = "attackComplete",
+    BattleEnded = 'battleEnded',
     BtnApplyClicked = "btnApplyClicked",
     CastComplete = "castComplete",
     CharacterDefeated = "characterDefeated",
     EffectApplied = "effectApplied",
+    EffectsUpdated = "effectsUpdated",
     InfoTextUpdated = "infoTextUpdated",
+    PartyDefeated = "partyDefeated",
     Revived = "revived",
     UILoaded = "uiLoaded"
+}
+
+export enum FrameRate
+{
+    Ability = 30,
+    Cast = 12,
+    Death = 10,
+    Mage = 13,
+    Ranger = 13,
+    Spell = 30,
+    Warrior = 10,
+
 }
 
 export enum GridPosition
@@ -183,9 +207,10 @@ export enum Message
 
 export enum ObjectScale
 {
-    battle = 3.5,
-    castAnimation = 1.5,
-    spell = 2,
+    Ability = 2.5,
+    Battle = 3.5,
+    CastAnimation = 1.5,
+    Spell = 2,
 }
 
 export enum Scene

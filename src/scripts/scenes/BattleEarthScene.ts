@@ -74,6 +74,21 @@ export default class BattleEarthScene extends BattleScene {
       super.startBattle(code);
     }
 
+    protected endBattle(battleWon)
+    {
+      super.endBattle(battleWon);
+    }
+
+    protected handleButtonClick(code)
+    {
+      super.handleButtonClick(code);
+    }
+
+    protected tryAgain()
+    {
+      super.tryAgain();
+    }
+
     protected findAsset(key: string)
     {
       return super.findAsset(key);

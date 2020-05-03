@@ -63,6 +63,13 @@ export class Party{
         });
     }
 
+    reset()
+    {
+        this.group.forEach(member =>{
+            member.reset();
+        })
+    }
+
     emitAttackComplete()
     {
         this.emitter.emit(EventType.AttackComplete);
@@ -71,11 +78,22 @@ export class Party{
     emitCharacterDefeated(message: string)
     {
         this.emitter.emit(EventType.CharacterDefeated, message);
+
+        if(this.hasBeenDefeated())
+        {
+            this.emitter.emit(EventType.PartyDefeated);
+            this.emitter.removeAllListeners(EventType.PartyDefeated);
+        }
     }
 
     emitEffectApplied(message: string)
     {
         this.emitter.emit(EventType.EffectApplied, message);
+    }
+
+    emitEffectUpdated(character: Character)
+    {
+        this.emitter.emit(EventType.EffectsUpdated, character);
     }
 
     emitRevived(character: Character)
@@ -98,6 +116,10 @@ export class BattleParty extends Party{
         this.group[2] = this.ranger = ranger;
 
         this.setEmitters();
+
+        this.group.forEach(member =>{
+            member.on(EventType.EffectsUpdated, this.emitEffectUpdated, this);
+        });
     }
 }
 

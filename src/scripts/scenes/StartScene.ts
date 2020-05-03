@@ -2,7 +2,7 @@ import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Hero } from '../objects/characters/Hero';
 import { BattleParty } from '../objects/characters/Party';
-import { EventType, HeroType, GridPosition, Value, SceneType, Message } from '../utility/Enumeration';
+import { EventType, HeroType, GridPosition, Value, SceneType, Message, FrameRate } from '../utility/Enumeration';
 import { GameState } from '../utility/GameState';
 import { ItemDatabase } from '../objects/items/ItemDatabase';
 import { Weapon, Armor } from '../objects/items/Item';
@@ -110,7 +110,7 @@ export default class StartScene extends Phaser.Scene {
         deathImageKey: this.findAsset("warrior_death").key,
         castImageKey: this.findAsset("warrior_cast").key,
         battleAnimationFrames: this.findAsset("warrior_battle").frames,
-        battleAnimationFrameRate: 10,
+        battleAnimationFrameRate: FrameRate.Warrior,
         gridPosition: GridPosition.playerMiddle
       });
 
@@ -125,7 +125,7 @@ export default class StartScene extends Phaser.Scene {
         deathImageKey: this.findAsset("mage_death").key,
         castImageKey: this.findAsset("mage_cast").key,
         battleAnimationFrames: this.findAsset("mage_battle").frames,
-        battleAnimationFrameRate: 13,
+        battleAnimationFrameRate: FrameRate.Mage,
         gridPosition: GridPosition.playerBottom
       });
 
@@ -140,7 +140,7 @@ export default class StartScene extends Phaser.Scene {
         deathImageKey: this.findAsset("ranger_death").key,
         castImageKey: this.findAsset("ranger_cast").key,
         battleAnimationFrames: this.findAsset("ranger_battle").frames,
-        battleAnimationFrameRate: 13,
+        battleAnimationFrameRate: FrameRate.Ranger,
         gridPosition: GridPosition.playerTop
       });
 
@@ -154,7 +154,6 @@ export default class StartScene extends Phaser.Scene {
       });
       this.gameState = new GameState(party);
 
-      this.scene.get('UIScene').children.destroy();
       this.scene.get('UIScene').events.shutdown();
       this.background.destroy();
       this.backgroundMusic.destroy();

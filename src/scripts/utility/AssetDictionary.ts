@@ -43,6 +43,7 @@ export class AssetDictionary{
         ///#region: HUD
 
         this.add(new Asset("hud_layout", "assets/battlehud/Layout.png", [573, 32], 0, AssetType.Image, false));
+        this.add(new Asset("hud_icons", "assets/icons/IconSet.png", [32, 32], 320, AssetType.Sprite, false));
 
         ///#endregion
 
@@ -54,13 +55,22 @@ export class AssetDictionary{
 
         this.add(new Asset("start_music", "assets/sounds/StartScreen.mp3", [0,0], 0, AssetType.Sound, false));
         this.add(new Asset("battle_music", "assets/sounds/battle_music.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("victory_music", "assets/sounds/Victory.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("defeat_music", "assets/sounds/Defeat.mp3", [0,0], 0, AssetType.Sound, false));
 
         ///#endregion
 
-    
     //#endregion
 
     //#region: Sprites
+
+        ///#region: Ability Sprites
+
+        this.add(new Asset("bow_hit", "assets/spells/attack/thrust2.png", [192, 192], 15, AssetType.Sprite, false));
+        this.add(new Asset("staff_hit", "assets/spells/attack/pink.png", [192, 192], 35, AssetType.Sprite, false));
+        this.add(new Asset("sword_hit", "assets/spells/attack/slash3.png", [192, 192], 15, AssetType.Sprite, false));
+
+        ///#endregion
 
         ///#region: Character Sprites
         this.add(new Asset("mage_battle", "assets/sprites/mage_battle.png", [192, 100], 8, AssetType.Sprite, false));
@@ -108,38 +118,33 @@ export class AssetDictionary{
             this.add(new Asset("dark_spell_2", "assets/spells/black_magic/dark2.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("dark_spell_3", "assets/spells/black_magic/dark3.png", [192, 192], 100, AssetType.Sprite, false));
 
-            
             this.add(new Asset("earth_spell_1", "assets/spells/black_magic/earth1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("earth_spell_2", "assets/spells/black_magic/earth2.png", [192, 192], 100, AssetType.Sprite, false));
             //this.add(new Asset("earth_spell_3", "assets/spells/black_magic/earth3.png", [192, 192], 100, AssetType.Sprite, false));
-
-           
-            
 
             this.add(new Asset("fire_spell_1", "assets/spells/black_magic/fire1.png", [192, 192], 100, AssetType.Sprite, false));
             //this.add(new Asset("fire_spell_2", "assets/spells/black_magic/fire2.png", [192, 192], 100, AssetType.Sprite, false));
             //this.add(new Asset("fire_spell_3", "assets/spells/black_magic/fire3.png", [192, 192], 100, AssetType.Sprite, false));
 
-
-
             this.add(new Asset("ice_spell_1", "assets/spells/black_magic/ice1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("ice_spell_2", "assets/spells/black_magic/ice2.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("ice_spell_3", "assets/spells/black_magic/ice3.png", [192, 192], 100, AssetType.Sprite, false));
-
 
             this.add(new Asset("lightning_spell_1", "assets/spells/black_magic/lightning3.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("lightning_spell_2a", "assets/spells/black_magic/lightning2_a.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("lightning_spell_2b", "assets/spells/black_magic/lightning2_b.png", [192, 192], 100, AssetType.Sprite, false));
 
-
             this.add(new Asset("water_spell_1", "assets/spells/black_magic/water1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("water_spell_2", "assets/spells/black_magic/water2.png", [192, 192], 100, AssetType.Sprite, false));
             //this.add(new Asset("water_spell_3", "assets/spells/black_magic/water3.png", [192, 192], 100, AssetType.Sprite, false));
 
-
             this.add(new Asset("wind_spell_1", "assets/spells/black_magic/wind1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("wind_spell_2", "assets/spells/black_magic/wind2.png", [192, 192], 100, AssetType.Sprite, false));
             //this.add(new Asset("wind_spell_3", "assets/spells/black_magic/wind3.png", [192, 192], 100, AssetType.Sprite, false));
+
+            this.add(new Asset("confuse", "assets/spells/black_magic/confuse.png", [192, 192], 100, AssetType.Sprite, false));
+            this.add(new Asset("poison", "assets/spells/black_magic/poison.png", [192, 192], 100, AssetType.Sprite, false));
+            this.add(new Asset("sleep", "assets/spells/black_magic/sleep.png", [192, 192], 100, AssetType.Sprite, false));
             
             ////#endregion
 
@@ -149,16 +154,12 @@ export class AssetDictionary{
             this.add(new Asset("cure_spell_2", "assets/spells/white_magic/cure2.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("cure_spell_3", "assets/spells/white_magic/cure3.png", [192, 192], 100, AssetType.Sprite, false));
 
-
             this.add(new Asset("protect_spell_1", "assets/spells/white_magic/protect1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("protect_spell_2", "assets/spells/white_magic/protect2.png", [192, 192], 100, AssetType.Sprite, false));
             //this.add(new Asset("protect_spell_3", "assets/spells/white_magic/protect3.png", [192, 192], 100, AssetType.Sprite, false));
 
-
             this.add(new Asset("remedy_spell", "assets/spells/white_magic/remedy.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("revive_spell", "assets/spells/white_magic/revive.png", [192, 192], 100, AssetType.Sprite, false));
-
-
 
             ////#endregion
 
@@ -169,13 +170,13 @@ export class AssetDictionary{
             this.add(new Asset('battle_text', 'assets/text/battle.txt', [0, 0], 0, AssetType.Text, false));
             this.add(new Asset('start_text', 'assets/text/start.txt', [0, 0], 0, AssetType.Text, false));
             this.add(new Asset("test_script", 'assets/text/testScript.txt', [0, 0], 0, AssetType.Text, false));
+            this.add(new Asset("test", 'assets/text/test.txt', [0, 0], 0, AssetType.Text, false));
+
 
         ///#endregion
 
-
     //#endregion
 
-      
     }
 
     add(asset: Asset)

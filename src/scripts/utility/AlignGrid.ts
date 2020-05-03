@@ -22,8 +22,8 @@ export class AlignGrid {
 
         this.color = "0xffffff";
 
-        if(config.showNumbers)
-            this.showNumbers();
+        if(config.showGrid)
+            this.showGrid();
     }
     show() {
         this.graphics = this.scene.add.graphics();
@@ -68,7 +68,7 @@ export class AlignGrid {
             y: y2
         }
     }
-    showNumbers() {
+    showGrid() {
         this.show();
         var count = 0;
         for (var i = 0; i < this.config.rows; i++) {

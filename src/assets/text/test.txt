@@ -1,0 +1,18 @@
+if(this.warriorTurn && (this.turn % 5 == 0 || this.turn == 1))
+{
+  this.cast("sleep", "Enemy1");
+}
+else if(this.warriorTurn)
+  this.attack("random");
+if(this.mageTurn && (this.turn % 5 == 0 || this.turn == 1))
+{
+  this.cast("sleep", "Enemy2");
+}
+else if(this.mageTurn)
+  this.attack("random");
+if(this.rangerTurn && (this.turn % 5 == 0 || this.turn == 1))
+{
+  this.cast("sleep", "Enemy3");
+}
+else if(this.rangerTurn)
+  this.attack("random");
