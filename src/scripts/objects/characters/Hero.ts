@@ -255,7 +255,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     removeStatusEffects()
     {
         this.statusEffects.forEach(effect => {
-            
+            effect.removeAilment(this);
             this.statusEffects.delete(effect.effectType);
         });
     }
@@ -269,6 +269,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             effect.handleEffect(this);
 
             if(effect.duration <= 0){
+                effect.removeAilment(this);
                 this.statusEffects.delete(effect.effectType);
                 this.emit(EventType.EffectsUpdated, this);
             }
@@ -302,6 +303,8 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         this.actedThisTurn = false;
         this.isAttacking = false;
         this.isLimitBursting = false;
+        
+        this.removeStatusEffects();
     }
 
     //#region: Animation
@@ -342,7 +345,11 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
         this.scene.add.existing(attackEffect);
         attackEffect.setDepth(Depth.Effect);
-        attackEffect.setScale(ObjectScale.Ability);
+
+        if(this.characterType == CharacterType.player)
+            attackEffect.setScale(ObjectScale.Ability);
+        else
+            attackEffect.setScale(-ObjectScale.Ability);
         
         let effectAnimation = attackEffect.anims.animationManager.create(
         {
@@ -492,9 +499,9 @@ export class Enemy extends Character{
         this.characterType = CharacterType.enemy;
         this.maxMP = this.mp = Value.MaxEnemyMP;
 
-        this.castEffectOffset = -Value.CastEffectOffset;
+        this.castEffectOffset = Value.CastEffectOffset;
 
-        this.setScale(-ObjectScale.Battle, ObjectScale.Battle);
+        this.setScale(ObjectScale.Battle + 0.5, ObjectScale.Battle + 0.5);
     }
 }
 

@@ -73,6 +73,8 @@ export class AssetDictionary{
         ///#endregion
 
         ///#region: Character Sprites
+        
+        //Player
         this.add(new Asset("mage_battle", "assets/sprites/mage_battle.png", [192, 100], 8, AssetType.Sprite, false));
         this.add(new Asset("mage_death", "assets/sprites/mage_death.png", [64, 90], 6, AssetType.Sprite, false));
         this.add(new Asset("mage_cast", "assets/sprites/mage_cast.png", [63, 70], 7, AssetType.Sprite, false));
@@ -84,6 +86,17 @@ export class AssetDictionary{
         this.add(new Asset("warrior_battle", "assets/sprites/warrior_battle.png", [195, 100], 6, AssetType.Sprite, false));
         this.add(new Asset("warrior_death", "assets/sprites/warrior_death.png", [64, 90], 6, AssetType.Sprite, false));
         this.add(new Asset("warrior_cast", "assets/sprites/warrior_cast.png", [63, 70], 7, AssetType.Sprite, false));
+
+        //Enemies
+        this.add(new Asset("orc_mage_battle", "assets/sprites/orcs/orc_mage_battle.png", [192, 100], 8, AssetType.Sprite, false));
+        this.add(new Asset("orc_mage_death", "assets/sprites/orcs/orc_mage_death.png", [64, 80], 6, AssetType.Sprite, false));
+        this.add(new Asset("orc_mage_cast", "assets/sprites/orcs/orc_mage_cast.png", [63, 70], 7, AssetType.Sprite, false));
+        this.add(new Asset("orc_ranger_battle", "assets/sprites/orcs/orc_ranger_battle.png",[64, 74], 13, AssetType.Sprite, false));
+        this.add(new Asset("orc_ranger_death", "assets/sprites/orcs/orc_ranger_death.png", [64, 64], 6, AssetType.Sprite, false));
+        this.add(new Asset("orc_ranger_cast", "assets/sprites/orcs/orc_ranger_cast.png", [63, 70], 7, AssetType.Sprite, false));
+        this.add(new Asset("orc_warrior_battle", "assets/sprites/orcs/orc_warrior_battle.png", [64, 70], 6, AssetType.Sprite, false));
+        this.add(new Asset("orc_warrior_death", "assets/sprites/orcs/orc_warrior_death.png", [64, 64], 6, AssetType.Sprite, false));
+        this.add(new Asset("orc_warrior_cast", "assets/sprites/orcs/orc_warrior_cast.png", [63, 70], 7, AssetType.Sprite, false));
         ///#endregion
 
         ///#region: Limit Burst Sprites

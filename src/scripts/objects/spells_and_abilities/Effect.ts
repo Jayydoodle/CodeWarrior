@@ -99,22 +99,21 @@ export class Effect{
     {
         if(this.name == "poison")
         {
-            this.message = " is poisoned!" + " Turns Remaining: " + this.duration;
+            this.message = " is poisoned!";
 
             this.effectIconIndex = EffectIconIndex.Posion;
-        }
 
+        // move these in the brackets temporarily to prevent discharge effect
         this.duration = Value.EffectDuration;
         target.addStatusEffect(EffectType.DamageOverTime, this);
         target.emitEffectApplied(target.name + this.message);
+        }
+
     }
 
     ailment(target: Character)
     {
         this.duration--;
-
-        if(this.duration <= 0)
-            this.removeAilment(target);
     }
 
     cureStatusEffects(target: Character)

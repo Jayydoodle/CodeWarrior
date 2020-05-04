@@ -107,15 +107,41 @@ export class BattleManager{
         this.battleParty.emitter.on(EventType.PartyDefeated, this.endBattle, this);
     }
 
-    logMessage(message: string)
-    {
-        this.consoleLogger.log(message);
+//#region : Utility
+
+    getTurnCount(){
+
+        return this.turnCount;
     }
 
     pause()
     {
         this.isPaused = !this.isPaused;
     }
+
+//#endregion
+
+//#region : Emitter Handlers
+
+    logMessage(message: string)
+    {
+        this.consoleLogger.log(message);
+    }
+
+    updateEffects(character: Character)
+    {
+        this.hud.updateStatusAnimation(character);
+    }
+
+    revive(character: Character)
+    {
+        this.queue.enqueue(character);
+        this.battleSize++;
+    }
+
+//#endregion
+
+//#region : Battle Lifecycle
 
     update()
     {
@@ -134,17 +160,6 @@ export class BattleManager{
         }
 
         this.hud.updateAll(this.battleParty);
-    }
-
-    updateEffects(character: Character)
-    {
-        this.hud.updateStatusAnimation(character);
-    }
-
-    revive(character: Character)
-    {
-        this.queue.enqueue(character);
-        this.battleSize++;
     }
 
     endBattle()
@@ -265,8 +280,6 @@ export class BattleManager{
 
             this.currentTarget = this.determineTarget(this.battleParty.group);
 
-            this.currentTarget = this.battleParty.warrior;
-
             if(this.turnCount == 1 || this.turnCount % 4 == 0){
                 if(enemy1Turn)this.cast("sleep", "", true);
                 else if(enemy2Turn)this.cast("poison", "", true);
@@ -346,10 +359,9 @@ export class BattleManager{
         this.scene.time.delayedCall(this.attackDelay, this.handleTurn, [], this);
     }
 
-    getTurnCount(){
+//#endregion
 
-        return this.turnCount;
-    }
+//#region : Movement Helpers
 
     isMeleeAttacker()
     {
@@ -387,6 +399,10 @@ export class BattleManager{
     {
         this.scene.physics.moveToObject(attacker, target, this.movementSpeed);
     }
+
+//#endregion
+
+//#region : Attack Targeting
 
     determineTarget(targetParty: Character[])
     {
@@ -434,6 +450,10 @@ export class BattleManager{
         else
             return target;
     }
+
+//#endregion
+
+//#region : Battle Commands
 
     attack(enemyName: string, isEnemy?: boolean)
     {
@@ -511,4 +531,7 @@ export class BattleManager{
         this.scene.physics.moveTo(this.currentAttacker, this.gameWidth / 2, this. gameHeight / 2, this.movementSpeed);
         this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " used " + name);
     }
+
+//#endregion
+
 }

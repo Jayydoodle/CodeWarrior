@@ -104,6 +104,12 @@ export class HudElement extends Phaser.GameObjects.Container{
 
         this.statusIcon.setFrame(0);
 
+        /* must set container to non exclusive because we must add the statusIcon
+        to the scene manually in order for the animation to render.  If this is 
+        not set, scene loads will break because the statusIcon is in the scene
+        display list */
+        this.setExclusive(false);
+
         this.add(this.hudDisplay);
         this.add(this.statusIcon);
 
@@ -127,6 +133,7 @@ export class HudElement extends Phaser.GameObjects.Container{
 
     createStatusAnimation(name: string, scene: Phaser.Scene)
     {
+        // here is where we add the icon to the scene
         scene.add.existing(this.statusIcon);
 
         this.statusAnimation = this.statusIcon.anims.animationManager.create(
