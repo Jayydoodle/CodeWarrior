@@ -222,7 +222,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
     addTP(damage: number)
     {
-        this.tp += damage * .3;
+        this.tp += Math.floor(damage * .05);
 
         if(this.tp >= this.maxTP)
         {

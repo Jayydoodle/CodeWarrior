@@ -113,7 +113,7 @@ export enum Value{
     MPCostIntermediate = 25,
     MPCostAdvanced = 50,
     SpellFrames = 100,
-    StartingPlayerHealth = 1000,
+    StartingPlayerHealth = 2000,
     StartingPlayerMP = 200
 }
 

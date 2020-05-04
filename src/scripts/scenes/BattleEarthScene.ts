@@ -1,5 +1,6 @@
 import BattleScene from "./BattleScene";
 import { GridPosition, Value, HeroType } from "../utility/Enumeration";
+import { EarthBattleManager } from "../utility/battle_managers/EarthBattleManager";
 
 export default class BattleEarthScene extends BattleScene {
 
@@ -58,6 +59,11 @@ export default class BattleEarthScene extends BattleScene {
     create()
     {
       super.create();
+    }
+
+    createBattleParty()
+    {
+      return new EarthBattleManager(this, this.consoleLogger, this.hud, this.battleParty, this.enemyParty);
     }
 
     update()

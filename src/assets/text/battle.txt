@@ -66,14 +66,26 @@ Available Spells:
 "remedy" - remove status effect
 "raise" - ressurect fallen ally
 
+<<< Limit Bursts >>>
+
+Warrior:
+"inferno" - fire damage to all enemies
+
+Mage:
+"torrent" - water damage to all enemies
+"resurrection" - Revive all KOed allies
+
+Ranger:
+"tempest" - wind damage to all enemies
+
 Available Targets:
 
 "warrior name"
 "mage name"
 "ranger name"
-"Enemy1"
-"Enemy2"
-"Enemy3"
+"Orc Warrior"
+"Orc Mage"
+"Orc Ranger"
 "random" - chooses a random enemy
 
 

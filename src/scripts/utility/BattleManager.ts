@@ -10,51 +10,51 @@ import { LimitBurstDatabase } from "../objects/spells_and_abilities/LimitBurstDa
 
 export class BattleManager{
 
-    private scene: Phaser.Scene;
-    private hud: Hud;
-    private lbBackground: Phaser.GameObjects.Rectangle;
-    private gameWidth: number;
-    private gameHeight: number;
+    protected scene: Phaser.Scene;
+    protected hud: Hud;
+    protected lbBackground: Phaser.GameObjects.Rectangle;
+    protected gameWidth: number;
+    protected gameHeight: number;
 
-    private consoleLogger: ConsoleLogger;
+    protected consoleLogger: ConsoleLogger;
     public emitter: Phaser.Events.EventEmitter;
-    private turnCount: number = 1;
-    private code: string;
-    private functionCalled: boolean = false;
-    private errorLogged: boolean = false;
-    private isPaused: boolean = false;
-    private isContinuous: boolean = true;
+    protected turnCount: number = 1;
+    protected code: string;
+    protected functionCalled: boolean = false;
+    protected errorLogged: boolean = false;
+    protected isPaused: boolean = false;
+    protected isContinuous: boolean = true;
 
-    private meleeAttackOffset: number = 300;
-    private limitBurstOffset: number = 100;
-    private movementSpeed: number = 3000;
-    private attackDelay: number = AttackDelay.none;
+    protected meleeAttackOffset: number = 300;
+    protected limitBurstOffset: number = 100;
+    protected movementSpeed: number = 3000;
+    protected attackDelay: number = AttackDelay.none;
 
-    private battleParty: BattleParty;
-    private enemyParty: EnemyParty;
-    private currentTarget: Character;
-    private currentAttacker: Character;
+    protected battleParty: BattleParty;
+    protected enemyParty: EnemyParty;
+    protected currentTarget: Character;
+    protected currentAttacker: Character;
 
-    private queue: Queue<Character>;
-    private seenCharacters: Map<string, Character>;
-    private battleSize: number = 0;
+    protected queue: Queue<Character>;
+    protected seenCharacters: Map<string, Character>;
+    protected battleSize: number = 0;
 
     // player variables
-    private limitBurstReady: boolean;
-    private warriorHp: number;
-    private warriorTurn: boolean;
-    private warriorIsAlive: boolean;
-    private mageHp: number;
-    private mageTurn: boolean;
-    private mageIsAlive:boolean;
-    private rangerHp: number;
-    private rangerTurn: boolean;
-    private rangerIsAlive: boolean;
-    private hp: number;
-    private mp: number;
-    private turn: number;
+    protected limitBurstReady: boolean;
+    protected warriorHp: number;
+    protected warriorTurn: boolean;
+    protected warriorIsAlive: boolean;
+    protected mageHp: number;
+    protected mageTurn: boolean;
+    protected mageIsAlive:boolean;
+    protected rangerHp: number;
+    protected rangerTurn: boolean;
+    protected rangerIsAlive: boolean;
+    protected hp: number;
+    protected mp: number;
+    protected turn: number;
 
-    private limitBurstDatabase: LimitBurstDatabase;
+    protected limitBurstDatabase: LimitBurstDatabase;
 
     constructor(scene: Phaser.Scene, consoleLogger: ConsoleLogger, hud: Hud, battleParty: BattleParty, enemyParty: EnemyParty)
     {
@@ -83,7 +83,6 @@ export class BattleManager{
 
         this.battleParty.group.forEach(member => {
             this.queue.enqueue(member);
-            member.tp = 100;
             this.battleSize++;
         });
 
@@ -244,19 +243,19 @@ export class BattleManager{
             var player = this.currentAttacker as Hero;
 
             /* player variables */
-            this.warriorTurn = player.heroType == HeroType.Melee;
+            this.warriorTurn = this.currentAttacker.heroType == HeroType.Melee;
             this.warriorHp = this.battleParty.warrior.getCurrentHp();
             this.warriorIsAlive = this.battleParty.warrior.isAlive;
-            this.mageTurn = player.heroType == HeroType.Magic;
+            this.mageTurn = this.currentAttacker.heroType == HeroType.Magic;
             this.mageHp = this.battleParty.mage.getCurrentHp();
             this.mageIsAlive = this.battleParty.mage.isAlive;
-            this.rangerTurn = player.heroType == HeroType.Ranged;
+            this.rangerTurn = this.currentAttacker.heroType == HeroType.Ranged;
             this.rangerHp = this.battleParty.ranger.getCurrentHp();
             this.rangerIsAlive = this.battleParty.ranger.isAlive;
 
-            this.hp = player.getCurrentHp();
-            this.mp = player.getCurrentMp();
-            this.limitBurstReady = player.limitBurstReady();
+            this.hp = this.currentAttacker.getCurrentHp();
+            this.mp = this.currentAttacker.getCurrentMp();
+            this.limitBurstReady = this.currentAttacker.limitBurstReady();
             this.turn = this.turnCount;
 
             try {
@@ -269,25 +268,7 @@ export class BattleManager{
               if(error != Message.MultipleActionError){ this.nextTurn(); }
             }
         }
-        else{
-
-            // Create a function here that can be implemented differently
-            // in different battles to invoke different enemy behavior
-
-            var enemy1Turn = this.currentAttacker == this.enemyParty.group[0];
-            var enemy2Turn = this.currentAttacker == this.enemyParty.group[1];
-            var enemy3Turn = this.currentAttacker == this.enemyParty.group[2];
-
-            this.currentTarget = this.determineTarget(this.battleParty.group);
-
-            if(this.turnCount == 1 || this.turnCount % 4 == 0){
-                if(enemy1Turn)this.cast("sleep", "", true);
-                else if(enemy2Turn)this.cast("poison", "", true);
-                else if(enemy3Turn)this.cast("confuse", "", true);
-            }
-            else
-                this.attack("", true);
-        }
+        else{ this.handleEnemyTurn(); }
 
         if(isPlayer && !this.functionCalled && !this.errorLogged ) // required for all custom battle builds
         {
@@ -295,6 +276,24 @@ export class BattleManager{
            this.nextTurn();
         }
             
+    }
+
+    // This method is overridden in each battle manager that extends BattleManager
+    handleEnemyTurn()
+    {
+        var enemy1Turn = this.currentAttacker == this.enemyParty.group[0];
+        var enemy2Turn = this.currentAttacker == this.enemyParty.group[1];
+        var enemy3Turn = this.currentAttacker == this.enemyParty.group[2];
+
+        this.currentTarget = this.determineTarget(this.battleParty.group);
+
+        if(this.turnCount == 1 || this.turnCount % 4 == 0){
+            if(enemy1Turn)this.cast("sleep", "", true);
+            else if(enemy2Turn)this.cast("poison", "", true);
+            else if(enemy3Turn)this.cast("confuse", "", true);
+        }
+        else
+            this.attack("", true);
     }
 
     completeTurn()

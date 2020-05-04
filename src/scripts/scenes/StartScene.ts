@@ -23,7 +23,8 @@ export default class StartScene extends Phaser.Scene {
   private infoTextSet: boolean = false;
 
   private tutorialIndex = 1;
-  private totalTutorials = 13;
+  private totalTutorials = 15;
+  private tutorialMode = false;
 
 
   constructor() {
@@ -65,13 +66,15 @@ export default class StartScene extends Phaser.Scene {
   tutorial()
   {
     this.title.visible = false;
-    this.background.setImage("tutorial_"+1, 400, 200);
+    this.tutorialMode = true;
+    this.background.setImage("tutorial_"+1, 100, 50);
     this.updateInfoText("To continue, enter:\nthis.next();\nor\nthis.previous();\n\nTo exit:\nthis.endTutorial();");
   }
 
   endTutorial()
   {
     this.title.visible = true;
+    this.tutorialMode = false;
     this.tutorialIndex = 1;
     this.background.setImage("start_scene");
     this.updateInfoText(this.infoText);
@@ -79,22 +82,26 @@ export default class StartScene extends Phaser.Scene {
 
   next()
   {
+    if(!this.tutorialMode) return;
+
     this.tutorialIndex++;
 
     if(this.tutorialIndex == this.totalTutorials + 1)
-      this.endTutorial();
-    else
-      this.background.setImage("tutorial_"+this.tutorialIndex, 400, 200);
+      this.tutorialIndex = 1;
+    
+      this.background.setImage("tutorial_"+this.tutorialIndex, 100, 50);
   }
 
   previous()
   {
+    if(!this.tutorialMode) return;
+
     this.tutorialIndex--;
 
     if(this.tutorialIndex == 0)
-      this.endTutorial();
-    else
-      this.background.setImage("tutorial_"+this.tutorialIndex, 400, 200);
+      this.tutorialIndex = this.totalTutorials;
+    
+      this.background.setImage("tutorial_"+this.tutorialIndex, 100, 50);
   }
 
   createParty(warriorName: string, mageName: string, rangerName: string)

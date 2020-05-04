@@ -27,7 +27,7 @@ export default class BattleScene extends Phaser.Scene {
   protected backgroundMusic: Phaser.Sound.BaseSound;
   protected alignGrid: AlignGrid;
   protected battleManager: BattleManager;
-  private config: BattleConfig;
+  protected config: BattleConfig;
 
   protected turnCountText: Phaser.GameObjects.Text;
   protected consoleLogger: ConsoleLogger;
@@ -36,8 +36,8 @@ export default class BattleScene extends Phaser.Scene {
   protected enemyParty: EnemyParty;
   protected battleWon: boolean;
 
-  private hud: Hud;
-  private infoTextSet = false;
+  protected hud: Hud;
+  protected infoTextSet = false;
   
   constructor(sceneKey: string, config: BattleConfig) {
     super({ key: sceneKey });
@@ -124,7 +124,8 @@ export default class BattleScene extends Phaser.Scene {
     
     this.battleParty.setInitialPositions();
     this.enemyParty.setInitialPositions();
-    this.battleManager = new BattleManager(this, this.consoleLogger, this.hud, this.battleParty, this.enemyParty);
+
+    this.battleManager = this.createBattleParty();
     this.battleManager.emitter.on(Enum.EventType.BattleEnded, this.endBattle, this);
 
     this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.BtnApplyClicked, this.startBattle, this);
@@ -133,6 +134,11 @@ export default class BattleScene extends Phaser.Scene {
     this.turnCountText = this.add.text(0, 0, "", { color:'#000000', font: '80pt Arial'});
     this.alignGrid.placeAtIndex(8, this.turnCountText);
 
+  }
+
+  createBattleParty()
+  {
+    return new BattleManager(this, this.consoleLogger, this.hud, this.battleParty, this.enemyParty);
   }
 
   update() 
