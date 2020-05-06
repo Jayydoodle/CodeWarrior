@@ -129,7 +129,7 @@ export default class BattleScene extends Phaser.Scene {
     this.enemyParty.setInitialPositions();
 
     this.battleManager = this.createBattleParty();
-    this.battleManager.emitter.on(Enum.EventType.BattleEnded, this.endBattle, this);
+    this.battleManager.emitter.on(Enum.EventType.BattleEnded, this.endBattle, this)
 
     this.scene.get(Enum.Scene.UIScene).events.on(Enum.EventType.BtnApplyClicked, this.startBattle, this);
     this.scene.get(Enum.Scene.UIScene).scene.restart({parentScene: this.scene.key, sceneType: this.sceneType});
@@ -151,8 +151,14 @@ export default class BattleScene extends Phaser.Scene {
 
     if(!this.infoTextSet)
     {
+      this.updateAutoComplete(this.battleParty.names.concat(this.enemyParty.names));
       this.updateInfoText(this.cache.text.get("battle_text"));
     }
+  }
+
+  protected updateAutoComplete(wordList)
+  {
+    this.events.emit(Enum.EventType.AutoCompleteUpdate, wordList);
   }
 
   protected updateInfoText(text)

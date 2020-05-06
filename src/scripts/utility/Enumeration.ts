@@ -112,7 +112,7 @@ export enum Value{
     MPCostIntermediate = 25,
     MPCostAdvanced = 50,
     SpellFrames = 100,
-    StartingPlayerHealth = 2000,
+    StartingPlayerHealth = 3000,
     StartingPlayerMP = 200
 }
 
@@ -160,6 +160,7 @@ export enum Depth
 export enum EventType
 {
     AnimationComplete = "animationComplete",
+    AutoCompleteUpdate = "autoCompleteUpdate",
     ApplyEffects = "applyEffects",
     AttackComplete = "attackComplete",
     BattleEnded = 'battleEnded',

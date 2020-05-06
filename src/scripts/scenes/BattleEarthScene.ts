@@ -72,6 +72,11 @@ export default class BattleEarthScene extends BattleScene {
       super.update();
     }
 
+    protected updateAutoComplete(wordList)
+    {
+      super.updateAutoComplete(wordList);
+    }
+
     protected updateInfoText(text)
     {
       super.updateInfoText(text);

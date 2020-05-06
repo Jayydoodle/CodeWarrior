@@ -83,7 +83,6 @@ export class BattleManager{
 
         this.battleParty.group.forEach(member => {
             this.queue.enqueue(member);
-            member.tp = 100;
             this.battleSize++;
         });
 

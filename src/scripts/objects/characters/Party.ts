@@ -5,6 +5,7 @@ export class Party{
 
     public emitter: Phaser.Events.EventEmitter;
     group: Character[] = [];
+    names: string[] = [];
 
     constructor()
     {
@@ -14,6 +15,13 @@ export class Party{
     addToScene(sceneType: SceneType){
         this.group.forEach(member =>{
             member.addToScene(sceneType);
+        });
+    }
+
+    addMemberNames()
+    {
+        this.group.forEach(member =>{
+            this.names.push(member.name);
         });
     }
 
@@ -116,6 +124,7 @@ export class BattleParty extends Party{
         this.group[2] = this.ranger = ranger;
 
         this.setEmitters();
+        this.addMemberNames();
 
         this.group.forEach(member =>{
             member.on(EventType.EffectsUpdated, this.emitEffectUpdated, this);
@@ -135,5 +144,6 @@ export class EnemyParty extends Party{
         this.group = enemies;
 
         this.setEmitters();
+        this.addMemberNames();
     }
 }

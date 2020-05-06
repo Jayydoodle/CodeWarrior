@@ -19,7 +19,8 @@ module.exports = {
       { test: /\.tsx?$/, include: path.join(__dirname, '../src'), use: 'ts-loader' },
       { test: /\.css$/, include: [path.join(__dirname, '../src/css'), 
         path.join(__dirname, '../node_modules/codemirror/lib'),
-        path.join(__dirname, '../node_modules/codemirror/theme')], 
+        path.join(__dirname, '../node_modules/codemirror/theme'),
+        path.join(__dirname, '../node_modules/codemirror/addon/hint')], 
         use: ['style-loader', 'css-loader'] },
       { test: /\.ttf$/, use: 'ttf-loader' }
     ]

@@ -26,16 +26,17 @@ export default class UIScene extends Phaser.Scene {
   }
 
   create() {
-    this.codeEditor = new CodeEditor();
+    this.codeEditor = new CodeEditor(this.cache.text.get("autocomplete_list"));
     this.infoText =  new TextContainer("book");
     this.btnReset = new Button("reset", this.codeEditor.clear, this.codeEditor);
     this.btnApply = new Button("apply", this.onBtnApplyClicked, this);
 
     this.scene.get(this.parentScene).events.on(Enum.EventType.InfoTextUpdated, this.updateInfotext, this);
+    this.scene.get(this.parentScene).events.on(Enum.EventType.AutoCompleteUpdate, this.updateAutoComplete, this);
 
     if(this.isBattleScene)
     {
-      this.codeEditor.editor.setValue(this.cache.text.get("test"));
+      //this.codeEditor.editor.setValue(this.cache.text.get("test"));
     }
     else{
       this.codeEditor.editor.setValue("this.createParty(\"warrior\", \"mage\", \"ranger\");");
@@ -46,6 +47,11 @@ export default class UIScene extends Phaser.Scene {
   updateInfotext(text){
 
     this.infoText.updateText(text);
+  }
+
+  updateAutoComplete(wordList){
+
+    this.codeEditor.addToAutoCompleteList(wordList);
   }
 
   onBtnApplyClicked(){

@@ -159,6 +159,7 @@ export default class StartScene extends Phaser.Scene {
               member.learn(spell);
           });
       });
+
       this.gameState = new GameState(party);
 
       this.scene.get('UIScene').events.shutdown();
