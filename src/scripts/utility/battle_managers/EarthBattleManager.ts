@@ -90,11 +90,6 @@ export class EarthBattleManager extends BattleManager{
             this.currentTarget =  this.battleParty.warrior;
             this.cast("poison", "", true);
         }
-        else if(enemyWarriorTurn && (this.turnCount == 1 || this.turnCount % 5 == 0) && this.rangerIsAlive)
-        {
-            this.currentTarget =  this.battleParty.ranger;
-            this.cast("confuse", "", true);
-        }
         else
         {
             this.attack("", true);

@@ -6,10 +6,11 @@ import { Spell } from "../spells_and_abilities/Spell";
 import { LimitBurst } from "../spells_and_abilities/Action";
 import { BattleParty, EnemyParty, Party } from "./Party";
 import { Effect } from "../spells_and_abilities/Effect";
+import { AudioConfig, AudioObject } from "../../utility/Configuration";
 
 export class Character extends Phaser.Physics.Arcade.Sprite{
 
-    protected imageKey: string;
+    public imageKey: string;
     protected battleImageKey: string;
     protected castImageKey: string;
     protected deathImageKey: string;
@@ -17,21 +18,22 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     public heroType: HeroType;
     public config: CharacterConfig;
 
-    protected allowedWeaponType: WeaponType;
-    protected allowedArmorType: ArmorType;
     protected maxHealth: number;
     protected maxMP: number;
     protected maxTP: number = Value.MaxTP;
     protected health: number;
+    protected mp: number;
+    public tp: number = 0;
     protected weapon: Weapon;
     protected armor: Armor;
+    protected allowedWeaponType: WeaponType;
+    protected allowedArmorType: ArmorType;
     protected spellBook: Map<string, Spell>
     public statusEffects: Map<EffectType, Effect>
     public currentAttackType: AttackType;
     public activeSpell: Spell;
+    public activeSoundEffect: AudioObject | null;
     protected lb: LimitBurst;
-    public mp: number;
-    public tp: number = 0;
     public priority: number = 0;
 
     public isAttacking: boolean = false;
@@ -162,27 +164,32 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     {
         this.isLimitBursting = false;
         this.setTexture(this.battleImageKey);
+        this.fadeOutSound();
         this.emit(EventType.AttackComplete, this);
     }
 
     configureAttack()
     {
-        this.isAttacking = true;
         this.setDepth(Depth.Attacker);
         this.currentAttackType = AttackType.Regular;
+        this.isAttacking = true;
     }
 
     configureCast()
     {
         this.setDepth(Depth.Cast);
         this.currentAttackType = AttackType.Cast;
+        this.setTexture(this.castImageKey);
     }
 
     configureLimitBurst()
     {
-        this.isLimitBursting = true;
+        if(!this.limitBurstReady())
+            throw this.name + " cannot use " + this.lb.name + ".  Not enough TP";
+
         this.setDepth(Depth.Cast);
         this.currentAttackType = AttackType.LimitBurst;
+        this.isLimitBursting = true;
     }
 
     getBaseAttack()
@@ -200,14 +207,29 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         return this.health;
     }
 
+    getMaxHp()
+    {
+        return this.maxHealth;
+    }
+
     getCurrentMp()
     {
         return this.mp;
     }
 
+    getMaxMp()
+    {
+        return this.maxMP;
+    }
+
     getCurrentTp()
     {
         return this.tp;
+    }
+
+    getMaxTp()
+    {
+        return this.maxTP;
     }
 
     getSpellType()
@@ -258,6 +280,8 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             effect.removeAilment(this);
             this.statusEffects.delete(effect.effectType);
         });
+
+        this.emit(EventType.EffectsUpdated, this);
     }
 
     handleStatusEffects()
@@ -275,6 +299,9 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             }
         });
 
+        /* Phaser bug does not allow this on its own due phaser bug where removeFrame()
+        does not work when the size is 2, temporary fix is to call the emitter twice 
+        */
         if(this.statusEffects.size < previousSize && this.characterType == CharacterType.player)
             this.emit(EventType.EffectsUpdated, this);
     }
@@ -313,7 +340,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
     {
         if(this.actedThisTurn)
             return;
-
+        
         this.actedThisTurn = true;
             
         let attackAnimation = this.anims.animationManager.create(
@@ -324,10 +351,14 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             repeat: 0
         }) as Phaser.Animations.Animation;
 
+        // When the animation is 75% finished, play the effect and sound effect
         this.on("animationupdate-"+attackAnimation.key, () =>
         {
             if(this.frame === attackAnimation.getFrameByProgress(0.75).frame)
+            {
                 this.playAttackAnimationEffect(target);
+                this.playSoundEffect(this.weapon.audioConfig, false);
+            }
         });
 
         this.play(attackAnimation.key, true).once("animationcomplete-"+attackAnimation.key, () =>
@@ -370,9 +401,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             return;
 
         this.actedThisTurn = true;
-        this.setTexture(this.castImageKey);
-        this.setDepth(Depth.Cast);
-        
+
         spell.emitter.on(EventType.CastComplete, this.finishCast, this);
 
         let castAnimation = this.anims.animationManager.create(
@@ -389,6 +418,15 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         this.play(castAnimation.key, true).once("animationcomplete-"+castAnimation.key, () =>
         {
             spell.playAnimation(this.scene, target);
+            
+            if(spell.audioConfig)
+            {
+                if(spell instanceof LimitBurst)
+                    this.playSoundEffect(spell.audioConfig, true);
+                else
+                    this.playSoundEffect(spell.audioConfig, false);
+            }
+            
             this.isAttacking = false;
         });
     }
@@ -449,6 +487,45 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
             
             this.emit(EventType.CharacterDefeated, this.name + " has been defeated.");
         });
+    }
+
+    //#endregion
+
+    //#region : Sound
+
+    playSoundEffect(audioConfig: AudioConfig, saveReference: boolean)
+    {
+        var soundEffect = this.scene.sound.add(audioConfig.key);
+
+        if(audioConfig.volume)
+            soundEffect.play({ volume: audioConfig.volume });
+        else
+            soundEffect.play();
+
+        if(saveReference)
+        {
+            let audioObject = { soundObject: soundEffect, config: audioConfig };
+            this.activeSoundEffect = audioObject;
+        }
+
+        soundEffect.once('complete', () =>
+        {
+            soundEffect.destroy();
+        });
+    }
+
+    fadeOutSound()
+    {
+        if(!this.activeSoundEffect)
+            return;
+
+        this.scene.tweens.add({
+            targets: this.activeSoundEffect.soundObject,
+            volume: 0,
+            duration: 800
+        });
+
+        this.activeSoundEffect = null; 
     }
 
     //#endregion

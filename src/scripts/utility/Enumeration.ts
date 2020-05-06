@@ -4,7 +4,6 @@
 export enum ActionType {
     Offense,
     Defense,
-    Recovery,
     Special
 }
 
@@ -210,6 +209,7 @@ export enum ObjectScale
     Ability = 2.5,
     Battle = 3.5,
     CastAnimation = 1.5,
+    Icon = 0.8,
     Spell = 2,
 }
 

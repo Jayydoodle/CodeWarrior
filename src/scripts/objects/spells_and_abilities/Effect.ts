@@ -64,7 +64,7 @@ export class Effect{
         
         if(this.name == "confuse")
         {
-            this.message = " is confused!" + " Turns Remaining: " + this.duration;
+            this.message = target.name + " is confused!";
             target.isConfused = true;
             target.isAsleep = !target.isConfused;
 
@@ -72,7 +72,7 @@ export class Effect{
         }
         else if(this.name == "sleep")
         {
-            this.message = " is asleep" + " Turns Remaining: " + this.duration;
+            this.message = target.name + " is asleep!";
             target.isAsleep = true;
             target.isConfused = !target.isAsleep
 
@@ -80,7 +80,7 @@ export class Effect{
         }
 
         target.addStatusEffect(EffectType.Ailment, this);
-        target.emitEffectApplied(target.name + this.message);
+        target.emitEffectApplied(this.message + " Turns Remaining: " + this.duration);
     }
 
     removeAilment(target: Character)
@@ -114,6 +114,7 @@ export class Effect{
     ailment(target: Character)
     {
         this.duration--;
+        target.emitEffectApplied(this.message + " Turns Remaining: " + this.duration);
     }
 
     cureStatusEffects(target: Character)

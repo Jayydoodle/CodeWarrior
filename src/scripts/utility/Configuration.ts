@@ -10,6 +10,19 @@ export type AlignConfig = {
     showGrid: boolean
 }
 
+export type AudioObject = {
+
+    soundObject: Phaser.Sound.BaseSound,
+    config: AudioConfig
+}
+
+export type AudioConfig = {
+
+    key: string,
+    volume?: number,
+    fadeRate?: number
+}
+
 export type BattleConfig = 
 {
     backgroundAssetKey: string,
@@ -19,6 +32,9 @@ export type BattleConfig =
 export type HudConfig = {
 
     warriorName: string,
+    warriorImageKey: string,
     mageName: string,
-    rangerName: string
+    mageImageKey: string,
+    rangerName: string,
+    rangerImageKey: string
 }

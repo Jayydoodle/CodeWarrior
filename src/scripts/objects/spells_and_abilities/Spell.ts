@@ -2,13 +2,16 @@ import { ActionType, EventType, ElementType, EffectType } from "../../utility/En
 import { Character } from "../characters/Hero";
 import { Effect } from "./Effect";
 import { Action } from "./Action";
+import { AudioConfig } from "../../utility/Configuration";
 
 export class Spell extends Action {
 
     effectType: EffectType;
 
-    constructor(name: string, actionType: ActionType, effectType: EffectType, value: number, mpCost: number, imageKey: string, imageFrames: number) {
-        super(name, actionType, imageKey, imageFrames);
+    constructor(name: string, actionType: ActionType, effectType: EffectType, value: number, mpCost: number, 
+                imageKey: string, imageFrames: number, audioConfig?: AudioConfig) {
+
+        super(name, actionType, imageKey, imageFrames, audioConfig);
         this.value = value;
         this.mpCost = mpCost;
         this.effectType = effectType;
@@ -26,8 +29,10 @@ export class BlackMagic extends Spell {
     attackPower: number;
     element: ElementType;
 
-    constructor(name: string, element: ElementType, effectType: EffectType, attackPower: number, mpCost: number, imageKey: string, imageFrames: number) {
-        super(name, ActionType.Offense, effectType, attackPower, mpCost, imageKey, imageFrames);
+    constructor(name: string, element: ElementType, effectType: EffectType, attackPower: number, mpCost: number, 
+                imageKey: string, imageFrames: number, audioConfig?: AudioConfig) {
+
+        super(name, ActionType.Offense, effectType, attackPower, mpCost, imageKey, imageFrames, audioConfig);
         this.attackPower = attackPower;
         this.element = element;
     }
@@ -42,7 +47,9 @@ export class WhiteMagic extends Spell {
 
     effect: Effect;
 
-    constructor(name: string, effectType: EffectType, value: number, mpCost: number, imageKey: string, imageFrames: number) {
-        super(name, ActionType.Defense, effectType, value, mpCost, imageKey, imageFrames);
+    constructor(name: string, effectType: EffectType, value: number, mpCost: number, 
+                imageKey: string, imageFrames: number, audioConfig?: AudioConfig) {
+
+        super(name, ActionType.Defense, effectType, value, mpCost, imageKey, imageFrames, audioConfig);
     }
 }

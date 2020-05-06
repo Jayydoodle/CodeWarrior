@@ -1,5 +1,5 @@
 import { HudConfig } from "./Configuration";
-import { Depth, EffectIconIndex } from "./Enumeration";
+import { Depth, EffectIconIndex, ObjectScale } from "./Enumeration";
 import { Character } from "../objects/characters/Hero";
 import { BattleParty } from "../objects/characters/Party";
 
@@ -25,9 +25,9 @@ export class Hud extends Phaser.GameObjects.Container{
             this.statusFrameMap.set(frame.frame as Number, frame);
         });
 
-        let warriorHud = new HudElement(scene, config.warriorName);
-        let mageHud = new HudElement(scene, config.mageName);
-        let rangerHud = new HudElement(scene, config.rangerName);
+        let warriorHud = new HudElement(scene, config.warriorName, config.warriorImageKey);
+        let mageHud = new HudElement(scene, config.mageName, config.mageImageKey);
+        let rangerHud = new HudElement(scene, config.rangerName, config.rangerImageKey);
 
         this.map.set(config.warriorName.toLowerCase(), warriorHud);
         this.map.set(config.mageName.toLowerCase(), mageHud);
@@ -46,11 +46,9 @@ export class Hud extends Phaser.GameObjects.Container{
 
     update(character: Character)
     {
-        let HudElement = this.findElementByKey(character.name);
+        let hudElement = this.findElementByKey(character.name);
 
-        HudElement.healthText.text = character.getCurrentHp().toString();
-        HudElement.mpText.text = character.getCurrentMp().toString();
-        HudElement.tpText.text = character.getCurrentTp().toString();
+        hudElement.update(character);
     }
 
     updateStatusAnimation(character: Character)
@@ -87,20 +85,35 @@ export class Hud extends Phaser.GameObjects.Container{
 export class HudElement extends Phaser.GameObjects.Container{
 
     hudDisplay: Phaser.GameObjects.Image;
+    healthBar: Phaser.GameObjects.Image;
+    mpBar: Phaser.GameObjects.Image;
+    tpBar: Phaser.GameObjects.Image;
     nameText: Phaser.GameObjects.Text;
     healthText: Phaser.GameObjects.Text;
     mpText: Phaser.GameObjects.Text;
     tpText: Phaser.GameObjects.Text;
+    characterIcon: Phaser.GameObjects.Sprite;
     statusIcon: Phaser.GameObjects.Sprite;
-    statusAnimationFrames: Phaser.Types.Animations.AnimationFrame[];
     statusAnimation: Phaser.Animations.Animation;
 
-    constructor(scene: Phaser.Scene, name: string)
+    fullBar: number = 105;
+
+    constructor(scene: Phaser.Scene, name: string, imageKey: string)
     {
         super(scene);
         
         this.hudDisplay = new Phaser.GameObjects.Image(scene, 0, 0, "hud_layout");
         this.statusIcon = new Phaser.GameObjects.Sprite(scene, 262, 0, "hud_icons");
+        this.characterIcon = new Phaser.GameObjects.Sprite(scene, -260, 0, imageKey);
+        this.healthBar = new Phaser.GameObjects.Image(scene, 35, 7, "hud_health");
+        this.mpBar = new Phaser.GameObjects.Image(scene, 168, 7, "hud_mp");
+        this.tpBar = new Phaser.GameObjects.Image(scene, 291, 7, "hud_tp");
+
+        this.healthBar.setCrop(0, 0, this.fullBar, 3);
+        this.mpBar.setCrop(0, 0, this.fullBar, 3);
+        this.tpBar.setCrop(0, 0, this.fullBar, 3);
+
+        this.characterIcon.setScale(ObjectScale.Icon);
 
         this.statusIcon.setFrame(0);
 
@@ -112,6 +125,10 @@ export class HudElement extends Phaser.GameObjects.Container{
 
         this.add(this.hudDisplay);
         this.add(this.statusIcon);
+        this.add(this.characterIcon);
+        this.add(this.healthBar);
+        this.add(this.mpBar);
+        this.add(this.tpBar);
 
         this.nameText = this.addText(scene, name, -205, -9);
         this.healthText = this.addText(scene, "", -85, -13);
@@ -119,6 +136,21 @@ export class HudElement extends Phaser.GameObjects.Container{
         this.tpText = this.addText(scene, "", 165, -13);
 
         this.createStatusAnimation(name, scene);
+    }
+
+    update(character: Character)
+    {
+        this.healthText.text = character.getCurrentHp().toString();
+        this.mpText.text = character.getCurrentMp().toString();
+        this.tpText.text = character.getCurrentTp().toString();
+
+        var healthPercentage = character.getCurrentHp() / character.getMaxHp();
+        var mpPercentage = character.getCurrentMp() / character.getMaxMp();
+        var tpPercentage = character.getCurrentTp() / character.getMaxTp();
+
+        this.healthBar.setCrop(0, 0, this.fullBar * healthPercentage, 3);
+        this.mpBar.setCrop(0, 0, this.fullBar * mpPercentage, 3);
+        this.tpBar.setCrop(0, 0, this.fullBar * tpPercentage, 3);
     }
 
     addText(scene: Phaser.Scene, value: string, xOffset: number, yOffset: number)

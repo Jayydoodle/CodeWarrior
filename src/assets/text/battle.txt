@@ -72,7 +72,7 @@ Warrior:
 "inferno" - fire damage to all enemies
 
 Mage:
-"torrent" - water damage to all enemies
+"benediction" - Heal all allies 100% HP
 "resurrection" - Revive all KOed allies
 
 Ranger:

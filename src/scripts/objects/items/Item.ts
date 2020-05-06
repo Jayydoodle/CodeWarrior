@@ -1,4 +1,5 @@
 import { ItemType, WeaponType, ArmorType, ElementType } from "../../utility/Enumeration";
+import { AudioConfig } from "../../utility/Configuration";
 
 export class Item{
 
@@ -6,13 +7,17 @@ export class Item{
     itemType: ItemType;
     isConsumable: boolean;
     imageKey: string;
+    audioConfig: AudioConfig;
 
-    constructor(displayName: string, type: ItemType, isConsumable: boolean, imageKey: string)
+    constructor(displayName: string, type: ItemType, isConsumable: boolean, imageKey: string, audioConfig?: AudioConfig)
     {
         this.displayName = displayName;
         this.itemType = type;
         this.isConsumable = isConsumable;
         this.imageKey = imageKey;
+        
+        if(audioConfig)
+            this.audioConfig = audioConfig;
     }
 }
 
@@ -24,9 +29,10 @@ export class Weapon extends Item{
     effectKey: string;
     effectFrames: number;
 
-    constructor(displayName: string, type: WeaponType, element: ElementType,  attackPower: number, imageKey: string, effectKey: string, effectFrames: number)
+    constructor(displayName: string, type: WeaponType, element: ElementType,  attackPower: number, imageKey: string, 
+                effectKey: string, effectFrames: number, audioConfig: AudioConfig)
     {
-        super(displayName, ItemType.Weapon, false, imageKey);
+        super(displayName, ItemType.Weapon, false, imageKey, audioConfig);
         this.weaponType = type;
         this.element = element;
         this.attackPower = attackPower;

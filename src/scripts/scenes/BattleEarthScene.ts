@@ -64,6 +64,7 @@ export default class BattleEarthScene extends BattleScene {
     createBattleParty()
     {
       return new EarthBattleManager(this, this.consoleLogger, this.hud, this.battleParty, this.enemyParty);
+      //return super.createBattleParty();
     }
 
     update()

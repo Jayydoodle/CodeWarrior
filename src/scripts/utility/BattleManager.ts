@@ -83,6 +83,7 @@ export class BattleManager{
 
         this.battleParty.group.forEach(member => {
             this.queue.enqueue(member);
+            member.tp = 100;
             this.battleSize++;
         });
 
@@ -218,14 +219,14 @@ export class BattleManager{
 
         if(this.currentAttacker.isAsleep) // refactor
         {
-            this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " is asleep");
+            this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " is asleep and his turn was skipped!");
             this.nextTurn();
             return;
         }
 
         if(this.currentAttacker.isConfused) // refactor
         {
-            this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " is confused!");
+            this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " is confused and starts attacking party members!");
             
             if(this.currentAttacker.characterType == CharacterType.player)
                 this.currentTarget = this.determineTarget(this.battleParty.group);
@@ -287,10 +288,10 @@ export class BattleManager{
 
         this.currentTarget = this.determineTarget(this.battleParty.group);
 
-        if(this.turnCount == 1 || this.turnCount % 4 == 0){
+        if(this.turnCount == 1 || this.turnCount % 6 == 0){
             if(enemy1Turn)this.cast("sleep", "", true);
             else if(enemy2Turn)this.cast("poison", "", true);
-            else if(enemy3Turn)this.cast("confuse", "", true);
+            else if(enemy3Turn)this.cast("confuse", "",true);
         }
         else
             this.attack("", true);
@@ -521,12 +522,12 @@ export class BattleManager{
 
         try {
             this.currentAttacker.learn(this.limitBurstDatabase.findByName(name));
+            this.currentAttacker.configureLimitBurst();
         } 
         catch (error) {
             throw(error);
         }
 
-        this.currentAttacker.configureLimitBurst();
         this.scene.physics.moveTo(this.currentAttacker, this.gameWidth / 2, this. gameHeight / 2, this.movementSpeed);
         this.consoleLogger.logTurn(this.turnCount, this.currentAttacker.name + " used " + name);
     }

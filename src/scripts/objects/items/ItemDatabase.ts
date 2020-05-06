@@ -16,15 +16,15 @@ export class ItemDatabase{
         //#region: Weapons
 
             //#region: Melee 
-            this.add(new Weapon("Wooden Sword", WeaponType.Melee, ElementType.None, 100, "wooden_sword", "sword_hit", 15));
+            this.add(new Weapon("Wooden Sword", WeaponType.Melee, ElementType.None, 100, "wooden_sword", "sword_hit", 15, { key: "sword_sound" }));
             //#endregion
 
             //#region: Magic 
-            this.add(new Weapon("Wooden Staff", WeaponType.Magic, ElementType.None, 100, "wooden_staff", "staff_hit", 15));
+            this.add(new Weapon("Wooden Staff", WeaponType.Magic, ElementType.None, 100, "wooden_staff", "staff_hit", 15, { key: "staff_sound" }));
             //#endregion
 
             //#region: Ranged 
-            this.add(new Weapon("Wooden Bow", WeaponType.Ranged, ElementType.None, 100, "wooden_bow", "bow_hit", 35));
+            this.add(new Weapon("Wooden Bow", WeaponType.Ranged, ElementType.None, 100, "wooden_bow", "bow_hit", 35, { key: "bow_sound" }));
             //#endregion
 
         //#endregion

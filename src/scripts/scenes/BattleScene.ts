@@ -59,7 +59,7 @@ export default class BattleScene extends Phaser.Scene {
     this.background = new Background(this.findAsset(this.config.backgroundAssetKey).key, this, 0, 0);
     this.consoleLogger = new ConsoleLogger();
 
-    this.backgroundMusic = this.sound.add("battle_music", { loop: true });
+    this.backgroundMusic = this.sound.add("battle_music", { loop: true, volume: 0.4 });
     this.backgroundMusic.play();
 
     this.gameState.changeScene(this);
@@ -75,8 +75,11 @@ export default class BattleScene extends Phaser.Scene {
 
     this.hud = new Hud(this, {
       warriorName: this.gameState.party.warrior.name,
+      warriorImageKey: this.gameState.party.warrior.imageKey,
       mageName: this.gameState.party.mage.name,
-      rangerName: this.gameState.party.ranger.name
+      mageImageKey: this.gameState.party.mage.imageKey,
+      rangerName: this.gameState.party.ranger.name,
+      rangerImageKey: this.gameState.party.ranger.imageKey
     });
 
     this.alignGrid.placeAtIndex(86, this.hud);

@@ -2,6 +2,7 @@ import { ActionType, EventType, Depth, Value, EffectType, ElementType, ObjectSca
 import { Character } from "../characters/Hero";
 import { Effect } from "./Effect";
 import { BattleParty, EnemyParty } from "../characters/Party";
+import { AudioConfig } from "../../utility/Configuration";
 
 export class Action{
 
@@ -14,13 +15,17 @@ export class Action{
     mpCost: number = 0;
     value: number = 0;
     public emitter: Phaser.Events.EventEmitter;
+    audioConfig: AudioConfig
 
-    constructor(name: string, actionType: ActionType, imageKey: string, imageFrames: number){
+    constructor(name: string, actionType: ActionType, imageKey: string, imageFrames: number, audioConfig?: AudioConfig){
         this.name = name;
         this.actionType = actionType;
         this.imageKey = imageKey;
         this.imageFrames = imageFrames;
         this.emitter = new Phaser.Events.EventEmitter();
+
+        if(audioConfig)
+            this.audioConfig = audioConfig;
     }
 
     playAnimation(scene: Phaser.Scene, target:Character | BattleParty | EnemyParty)
@@ -64,8 +69,8 @@ export class LimitBurst extends Action{
     effects: Effect[] = [];
     elementType: ElementType;
 
-    constructor(name: string, value: number, actionType: ActionType, effectTypes: EffectType[], elementType: ElementType, imageKey: string, imageFrames: number){
-        super(name, actionType, imageKey, imageFrames);
+    constructor(name: string, value: number, actionType: ActionType, effectTypes: EffectType[], elementType: ElementType, imageKey: string, imageFrames: number, audioConfig?: AudioConfig){
+        super(name, actionType, imageKey, imageFrames, audioConfig);
         this.value = value;
         this.elementType = elementType;
 

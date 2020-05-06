@@ -1,5 +1,5 @@
 import { Spell, BlackMagic, WhiteMagic } from "./Spell";
-import { ElementType, BlackMagicLevel, EffectType, WhiteMagicLevel, Value } from "../../utility/Enumeration";
+import { ElementType, BlackMagicLevel, EffectType, WhiteMagicLevel, Value, ActionType } from "../../utility/Enumeration";
 
 
 export class SpellDatabase{
@@ -16,7 +16,14 @@ export class SpellDatabase{
             return;
         }
 
-    //#region: Black Magic
+    //#region : General
+
+        this.add(new Spell("sleep", ActionType.Special, EffectType.Ailment, 0, Value.MPCostIntermediate, "sleep", 100));
+        this.add(new Spell("confuse", ActionType.Special, EffectType.Ailment, 0, Value.MPCostIntermediate, "confuse", 100));
+
+    //#endregion
+
+    //#region : Black Magic
 
         this.add(new BlackMagic("earth1", ElementType.Earth, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100));
         this.add(new BlackMagic("earth2", ElementType.Earth, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "earth_spell_2", 100));
@@ -43,9 +50,7 @@ export class SpellDatabase{
         this.add(new BlackMagic("lightning2", ElementType.Lightning, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "lightning_spell_2a", 100));
         this.add(new BlackMagic("lightning3", ElementType.Lightning, EffectType.None, BlackMagicLevel.III, Value.MPCostAdvanced, "lightning_spell_2b", 100));
 
-        this.add(new BlackMagic("confuse", ElementType.None, EffectType.Ailment, BlackMagicLevel.I, Value.MPCostIntermediate, "confuse", 100));
         this.add(new BlackMagic("poison", ElementType.Dark, EffectType.DamageOverTime, BlackMagicLevel.I, Value.MPCostIntermediate, "poison", 100));
-        this.add(new BlackMagic("sleep", ElementType.None, EffectType.Ailment, BlackMagicLevel.I, Value.MPCostIntermediate, "sleep", 100));
 
         this.add(new BlackMagic("water1", ElementType.Water, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_1", 100));
         this.add(new BlackMagic("water2", ElementType.Water, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "water_spell_2", 100));
@@ -59,7 +64,7 @@ export class SpellDatabase{
 
     //#endregion
 
-    //#region: White Magic
+    //#region : White Magic
 
         this.add(new WhiteMagic("cure1", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_1", 100));
         this.add(new WhiteMagic("cure2", EffectType.Restoration, WhiteMagicLevel.II, Value.MPCostIntermediate, "cure_spell_2", 100));
@@ -103,21 +108,22 @@ export class SpellDatabase{
 
     testSpells()
     {
-        this.add(new BlackMagic("confuse", ElementType.None, EffectType.Ailment, 0, Value.MPCostIntermediate, "confuse", 100));
-        this.add(new BlackMagic("earth", ElementType.Earth, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100));
-        this.add(new BlackMagic("dark", ElementType.Dark,  EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "dark_spell_3", 100));
-        this.add(new BlackMagic("fire", ElementType.Fire, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "fire_spell_1", 100));
-        this.add(new BlackMagic("ice", ElementType.Ice, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "ice_spell_1", 100));
-        this.add(new BlackMagic("lightning", ElementType.Lightning, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "lightning_spell_1", 100));
-        this.add(new BlackMagic("poison", ElementType.Dark, EffectType.DamageOverTime, BlackMagicLevel.I, Value.MPCostIntermediate, "poison", 100));
-        this.add(new BlackMagic("sleep", ElementType.None, EffectType.Ailment, 0, Value.MPCostIntermediate, "sleep", 100));
-        this.add(new BlackMagic("water", ElementType.Water, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_2", 100));
-        this.add(new BlackMagic("wind", ElementType.Wind, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100));
+        this.add(new BlackMagic("earth", ElementType.Earth, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100, { key: "earth_sound" }));
+        this.add(new BlackMagic("dark", ElementType.Dark,  EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "dark_spell_3", 100, { key: "dark_sound" }));
+        this.add(new BlackMagic("fire", ElementType.Fire, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "fire_spell_1", 100, { key: "fire_sound" }));
+        this.add(new BlackMagic("ice", ElementType.Ice, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "ice_spell_1", 100, { key: "ice_sound" }));
+        this.add(new BlackMagic("lightning", ElementType.Lightning, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "lightning_spell_1", 100, { key: "lightning_sound" }));
+        this.add(new BlackMagic("poison", ElementType.Dark, EffectType.DamageOverTime, BlackMagicLevel.I, Value.MPCostIntermediate, "poison", 100, { key: "poison_sound" }));
+        this.add(new BlackMagic("water", ElementType.Water, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_2", 100, { key: "water_sound" }));
+        this.add(new BlackMagic("wind", ElementType.Wind, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100, { key: "wind_sound" }));
 
-        this.add(new WhiteMagic("cure", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_3", 100));
+        this.add(new WhiteMagic("cure", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_3", 100, { key: "cure_sound" }));
         this.add(new WhiteMagic("protect", EffectType.BuffDefense, WhiteMagicLevel.I, Value.MPCostBeginner, "protect_spell_2", 100));
-        this.add(new WhiteMagic("remedy", EffectType.CureStatusEffects, 0, Value.MPCostIntermediate, "remedy_spell", 100));
-        this.add(new WhiteMagic("raise", EffectType.Revival, 0, Value.MPCostAdvanced, "revive_spell", 100));
+        this.add(new WhiteMagic("remedy", EffectType.CureStatusEffects, 0, Value.MPCostIntermediate, "remedy_spell", 100, { key: "remedy_sound" }));
+        this.add(new WhiteMagic("raise", EffectType.Revival, 0, Value.MPCostAdvanced, "revive_spell", 100, { key: "revive_sound" }));
+
+        this.add(new Spell("sleep", ActionType.Special, EffectType.Ailment, 0, Value.MPCostIntermediate, "sleep", 100, { key: "sleep_sound", volume: 0.5 }));
+        this.add(new Spell("confuse", ActionType.Special, EffectType.Ailment, 0, Value.MPCostIntermediate, "confuse", 100, { key: "confuse_sound" }));
 
     }
 

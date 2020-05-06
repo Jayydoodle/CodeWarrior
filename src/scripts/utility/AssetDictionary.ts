@@ -8,21 +8,21 @@ export class AssetDictionary{
     {
         this.assets = new Map<string, Asset>();
 
-    //#region: Font
+    //#region : Font
     
 
     //#endregion
 
-    //#region: Images
+    //#region : Images
 
-        ///#region: Background
+        ///#region : Background
         this.add(new Asset("background", "assets/backgrounds/map.png", [1280, 512], 0, AssetType.Image, false));
         this.add(new Asset("earth_battle", "assets/backgrounds/earth.jpg", [640, 440], 0, AssetType.Image, false));
         this.add(new Asset("fire_battle", "assets/backgrounds/fire.jpg", [640, 440], 0, AssetType.Image, false));
         this.add(new Asset("start_scene", "assets/start_scene.jpg", [1200,720], 0, AssetType.Image, false));
         ///#endregion
 
-        ///#region: Tutorial
+        ///#region : Tutorial
 
         this.add(new Asset("tutorial_1", "assets/backgrounds/tutorial/tutorial_1.png", [1920, 1080], 0, AssetType.Image, false));
         this.add(new Asset("tutorial_2", "assets/backgrounds/tutorial/tutorial_2.png", [1961, 976], 0, AssetType.Image, false));
@@ -42,18 +42,21 @@ export class AssetDictionary{
 
         ///#endregion
 
-        ///#region: HUD
+        ///#region : HUD
 
         this.add(new Asset("hud_layout", "assets/battlehud/Layout.png", [573, 32], 0, AssetType.Image, false));
         this.add(new Asset("hud_icons", "assets/icons/IconSet.png", [32, 32], 320, AssetType.Sprite, false));
+        this.add(new Asset("hud_health", "assets/battlehud/health_bar.png", [315, 3], 0, AssetType.Image, false));
+        this.add(new Asset("hud_mp", "assets/battlehud/mp_bar.png", [315, 3], 0, AssetType.Image, false));
+        this.add(new Asset("hud_tp", "assets/battlehud/tp_bar.png", [315, 3], 0, AssetType.Image, false));
 
         ///#endregion
 
     //#endregion
 
-    //#region: Sound
+    //#region : Sound
 
-        ///#region: Music
+        ///#region : Music
 
         this.add(new Asset("start_music", "assets/sounds/StartScreen.mp3", [0,0], 0, AssetType.Sound, false));
         this.add(new Asset("battle_music", "assets/sounds/battle_music.mp3", [0,0], 0, AssetType.Sound, false));
@@ -62,11 +65,65 @@ export class AssetDictionary{
 
         ///#endregion
 
+        ///#region : LimibtBurstFx
+        
+        this.add(new Asset("lb_sound_earth", "assets/sounds/LimitBurstFX/earth_lb.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("lb_sound_fire", "assets/sounds/LimitBurstFX/fire_lb.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("lb_sound_heal", "assets/sounds/LimitBurstFX/heal_lb.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("lb_sound_ice", "assets/sounds/LimitBurstFX/ice_lb.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("lb_sound_lightning", "assets/sounds/LimitBurstFX/lightning_lb.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("lb_sound_revive", "assets/sounds/LimitBurstFX/revive_lb.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("lb_sound_water", "assets/sounds/LimitBurstFX/water_lb.mp3", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("lb_sound_wind", "assets/sounds/LimitBurstFX/wind_lb.mp3", [0,0], 0, AssetType.Sound, false));
+
+        ///#endregion
+
+        ///#region : SpellFx
+
+
+            ////#region : Black Magic
+
+            this.add(new Asset("dark_sound", "assets/sounds/SpellFX/black_magic/dark_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("earth_sound", "assets/sounds/SpellFX/black_magic/earth_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("fire_sound", "assets/sounds/SpellFX/black_magic/fire_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("ice_sound", "assets/sounds/SpellFX/black_magic/ice_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("lightning_sound", "assets/sounds/SpellFX/black_magic/lightning_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("poison_sound", "assets/sounds/SpellFX/black_magic/poison_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("water_sound", "assets/sounds/SpellFX/black_magic/water_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("wind_sound", "assets/sounds/SpellFX/black_magic/wind_sound.mp3", [0,0], 0, AssetType.Sound, false));
+
+            ////#endregion
+
+            ////#region : Debuff
+
+            this.add(new Asset("sleep_sound", "assets/sounds/SpellFX/debuff/sleep_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("confuse_sound", "assets/sounds/SpellFX/debuff/confuse_sound.mp3", [0,0], 0, AssetType.Sound, false));
+
+            ////#endregion
+
+            ////#region : White Magic
+
+            this.add(new Asset("cure_sound", "assets/sounds/SpellFX/white_magic/cure_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("remedy_sound", "assets/sounds/SpellFX/white_magic/remedy_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("revive_sound", "assets/sounds/SpellFX/white_magic/revive_sound.mp3", [0,0], 0, AssetType.Sound, false));
+
+            ////#endregion
+
+        ///#endregion
+
+        ///#region : WeaponFX
+
+        this.add(new Asset("bow_sound", "assets/sounds/WeaponFX/bow.wav", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("staff_sound", "assets/sounds/WeaponFX/staff.wav", [0,0], 0, AssetType.Sound, false));
+        this.add(new Asset("sword_sound", "assets/sounds/WeaponFX/sword.wav", [0,0], 0, AssetType.Sound, false));
+
+        ///#endregion
+
     //#endregion
 
-    //#region: Sprites
+    //#region : Sprites
 
-        ///#region: Ability Sprites
+        ///#region : Ability Sprites
 
         this.add(new Asset("bow_hit", "assets/spells/attack/thrust2.png", [192, 192], 15, AssetType.Sprite, false));
         this.add(new Asset("staff_hit", "assets/spells/attack/pink.png", [192, 192], 35, AssetType.Sprite, false));
@@ -74,7 +131,7 @@ export class AssetDictionary{
 
         ///#endregion
 
-        ///#region: Character Sprites
+        ///#region : Character Sprites
         
         //Player
         this.add(new Asset("mage_battle", "assets/sprites/mage_battle.png", [192, 100], 8, AssetType.Sprite, false));
@@ -101,7 +158,7 @@ export class AssetDictionary{
         this.add(new Asset("orc_warrior_cast", "assets/sprites/orcs/orc_warrior_cast.png", [63, 70], 7, AssetType.Sprite, false));
         ///#endregion
 
-        ///#region: Limit Burst Sprites
+        ///#region : Limit Burst Sprites
 
         this.add(new Asset("lb_benediction", "assets/spells/limit_burst/Benediction.png", [192,192], 100, AssetType.Sprite, false));
         this.add(new Asset("lb_collapse", "assets/spells/limit_burst/Collapse.png", [192,192], 100, AssetType.Sprite, false));
@@ -117,9 +174,9 @@ export class AssetDictionary{
 
         ///#endregion
 
-        ///#region: Spell Sprites
+        ///#region : Spell Sprites
 
-            ////#region: Animation
+            ////#region : Animation
 
             this.add(new Asset("cast_main", "assets/spells/cast/cast_white.png", [192,192], 100, AssetType.Sprite, false));
             this.add(new Asset("cast_white", "assets/spells/cast/cast_purple.png", [192,192], 100, AssetType.Sprite, false));
@@ -127,7 +184,7 @@ export class AssetDictionary{
 
             ////#endregion
 
-            ////#region: Black Magic
+            ////#region : Black Magic
 
             this.add(new Asset("dark_spell_1", "assets/spells/black_magic/dark1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("dark_spell_2", "assets/spells/black_magic/dark2.png", [192, 192], 100, AssetType.Sprite, false));
@@ -145,7 +202,7 @@ export class AssetDictionary{
             this.add(new Asset("ice_spell_2", "assets/spells/black_magic/ice2.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("ice_spell_3", "assets/spells/black_magic/ice3.png", [192, 192], 100, AssetType.Sprite, false));
 
-            this.add(new Asset("lightning_spell_1", "assets/spells/black_magic/lightning3.png", [192, 192], 100, AssetType.Sprite, false));
+            this.add(new Asset("lightning_spell_1", "assets/spells/black_magic/lightning1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("lightning_spell_2a", "assets/spells/black_magic/lightning2_a.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("lightning_spell_2b", "assets/spells/black_magic/lightning2_b.png", [192, 192], 100, AssetType.Sprite, false));
 
@@ -163,7 +220,7 @@ export class AssetDictionary{
             
             ////#endregion
 
-            ////#region: White Magic
+            ////#region : White Magic
 
             this.add(new Asset("cure_spell_1", "assets/spells/white_magic/cure1.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("cure_spell_2", "assets/spells/white_magic/cure2.png", [192, 192], 100, AssetType.Sprite, false));
@@ -180,7 +237,7 @@ export class AssetDictionary{
 
         ///#endregion
 
-        ///#region: Text
+        ///#region : Text
 
             this.add(new Asset('battle_text', 'assets/text/battle.txt', [0, 0], 0, AssetType.Text, false));
             this.add(new Asset('start_text', 'assets/text/start.txt', [0, 0], 0, AssetType.Text, false));

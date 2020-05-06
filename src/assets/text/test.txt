@@ -1,18 +1,13 @@
-if(this.warriorTurn && (this.turn % 5 == 0 || this.turn == 1))
+if(this.warriorTurn)
 {
-  this.cast("sleep", "Enemy1");
+  this.limitBurst("inferno");
 }
-else if(this.warriorTurn)
-  this.attack("random");
-if(this.mageTurn && this.limitBurstReady)
+if(this.mageTurn)
 {
   this.limitBurst("freeze");
 }
-else if(this.mageTurn)
-  this.attack("random");
-if(this.rangerTurn && this.limitBurstReady)
+if(this.rangerTurn)
 {
   this.limitBurst("torrent");
 }
-else if(this.rangerTurn)
-  this.attack("random");
+
