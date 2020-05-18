@@ -1,5 +1,5 @@
 import { AssetDictionary } from '../utility/AssetDictionary';
-import { Background } from '../objects/world_space/background';
+import { Background } from '../utility/background';
 import { Hero } from '../objects/characters/Hero';
 import { Party } from '../objects/characters/Party';
 import { GameState } from '../utility/GameState';

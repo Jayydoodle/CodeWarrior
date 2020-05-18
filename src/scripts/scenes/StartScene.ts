@@ -1,5 +1,5 @@
 import { AssetDictionary } from '../utility/AssetDictionary';
-import { Background } from '../objects/world_space/background';
+import { Background } from '../utility/background';
 import { Hero } from '../objects/characters/Hero';
 import { BattleParty } from '../objects/characters/Party';
 import { EventType, HeroType, GridPosition, Value, SceneType, Message, FrameRate, GameMode } from '../utility/Enumeration';

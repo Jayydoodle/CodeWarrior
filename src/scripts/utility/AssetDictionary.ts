@@ -19,7 +19,7 @@ export class AssetDictionary{
         this.add(new Asset("background", "assets/backgrounds/map.png", [1280, 512], 0, AssetType.Image, false));
         this.add(new Asset("earth_battle", "assets/backgrounds/earth.jpg", [640, 440], 0, AssetType.Image, false));
         this.add(new Asset("fire_battle", "assets/backgrounds/fire.jpg", [640, 440], 0, AssetType.Image, false));
-        this.add(new Asset("start_scene", "assets/start_scene.jpg", [1200,720], 0, AssetType.Image, false));
+        this.add(new Asset("start_scene", "assets/backgrounds/start_scene.jpg", [1200,720], 0, AssetType.Image, false));
         ///#endregion
 
         ///#region : Tutorial
@@ -138,17 +138,17 @@ export class AssetDictionary{
         ///#region : Character Sprites
         
         //Player
-        this.add(new Asset("mage_battle", "assets/sprites/mage_battle.png", [192, 100], 8, AssetType.Sprite, false));
-        this.add(new Asset("mage_death", "assets/sprites/mage_death.png", [64, 90], 6, AssetType.Sprite, false));
-        this.add(new Asset("mage_cast", "assets/sprites/mage_cast.png", [63, 70], 7, AssetType.Sprite, false));
+        this.add(new Asset("mage_battle", "assets/sprites/player/mage_battle.png", [192, 100], 8, AssetType.Sprite, false));
+        this.add(new Asset("mage_death", "assets/sprites/player/mage_death.png", [64, 90], 6, AssetType.Sprite, false));
+        this.add(new Asset("mage_cast", "assets/sprites/player/mage_cast.png", [63, 70], 7, AssetType.Sprite, false));
 
-        this.add(new Asset("ranger_battle", "assets/sprites/ranger_battle.png",[64, 74], 13, AssetType.Sprite, false));
-        this.add(new Asset("ranger_death", "assets/sprites/ranger_death.png", [64, 64], 6, AssetType.Sprite, false));
-        this.add(new Asset("ranger_cast", "assets/sprites/ranger_cast.png", [63, 70], 7, AssetType.Sprite, false));
+        this.add(new Asset("ranger_battle", "assets/sprites/player/ranger_battle.png",[64, 74], 13, AssetType.Sprite, false));
+        this.add(new Asset("ranger_death", "assets/sprites/player/ranger_death.png", [64, 64], 6, AssetType.Sprite, false));
+        this.add(new Asset("ranger_cast", "assets/sprites/player/ranger_cast.png", [63, 70], 7, AssetType.Sprite, false));
 
-        this.add(new Asset("warrior_battle", "assets/sprites/warrior_battle.png", [195, 100], 6, AssetType.Sprite, false));
-        this.add(new Asset("warrior_death", "assets/sprites/warrior_death.png", [64, 90], 6, AssetType.Sprite, false));
-        this.add(new Asset("warrior_cast", "assets/sprites/warrior_cast.png", [63, 70], 7, AssetType.Sprite, false));
+        this.add(new Asset("warrior_battle", "assets/sprites/player/warrior_battle.png", [195, 100], 6, AssetType.Sprite, false));
+        this.add(new Asset("warrior_death", "assets/sprites/player/warrior_death.png", [64, 90], 6, AssetType.Sprite, false));
+        this.add(new Asset("warrior_cast", "assets/sprites/player/warrior_cast.png", [63, 70], 7, AssetType.Sprite, false));
 
         //Enemies
         this.add(new Asset("orc_mage_battle", "assets/sprites/orcs/orc_mage_battle.png", [192, 100], 8, AssetType.Sprite, false));

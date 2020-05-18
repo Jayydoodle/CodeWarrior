@@ -1,5 +1,5 @@
 import { AssetDictionary } from '../utility/AssetDictionary';
-import { Background } from '../objects/world_space/background';
+import { Background } from '../utility/background';
 import { Enemy } from '../objects/characters/Hero';
 import * as Enum from '../utility/Enumeration';
 import { AlignGrid } from '../utility/AlignGrid';
