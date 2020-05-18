@@ -1,32 +1,13 @@
-# educational-phaser-game-template
+# Code Warrior
 
-Template for designing educational Phaser Games
+ Code Warrior is a classic RPG game that you play by writing code. The game incorporates all of the classic themes that have made games in this genre so successful, while also providing a learning experience. The objective of the game is to reinforce basic programming concepts, and thus every action in the game is performed by writing code. The player will engage in scripted ‘battles’ where they must utilize pre-defined variables and methods in a logical way to defeat the enemy. Each enemy will have an attack pattern that is visible to the player, and the goal is to design a basic algorithm to counter it. Therefore each enemy attack can be seen as a ‘bug’ in the code, where the player algorithm is the ‘patch’. 
 
-# Important Files
+![Alt text](src/assets/screenshot/large.png?raw=true)
 
-These files are for coding your game:
+## Gameplay Instructions
 
-* [src/scripts/game.ts](src/scripts/game.ts): The starting file of your game.
+You are given an API of functions and variables pertaining to actions common in RPG games.  You must utilize your knowledge of programming to engage in battle and strategize similar to how you would a traditional RPG.  All code is written into the text editor at the bottom left of the screen.  Everything inside the text editor is exucuted upon clicking 'submit'.
 
-These files are for documenting your game:
- 
-* [egdd.md](egdd.md): The educational game design document describing this game in more depth.
+## Developers
 
-These [package.json](package.json) settings are for configuring the metadata of your game and should be updated:
-
-* `name`: This must be a lower-case version of your repository name on GitHub, without spaces.
-* `description`: Give a quick, one sentence summary of your game.
-* `game`:
-    * `url`: Change this to be the EXACT name of your repository on GitHub.
-    * `shortName`: Choose a short name for your game for [Progressive Web App](https://medium.com/@amberleyjohanna/seriously-though-what-is-a-progressive-web-app-56130600a093) packaging.
-    * `name`: Choose a longer, complete name for your game.
-* `repository`:
-    * `url`: Change this URL to be a link to your GitHub repository.
-* `homepage`: Change this URL to be a link to the final version of your game's EGDD.
-* `contributors`: This should be an array (list) of strings, where each string is like `"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)"`.
-
-You should edit the following images to create icons for your game, if it gets installed as a [Progressive Web App](https://medium.com/@amberleyjohanna/seriously-though-what-is-a-progressive-web-app-56130600a093):
-
-* [src/assets/icons/icons-192.png](src/assets/icons/icons-192.png): This is a 192x192 pixel version of your game's icon.
-* [src/assets/icons/icons-512.png](src/assets/icons/icons-512.png): This is a 512x512 pixel version of your game's icon.
-* [src/assets/icons/favicon.ico](src/assets/icons/favicon.ico): The [Favicon](https://en.wikipedia.org/wiki/Favicon) for your game.
+Jason Allen, Shabir Ghulam
