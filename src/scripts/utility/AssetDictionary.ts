@@ -36,9 +36,10 @@ export class AssetDictionary{
         this.add(new Asset("tutorial_10", "assets/backgrounds/tutorial/tutorial_10.png", [1920, 951], 0, AssetType.Image, false));
         this.add(new Asset("tutorial_11", "assets/backgrounds/tutorial/tutorial_11.png", [1920, 951], 0, AssetType.Image, false));
         this.add(new Asset("tutorial_12", "assets/backgrounds/tutorial/tutorial_12.png", [1920, 951], 0, AssetType.Image, false));
-        this.add(new Asset("tutorial_13", "assets/backgrounds/tutorial/tutorial_13.png", [1916, 893], 0, AssetType.Image, false));
-        this.add(new Asset("tutorial_14", "assets/backgrounds/tutorial/tutorial_14.png", [1908, 901], 0, AssetType.Image, false));
-        this.add(new Asset("tutorial_15", "assets/backgrounds/tutorial/tutorial_15.png", [1920, 1080], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_13", "assets/backgrounds/tutorial/tutorial_13.png", [1920, 1080], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_14", "assets/backgrounds/tutorial/tutorial_14.png", [1916, 893], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_15", "assets/backgrounds/tutorial/tutorial_15.png", [1908, 901], 0, AssetType.Image, false));
+        this.add(new Asset("tutorial_16", "assets/backgrounds/tutorial/tutorial_16.png", [1920, 1080], 0, AssetType.Image, false));
 
         ///#endregion
 

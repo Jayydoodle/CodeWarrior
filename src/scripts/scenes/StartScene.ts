@@ -23,7 +23,7 @@ export default class StartScene extends Phaser.Scene {
   private infoTextSet: boolean = false;
 
   private tutorialIndex = 1;
-  private totalTutorials = 15;
+  private totalTutorials = 16;
   private tutorialMode = false;
   private tutorialInitiationCompleted = false;
 
