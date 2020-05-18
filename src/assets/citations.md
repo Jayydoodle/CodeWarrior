@@ -1,12 +1,12 @@
 # Citations
 
-# Animations
+## Animations
 
 https://hadecynn.wordpress.com/category/animations-collection/
 
-# Images
+## Images
 
-## Background
+### Background
    
 Earth Background
 https://www.google.com/imgres?imgurl=https%3A%2F%2Fblackrobe.github.io%2FBFStoryArchive%2FBFStoryArchive%2Fdungeon_battle_collection%2Fdungeon_battle_40200.jpg&imgrefurl=https%3A%2F%2Fblackrobe.github.io%2FBFStoryArchive%2FBFStoryArchive%2Fmap102-ending.html&tbnid=FPVdhX-KdTdCzM&vet=12ahUKEwj9xKTrrr7pAhUGHN8KHfymBQAQMygAegQIARBa..i&docid=-otZpCucw8RKdM&w=640&h=440&q=waterfall&hl=en&safe=off&ved=2ahUKEwj9xKTrrr7pAhUGHN8KHfymBQAQMygAegQIARBa
@@ -17,33 +17,33 @@ https://www.google.com/imgres?imgurl=http%3A%2F%2Fblackrobe.github.io%2FBFStoryA
 Start Screen
 https://www.google.com/imgres?imgurl=https%3A%2F%2Fcdn.hipwallpaper.com%2Fi%2F49%2F85%2FM8lJOY.jpg&imgrefurl=https%3A%2F%2Fhipwallpaper.com%2Frpg-backgrounds%2F&tbnid=t0AJE4s2TuR6gM&vet=12ahUKEwiMsLSyr77pAhVCD98KHUVYCxEQMygBegUIARCFAg..i&docid=Vk3LHluExT0C6M&w=1280&h=720&q=rpg%20fantasy%20background&hl=en&safe=off&ved=2ahUKEwiMsLSyr77pAhVCD98KHUVYCxEQMygBegUIARCFAg
 
-## Hud
+### Hud
 
 https://atelierrgss.wordpress.com/download-page-mv-01/
 
-## UI
+### UI
 
 https://www.deviantart.com/vixen525/art/Blank-Vintage-Book-362830364
 
-# Font
+## Font
 
 https://www.dafont.com/aniron.font
 
 https://www.dafont.com/fontleroy-brown.font
 
-# Sounds
+## Sounds
 
-    ## FX
+### FX
 
-    https://assetstore.unity.com/packages/audio/sound-fx/magic-spells-sfx-bundle-49853
+https://assetstore.unity.com/packages/audio/sound-fx/magic-spells-sfx-bundle-49853
 
-    https://assetstore.unity.com/packages/audio/sound-fx/magic-spells-sound-effects-114628
+https://assetstore.unity.com/packages/audio/sound-fx/magic-spells-sound-effects-114628
 
-    ## Music
+### Music
 
-    https://wingless-seraph.net/en/
+https://wingless-seraph.net/en/
 
-# Tools
+## Tools
 
 Code Editor
 https://codemirror.net/
