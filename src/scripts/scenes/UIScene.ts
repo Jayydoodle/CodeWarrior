@@ -2,11 +2,13 @@ import { CodeEditor } from "../utility/CodeEditor";
 import { Button } from "../utility/Button";
 import * as Enum from "../utility/Enumeration";
 import { TextContainer } from "../utility/TextContainer";
+import { Modal } from "../utility/Modal";
 
 export default class UIScene extends Phaser.Scene {
   
   private btnReset: Button;
   private btnApply: Button;
+  private modal: Modal;
   private infoText: TextContainer;
   private codeEditor: CodeEditor;
 
@@ -32,14 +34,22 @@ export default class UIScene extends Phaser.Scene {
     this.btnApply = new Button("apply", this.onBtnApplyClicked, this);
 
     this.scene.get(this.parentScene).events.on(Enum.EventType.InfoTextUpdated, this.updateInfotext, this);
+    this.scene.get(this.parentScene).events.on(Enum.EventType.CodeEditorUpdated, this.updateCodeEditor, this);
     this.scene.get(this.parentScene).events.on(Enum.EventType.AutoCompleteUpdate, this.updateAutoComplete, this);
 
     if(this.isBattleScene)
     {
-      //this.codeEditor.editor.setValue(this.cache.text.get("test"));
+      this.updateCodeEditor(this.cache.text.get("battle_template"));
     }
     else{
-      this.codeEditor.editor.setValue("this.createParty(\"warrior\", \"mage\", \"ranger\");");
+      
+      this.modal = new Modal("modal", "modalBackground");
+      this.modal.addbutton("btnEasy", this.onBtnEasyClicked, this);
+      this.modal.addbutton("btnHard", this.onBtnHardClicked, this);
+
+      this.scene.get(this.parentScene).events.on(Enum.EventType.ModalToggle, this.modal.toggleVisibility, this.modal);
+
+      this.updateCodeEditor("this.tutorial();");
     }
 
   }
@@ -47,6 +57,11 @@ export default class UIScene extends Phaser.Scene {
   updateInfotext(text){
 
     this.infoText.updateText(text);
+  }
+
+  updateCodeEditor(text)
+  {
+    this.codeEditor.editor.setValue(text);
   }
 
   updateAutoComplete(wordList){
@@ -58,6 +73,14 @@ export default class UIScene extends Phaser.Scene {
 
     this.events.emit(Enum.EventType.BtnApplyClicked, this.codeEditor.getValue());
     
+  }
+
+  onBtnEasyClicked(){
+    this.events.emit(Enum.EventType.BtnModeClicked, Enum.GameMode.Easy);
+  }
+
+  onBtnHardClicked(){
+    this.events.emit(Enum.EventType.BtnModeClicked, Enum.GameMode.Hard);
   }
 
   resetCodeEditor()

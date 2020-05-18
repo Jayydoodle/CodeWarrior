@@ -2,7 +2,7 @@ import { AssetDictionary } from '../utility/AssetDictionary';
 import { Background } from '../objects/world_space/background';
 import { Hero } from '../objects/characters/Hero';
 import { BattleParty } from '../objects/characters/Party';
-import { EventType, HeroType, GridPosition, Value, SceneType, Message, FrameRate } from '../utility/Enumeration';
+import { EventType, HeroType, GridPosition, Value, SceneType, Message, FrameRate, GameMode } from '../utility/Enumeration';
 import { GameState } from '../utility/GameState';
 import { ItemDatabase } from '../objects/items/ItemDatabase';
 import { Weapon, Armor } from '../objects/items/Item';
@@ -25,6 +25,7 @@ export default class StartScene extends Phaser.Scene {
   private tutorialIndex = 1;
   private totalTutorials = 15;
   private tutorialMode = false;
+  private tutorialInitiationCompleted = false;
 
 
   constructor() {
@@ -41,12 +42,14 @@ export default class StartScene extends Phaser.Scene {
     this.backgroundMusic.play();
 
     this.scene.get('UIScene').events.on(EventType.BtnApplyClicked, this.evaluateCode, this);
+    this.scene.get('UIScene').events.on(EventType.BtnModeClicked, this.startGame, this);
 
     this.scene.launch('UIScene', {parentScene: this.scene.key, sceneType: this.sceneType});
 
     this.infoText = this.cache.text.get(this.findAsset("start_text").key);
 
     this.title = this.add.text(100, 100, "Code Warrior", { color:'#000000', font: '80pt Aniron'} );
+    this.title.setFontSize((this.game.config.width as number) * (this.game.config.height as number) * .00007);
   }
 
   update(){
@@ -55,6 +58,11 @@ export default class StartScene extends Phaser.Scene {
       {
         this.updateInfoText(this.infoText);
       }
+  }
+
+  protected updateCodeEditor(text)
+  {
+    this.events.emit(EventType.CodeEditorUpdated, text);
   }
 
   protected updateInfoText(text)
@@ -68,16 +76,19 @@ export default class StartScene extends Phaser.Scene {
     this.title.visible = false;
     this.tutorialMode = true;
     this.background.setImage("tutorial_"+1, 100, 50);
-    this.updateInfoText("To continue, enter:\nthis.next();\nor\nthis.previous();\n\nTo exit:\nthis.endTutorial();");
+    this.updateInfoText("To continue, click submit");
+    this.updateCodeEditor("this.next();");
   }
 
   endTutorial()
   {
     this.title.visible = true;
     this.tutorialMode = false;
+    this.tutorialInitiationCompleted = false;
     this.tutorialIndex = 1;
     this.background.setImage("start_scene");
     this.updateInfoText(this.infoText);
+    this.updateCodeEditor("");
   }
 
   next()
@@ -88,8 +99,14 @@ export default class StartScene extends Phaser.Scene {
 
     if(this.tutorialIndex == this.totalTutorials + 1)
       this.tutorialIndex = 1;
+
+    if(this.tutorialIndex > 2 && !this.tutorialInitiationCompleted){
+      
+      this.tutorialInitiationCompleted = true;
+      this.updateInfoText("To continue, enter:\nthis.next();\nor\nthis.previous();\n\nTo exit:\nthis.endTutorial();");
+    }
     
-      this.background.setImage("tutorial_"+this.tutorialIndex, 100, 50);
+    this.background.setImage("tutorial_"+this.tutorialIndex, 100, 50);
   }
 
   previous()
@@ -102,6 +119,18 @@ export default class StartScene extends Phaser.Scene {
       this.tutorialIndex = this.totalTutorials;
     
       this.background.setImage("tutorial_"+this.tutorialIndex, 100, 50);
+  }
+
+  startGame(gameMode: GameMode)
+  {
+    this.gameState.setDifficulty(gameMode);
+    this.events.emit(EventType.ModalToggle);
+
+    this.scene.get('UIScene').events.shutdown();
+    this.background.destroy();
+    this.backgroundMusic.destroy();
+
+    this.scene.start('BattleEarthScene', {gameState: this.gameState});
   }
 
   createParty(warriorName: string, mageName: string, rangerName: string)
@@ -161,12 +190,7 @@ export default class StartScene extends Phaser.Scene {
       });
 
       this.gameState = new GameState(party);
-
-      this.scene.get('UIScene').events.shutdown();
-      this.background.destroy();
-      this.backgroundMusic.destroy();
-
-      this.scene.start('BattleEarthScene', {gameState: this.gameState});
+      this.events.emit(EventType.ModalToggle);
   }
 
   evaluateCode(code)

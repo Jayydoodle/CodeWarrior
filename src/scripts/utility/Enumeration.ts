@@ -113,7 +113,8 @@ export enum Value{
     MPCostAdvanced = 50,
     SpellFrames = 100,
     StartingPlayerHealth = 3000,
-    StartingPlayerMP = 200
+    StartingPlayerMP = 400,
+    TPGainRate = .05
 }
 
 export enum WeaponType{
@@ -165,11 +166,14 @@ export enum EventType
     AttackComplete = "attackComplete",
     BattleEnded = 'battleEnded',
     BtnApplyClicked = "btnApplyClicked",
+    BtnModeClicked = "btnModeClicked",
     CastComplete = "castComplete",
     CharacterDefeated = "characterDefeated",
+    CodeEditorUpdated = "codeEditorUpdated",
     EffectApplied = "effectApplied",
     EffectsUpdated = "effectsUpdated",
     InfoTextUpdated = "infoTextUpdated",
+    ModalToggle = "modalToggle",
     PartyDefeated = "partyDefeated",
     Revived = "revived",
     UILoaded = "uiLoaded"
@@ -185,6 +189,12 @@ export enum FrameRate
     Spell = 30,
     Warrior = 10,
 
+}
+
+export enum GameMode
+{
+    Easy,
+    Hard
 }
 
 export enum GridPosition

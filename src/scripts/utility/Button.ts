@@ -1,14 +1,14 @@
 export class Button 
 {
-    private htmlElement: HTMLButtonElement;
+    private button: HTMLButtonElement;
 
-    constructor(htmlElementId: string, functionToRun, scope)
+    constructor(buttonId: string, functionToRun, scope)
     {
-        this.htmlElement = document.getElementById(htmlElementId) as HTMLButtonElement;
+        this.button = document.getElementById(buttonId) as HTMLButtonElement;
         this.onClick(functionToRun, scope);
     }
     onClick(functionToRun, scope)
     {
-        this.htmlElement.onclick = functionToRun.bind(scope);
+        this.button.onclick = functionToRun.bind(scope);
     }
 }

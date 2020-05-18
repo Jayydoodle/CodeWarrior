@@ -244,7 +244,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
 
     addTP(damage: number)
     {
-        this.tp += Math.floor(damage * .05);
+        this.tp += Math.floor(damage * Value.TPGainRate);
 
         if(this.tp >= this.maxTP)
         {
@@ -302,7 +302,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         /* Phaser bug does not allow this on its own due phaser bug where removeFrame()
         does not work when the size is 2, temporary fix is to call the emitter twice 
         */
-        if(this.statusEffects.size < previousSize && this.characterType == CharacterType.player)
+        if(this.characterType == CharacterType.player)
             this.emit(EventType.EffectsUpdated, this);
     }
 

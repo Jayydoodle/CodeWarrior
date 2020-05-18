@@ -4,12 +4,14 @@ import { LimitBurstDatabase } from "../../objects/spells_and_abilities/LimitBurs
 import { ConsoleLogger } from "../ConsoleLogger";
 import { Hud } from "../Hud";
 import { EnemyParty, BattleParty } from "../../objects/characters/Party";
+import { EnemyHud } from "../EnemyHud";
+import { GameMode } from "../Enumeration";
 
 export class EarthBattleManager extends BattleManager{
 
-    constructor(scene: Phaser.Scene, consoleLogger: ConsoleLogger, hud: Hud, battleParty: BattleParty, enemyParty: EnemyParty)
+    constructor(scene: Phaser.Scene, consoleLogger: ConsoleLogger, hud: Hud, enemyHud: EnemyHud, battleParty: BattleParty, enemyParty: EnemyParty, gameMode: GameMode)
     {
-        super(scene, consoleLogger, hud, battleParty, enemyParty);
+        super(scene, consoleLogger, hud, enemyHud, battleParty, enemyParty, gameMode);
     }
 
 //#region : Utility

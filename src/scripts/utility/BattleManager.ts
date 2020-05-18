@@ -1,17 +1,19 @@
 import { BattleParty, EnemyParty } from "../objects/characters/Party";
 import { Character, Hero, Enemy } from "../objects/characters/Hero";
-import { CharacterType, EventType, AttackDelay, HeroType, Message, ActionType, Depth, AttackType } from "./Enumeration";
+import { CharacterType, EventType, AttackDelay, HeroType, Message, ActionType, Depth, AttackType, GameMode } from "./Enumeration";
 import { TypedPriorityQueue } from "../../../node_modules/typedpriorityqueue";
 import { Queue } from "../../../node_modules/queue-typescript";
 import { ConsoleLogger } from "./ConsoleLogger";
 import { Hud } from "./Hud";
 import { DamageCalculator } from "./DamageCalculator";
 import { LimitBurstDatabase } from "../objects/spells_and_abilities/LimitBurstDatabase";
+import { EnemyHud } from "./EnemyHud";
 
 export class BattleManager{
 
     protected scene: Phaser.Scene;
     protected hud: Hud;
+    protected enemyHud: EnemyHud;
     protected lbBackground: Phaser.GameObjects.Rectangle;
     protected gameWidth: number;
     protected gameHeight: number;
@@ -23,12 +25,12 @@ export class BattleManager{
     protected functionCalled: boolean = false;
     protected errorLogged: boolean = false;
     protected isPaused: boolean = false;
-    protected isContinuous: boolean = true;
+    protected isContinuous: boolean;
 
     protected meleeAttackOffset: number = 300;
     protected limitBurstOffset: number = 100;
     protected movementSpeed: number = 3000;
-    protected attackDelay: number = AttackDelay.none;
+    protected attackDelay: number = AttackDelay.veryFast;
 
     protected battleParty: BattleParty;
     protected enemyParty: EnemyParty;
@@ -56,10 +58,11 @@ export class BattleManager{
 
     protected limitBurstDatabase: LimitBurstDatabase;
 
-    constructor(scene: Phaser.Scene, consoleLogger: ConsoleLogger, hud: Hud, battleParty: BattleParty, enemyParty: EnemyParty)
+    constructor(scene: Phaser.Scene, consoleLogger: ConsoleLogger, hud: Hud, enemyHud: EnemyHud, battleParty: BattleParty, enemyParty: EnemyParty, gameMode: GameMode)
     {
         this.scene = scene;
         this.hud = hud;
+        this.enemyHud = enemyHud;
         this.battleParty = battleParty;
         this.enemyParty = enemyParty;
 
@@ -87,6 +90,7 @@ export class BattleManager{
         });
 
         this.hud.updateAll(battleParty);
+        this.enemyHud.update(this.enemyParty.group[0]);
 
         this.enemyParty.group.forEach(member => {
             this.queue.enqueue(member);
@@ -104,9 +108,23 @@ export class BattleManager{
         this.battleParty.emitter.on(EventType.CharacterDefeated, this.logMessage, this);
         this.battleParty.emitter.on(EventType.Revived, this.revive, this);
         this.battleParty.emitter.on(EventType.PartyDefeated, this.endBattle, this);
+
+        this.setBehavior(gameMode);
     }
 
 //#region : Utility
+
+    setBehavior(gameMode: GameMode){
+
+        if(gameMode == GameMode.Easy)
+        {
+            this.isContinuous = false;
+        }
+        else if(gameMode == GameMode.Hard)
+        {
+            this.isContinuous = true;
+        }
+    }
 
     getTurnCount(){
 
@@ -157,6 +175,9 @@ export class BattleManager{
             else
                 this.currentAttacker.limitBurst(this.battleParty, this.enemyParty);
         }
+
+        if(this.currentAttacker && this.currentAttacker.characterType == CharacterType.enemy)
+            this.enemyHud.update(this.currentAttacker);
 
         this.hud.updateAll(this.battleParty);
     }
@@ -317,6 +338,10 @@ export class BattleManager{
                 this.currentAttacker.addTP(damage);
             }
         }
+
+        if(this.currentTarget.characterType == CharacterType.enemy)
+            this.enemyHud.update(this.currentTarget);
+
         this.lbBackground.setVisible(false);
 
         this.currentAttacker.actedThisTurn = false;

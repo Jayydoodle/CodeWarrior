@@ -50,6 +50,10 @@ export class AssetDictionary{
         this.add(new Asset("hud_mp", "assets/battlehud/mp_bar.png", [315, 3], 0, AssetType.Image, false));
         this.add(new Asset("hud_tp", "assets/battlehud/tp_bar.png", [315, 3], 0, AssetType.Image, false));
 
+        this.add(new Asset("enemy_health2", "assets/battlehud/Turn.png", [573,32], 0, AssetType.Image, false));
+        this.add(new Asset("enemy_health", "assets/battlehud/enemy_health.png", [315,3], 0, AssetType.Image, false));
+        this.add(new Asset("enemy_health_gauge", "assets/battlehud/enemy_gauge.png", [507,78], 0, AssetType.Image, false));
+
         ///#endregion
 
     //#endregion
@@ -243,7 +247,7 @@ export class AssetDictionary{
             this.add(new Asset('autocomplete_list', 'assets/text/autocomplete_list.txt', [0, 0], 0, AssetType.Text, false));
             this.add(new Asset('start_text', 'assets/text/start.txt', [0, 0], 0, AssetType.Text, false));
             this.add(new Asset("test_script", 'assets/text/testScript.txt', [0, 0], 0, AssetType.Text, false));
-            this.add(new Asset("test", 'assets/text/test.txt', [0, 0], 0, AssetType.Text, false));
+            this.add(new Asset("battle_template", 'assets/text/battle_template.txt', [0, 0], 0, AssetType.Text, false));
 
 
         ///#endregion

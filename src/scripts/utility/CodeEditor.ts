@@ -17,10 +17,10 @@ export class CodeEditor
    constructor(wordList: string){
 
       this.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-            tabSize: 3,
+            tabSize: 4,
             lineNumbers: true,
             indentUnit: 4,
-            indentWithTabs: false,
+            indentWithTabs: true,
             mode: "text/typescript",
             theme: "lucario",
             autoCloseBrackets: true,

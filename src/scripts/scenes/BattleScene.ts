@@ -12,6 +12,7 @@ import { Weapon, Armor } from '../objects/items/Item';
 import { SpellDatabase } from '../objects/spells_and_abilities/SpellDatabase';
 import { Hud } from '../utility/Hud';
 import { ConsoleLogger } from '../utility/ConsoleLogger';
+import { EnemyHud } from '../utility/EnemyHud';
 
 export default class BattleScene extends Phaser.Scene {
 
@@ -28,6 +29,7 @@ export default class BattleScene extends Phaser.Scene {
   protected alignGrid: AlignGrid;
   protected battleManager: BattleManager;
   protected config: BattleConfig;
+  protected gameMode: Enum.GameMode;
 
   protected turnCountText: Phaser.GameObjects.Text;
   protected consoleLogger: ConsoleLogger;
@@ -37,6 +39,7 @@ export default class BattleScene extends Phaser.Scene {
   protected battleWon: boolean;
 
   protected hud: Hud;
+  protected enemyHud: EnemyHud;
   protected infoTextSet = false;
   
   constructor(sceneKey: string, config: BattleConfig) {
@@ -63,6 +66,7 @@ export default class BattleScene extends Phaser.Scene {
     this.backgroundMusic.play();
 
     this.gameState.changeScene(this);
+    this.gameMode = this.gameState.gameMode;
 
     this.alignGrid = new AlignGrid({
       scene: this,
@@ -103,6 +107,9 @@ export default class BattleScene extends Phaser.Scene {
             gridPosition: config.gridPosition
         }));
     });
+
+    this.enemyHud = new EnemyHud(this);
+    this.alignGrid.placeAtIndex(12, this.enemyHud);
     
     this.battleParty = this.gameState.party;
     this.enemyParty = new EnemyParty(enemies);
@@ -141,7 +148,7 @@ export default class BattleScene extends Phaser.Scene {
 
   createBattleParty()
   {
-    return new BattleManager(this, this.consoleLogger, this.hud, this.battleParty, this.enemyParty);
+    return new BattleManager(this, this.consoleLogger, this.hud, this.enemyHud, this.battleParty, this.enemyParty, this.gameMode);
   }
 
   update() 

@@ -65,16 +65,15 @@
 
 </head>
 <body>
-  <div id="phaser-game">
-      
-  </div>
+  <div id="phaser-game"></div>
+
   <div id="leftScreen" style="display:none;">
       <div id="codeBox">
         <textarea name="Code" id="code"></textarea>
       </div>
       <div id="buttonContainer">
-        <button id="apply">Submit</button>
-        <button id="reset">Reset</button>
+        <button id="apply" class="animate-bottom">Submit</button>
+        <button id="reset" class="animate-bottom">Reset</button>
       </div>
   </div>
   <div id ="rightScreen" style="display:none;"> 
@@ -83,5 +82,18 @@
     </div>
     <div id="console"></div>  
   </div>
+
+  <div id="modalBackground">
+    <div id="modal" class="animate-top">
+      <div class='modal-header'>
+        Select Your Game Mode
+      </div>
+      <div class='actions'>
+        <button id="btnEasy">Easy</button>
+        <button id="btnHard">Normal</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

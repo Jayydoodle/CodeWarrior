@@ -3,10 +3,12 @@ if
 else
 var
 this.createParty
-this.tutorial
-this.endTutorial
-this.next
-this.previous
+this.tutorial();
+this.endTutorial();
+this.next();
+this.previous();
+this.tryAgain();
+this.continue();
 this.attack
 this.cast
 this.limitBurst
@@ -37,3 +39,4 @@ inferno
 benediction
 resurrection
 tempest
+random
