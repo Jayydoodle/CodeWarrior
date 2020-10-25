@@ -30,7 +30,7 @@ export class BattleManager{
     protected meleeAttackOffset: number = 300;
     protected limitBurstOffset: number = 100;
     protected movementSpeed: number = 3000;
-    protected attackDelay: number = AttackDelay.veryFast;
+    protected attackDelay: number = AttackDelay.none;
 
     protected battleParty: BattleParty;
     protected enemyParty: EnemyParty;
