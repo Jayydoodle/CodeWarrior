@@ -24,6 +24,6 @@ jobs:
 
     - name: Build
       run: |
-        npm install -g
+        npm install --save
         npm run build
         npm run deploy-all 
