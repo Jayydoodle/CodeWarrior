@@ -1,3 +1,5 @@
+importScripts("precache-manifest.0ad66fb939a53e95519722b0ef217bb9.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+
 /**
  * You should only modify this, if you know what you are doing.
  * This phaser template is using workbox (https://developers.google.com/web/tools/workbox/)
@@ -6,3 +8,4 @@
  * webpack/webpack.common.js
  */
 workbox.precaching.precacheAndRoute(__precacheManifest)
+
