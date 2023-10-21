@@ -71,5 +71,8 @@
     "phaser": "^3.22.0",
     "queue-typescript": "^1.0.1",
     "typedpriorityqueue": "^1.0.1"
+  },
+  "overrides": {
+    "@types/node": "17.0.41"
   }
 }
