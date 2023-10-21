@@ -1,21 +1,21 @@
 {
-  "name": "educational-game-project-team-12-jason-and-shabir",
+  "name": "CodeWarrior",
   "version": "0.0.2",
   "description": "Fight monsters with code",
-  "homepage": "https://github.com/UD-CISC374/educational-game-project-team-12-jason-and-shabir#readme",
+  "homepage": "https://github.com/Jayydoodle/CodeWarrior",
   "main": "index.js",
   "game": {
-    "url": "educational-game-project-team-12-jason-and-shabir",
+    "url": "CodeWarrior",
     "shortName": "CodeWarrior",
     "name": "Code Warrior"
   },
   "author": {
-    "name": "Austin Cory Bart",
-    "url": "https://github.com/acbart"
+    "name": "Jayydoodle",
+    "url": "https://github.com/jayydoodle"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/UD-CISC374/educational-game-project-team-12-jason-and-shabir.git"
+    "url": "https://github.com/Jayydoodle/CodeWarrior.git"
   },
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.dev.js",
