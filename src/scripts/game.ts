@@ -1,7 +1,7 @@
 import 'phaser';
-import MainScene from './scenes/MainScene';
-import PreloadScene from './scenes/PreloadScene';
 import GameConfig = Phaser.Types.Core.GameConfig;
+import MainScene from './scenes/mainScene';
+import PreloadScene from './scenes/preloadScene';
 import UIScene from './scenes/UIScene';
 import BattleEarthScene from './scenes/BattleEarthScene';
 import StartScene from './scenes/StartScene';
