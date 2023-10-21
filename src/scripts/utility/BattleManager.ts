@@ -163,11 +163,11 @@ export class BattleManager{
     update()
     {
         if(this.currentAttacker != null && this.isMeleeAttacker()){
-            this.currentAttacker.body.velocity.setTo(0, 0);
+            this.currentAttacker?.body?.velocity.setTo(0, 0);
             this.currentAttacker.playAttackAnimation(this.currentTarget);
         }
         else if(this.currentAttacker != null && this.isLimitBursting()){
-            this.currentAttacker.body.velocity.setTo(0,0);
+            this.currentAttacker?.body?.velocity.setTo(0,0);
             this.lbBackground.setVisible(true);
             
             if(this.currentAttacker.characterType == CharacterType.player)

@@ -21,14 +21,12 @@ export default class PreloadScene extends Phaser.Scene {
       progressBox.fillStyle(0x222222, 0.8);
       progressBox.fillRect(width/2 + 180, height/2, 500, 100);
 
-      let loadingText = this.add.text(width / 2 + 200, height / 2 - 100, 'Loading...', { 
+      let loadingText = this.add.text(width / 2 + 200, height / 2 - 100, 'Loading...', {
         font: '80px monospace',
-        fill: '#ffffff'
       });
 
       let percentText = this.add.text(width / 2 + 330, height / 2 + 10, '0%', {
           font: '80px monospace',
-          fill: '#ffffff'
       });
 
       this.load.on('progress', function (value) {

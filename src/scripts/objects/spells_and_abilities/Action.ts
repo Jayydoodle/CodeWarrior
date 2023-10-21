@@ -53,7 +53,7 @@ export class Action{
 
         action.play(this.name+"_anim", true).once("animationcomplete-"+this.name+"_anim", () =>
         {
-            action.body.velocity.setTo(0,0);
+            action?.body?.velocity.setTo(0,0);
             action.destroy();
             this.emitter.emit(EventType.ApplyEffects, target);
             this.emitter.emit(EventType.CastComplete);

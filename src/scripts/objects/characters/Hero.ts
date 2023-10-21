@@ -352,17 +352,20 @@ export class Character extends Phaser.Physics.Arcade.Sprite{
         }) as Phaser.Animations.Animation;
 
         // When the animation is 75% finished, play the effect and sound effect
-        this.on("animationupdate-"+attackAnimation.key, () =>
+        /*this.on("animationupdate-"+attackAnimation.key, () =>
         {
             if(this.frame === attackAnimation.getFrameByProgress(0.75).frame)
             {
                 this.playAttackAnimationEffect(target);
                 this.playSoundEffect(this.weapon.audioConfig, false);
             }
-        });
+        });*/
 
         this.play(attackAnimation.key, true).once("animationcomplete-"+attackAnimation.key, () =>
         {
+            this.playAttackAnimationEffect(target);
+            this.playSoundEffect(this.weapon.audioConfig, false);
+
             this.setFrame(0);
             this.isAttacking = false;
             this.emit(EventType.AttackComplete, this);
