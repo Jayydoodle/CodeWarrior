@@ -96,6 +96,7 @@ export class AssetDictionary{
             this.add(new Asset("poison_sound", "assets/sounds/SpellFX/black_magic/poison_sound.mp3", [0,0], 0, AssetType.Sound, false));
             this.add(new Asset("water_sound", "assets/sounds/SpellFX/black_magic/water_sound.mp3", [0,0], 0, AssetType.Sound, false));
             this.add(new Asset("wind_sound", "assets/sounds/SpellFX/black_magic/wind_sound.mp3", [0,0], 0, AssetType.Sound, false));
+            this.add(new Asset("death_sound", "assets/sounds/SpellFX/black_magic/death_sound.mp3", [0,0], 0, AssetType.Sound, false));
 
             ////#endregion
 
@@ -222,6 +223,7 @@ export class AssetDictionary{
             this.add(new Asset("confuse", "assets/spells/black_magic/confuse.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("poison", "assets/spells/black_magic/poison.png", [192, 192], 100, AssetType.Sprite, false));
             this.add(new Asset("sleep", "assets/spells/black_magic/sleep.png", [192, 192], 100, AssetType.Sprite, false));
+            this.add(new Asset("death", "assets/spells/black_magic/death.png", [192, 192], 100, AssetType.Sprite, false));
             
             ////#endregion
 

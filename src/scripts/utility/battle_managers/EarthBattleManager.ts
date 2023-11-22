@@ -82,7 +82,12 @@ export class EarthBattleManager extends BattleManager{
 
         this.currentTarget = this.determineTarget(this.battleParty.group);
 
-        if(enemyMageTurn && (this.turnCount == 1 || this.turnCount % 5 == 0) && this.warriorIsAlive)
+        if(enemyMageTurn && this.turnCount % 10 == 0 && this.rangerIsAlive)
+        {
+            this.currentTarget =  this.battleParty.ranger;
+            this.cast("death", "", true);
+        }
+        else if(enemyMageTurn && (this.turnCount == 1 || this.turnCount % 5 == 0) && this.warriorIsAlive)
         {
             this.currentTarget =  this.battleParty.warrior;
             this.cast("sleep", "", true);

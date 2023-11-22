@@ -517,7 +517,14 @@ export class BattleManager{
         
         if(!isEnemy)
         {   
-            try {
+            if(spellName == "death")
+            {
+                this.consoleLogger.logTurn(this.turnCount, "player cannot use the spell 'death', stop trying to cheat");
+                return;
+            }
+            
+            try 
+            {
                 let target;
 
                 if(spellName === "raise")

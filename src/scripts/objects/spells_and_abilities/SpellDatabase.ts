@@ -25,6 +25,8 @@ export class SpellDatabase{
 
     //#region : Black Magic
 
+        this.add(new BlackMagic("death", ElementType.Dark, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "death", 100));
+
         this.add(new BlackMagic("earth1", ElementType.Earth, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "earth_spell_1", 100));
         this.add(new BlackMagic("earth2", ElementType.Earth, EffectType.None, BlackMagicLevel.II, Value.MPCostIntermediate, "earth_spell_2", 100));
         //this.add(new BlackMagic("earth3", ElementType.Earth, EffectType.None, SpellLevel.III, Value.MPCostAdvanced, "earth_spell_3", 100));
@@ -117,6 +119,8 @@ export class SpellDatabase{
         this.add(new BlackMagic("water", ElementType.Water, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "water_spell_2", 100, { key: "water_sound" }));
         this.add(new BlackMagic("wind", ElementType.Wind, EffectType.None, BlackMagicLevel.I, Value.MPCostBeginner, "wind_spell_1", 100, { key: "wind_sound" }));
 
+        this.add(new BlackMagic("death", ElementType.Dark, EffectType.None, 999999, Value.MPCostBeginner, "death", 100, { key: "death_sound" }));
+
         this.add(new WhiteMagic("cure", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_3", 100, { key: "cure_sound" }));
         this.add(new WhiteMagic("protect", EffectType.BuffDefense, WhiteMagicLevel.I, Value.MPCostBeginner, "protect_spell_2", 100));
         this.add(new WhiteMagic("remedy", EffectType.CureStatusEffects, 0, Value.MPCostIntermediate, "remedy_spell", 100, { key: "remedy_sound" }));
@@ -124,7 +128,6 @@ export class SpellDatabase{
 
         this.add(new Spell("sleep", ActionType.Special, EffectType.Ailment, 0, Value.MPCostIntermediate, "sleep", 100, { key: "sleep_sound", volume: 0.5 }));
         this.add(new Spell("confuse", ActionType.Special, EffectType.Ailment, 0, Value.MPCostIntermediate, "confuse", 100, { key: "confuse_sound" }));
-
     }
 
 }
