@@ -904,7 +904,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/text/start.txt"
   },
   {
-    "revision": "ca61d1b85095b9cceaa89a85da59f7c6",
+    "revision": "d5a842053e1fa1ab44ff05a553320413",
     "url": "assets/text/testScript.txt"
   },
   {
@@ -920,12 +920,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "favicon.ico"
   },
   {
-    "revision": "af71c6d555beaab89330da5b954dcbf9",
+    "revision": "ed6b1b010b03ed42497cf19b6064e861",
     "url": "index.html"
   },
   {
-    "revision": "647c0ac1e8551a5ede4e",
-    "url": "main.40ff843356d2e501b356.bundle.js"
+    "revision": "49006e3bc7ad0061bf9f",
+    "url": "main.fbeea638a80142c902f2.bundle.js"
   },
   {
     "revision": "4cb13213f580a9954da2d3f2f7dc4fed",
