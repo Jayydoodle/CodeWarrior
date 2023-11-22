@@ -113,8 +113,8 @@ export enum Value{
     MPCostAdvanced = 50,
     SpellFrames = 100,
     StartingPlayerHealth = 3000,
-    StartingPlayerMP = 400,
-    TPGainRate = .05
+    StartingPlayerMP = 1000,
+    TPGainRate = .2
 }
 
 export enum WeaponType{

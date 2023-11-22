@@ -66,9 +66,9 @@ export class SpellDatabase{
 
     //#region : White Magic
 
-        this.add(new WhiteMagic("cure1", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_1", 100));
-        this.add(new WhiteMagic("cure2", EffectType.Restoration, WhiteMagicLevel.II, Value.MPCostIntermediate, "cure_spell_2", 100));
-        this.add(new WhiteMagic("cure3", EffectType.Restoration, WhiteMagicLevel.III, Value.MPCostAdvanced, "cure_spell_3", 100));
+        this.add(new WhiteMagic("cure1", EffectType.Restoration, WhiteMagicLevel.I, Value.MPCostBeginner, "cure_spell_1", 300));
+        this.add(new WhiteMagic("cure2", EffectType.Restoration, WhiteMagicLevel.II, Value.MPCostIntermediate, "cure_spell_2", 600));
+        this.add(new WhiteMagic("cure3", EffectType.Restoration, WhiteMagicLevel.III, Value.MPCostAdvanced, "cure_spell_3", 900));
     
 
         this.add(new WhiteMagic("protect1", EffectType.BuffDefense, WhiteMagicLevel.I, Value.MPCostBeginner, "protect_spell_1", 100));

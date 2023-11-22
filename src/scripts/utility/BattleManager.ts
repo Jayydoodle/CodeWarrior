@@ -484,6 +484,9 @@ export class BattleManager{
         if(this.functionCalled) { throw Message.MultipleActionError; }
         
         this.functionCalled = true;
+
+        if(enemyName == null)
+            enemyName = "random";
         
         if(!isEnemy)
         {

@@ -180,9 +180,7 @@ export class HudElement extends Phaser.GameObjects.Container{
     {
         this.statusIcon.anims.pause();
         
-        this.statusAnimation.frames.forEach(frame => {
-            this.statusAnimation.removeFrame(frame);
-        });
+        this.statusAnimation.frames = [];
 
         console.log(character.statusEffects);
 

@@ -13,13 +13,19 @@ if(this.mageTurn)
 {
   if(this.limitBurstReady)
   {
-    if(!this.warriorIsAlive && !this.rangerIsAlive)
+    if(!this.warriorIsAlive || !this.rangerIsAlive)
       this.limitBurst("resurrection");
     else
       this.limitBurst("discharge");
   }
+  else if(this.mageHp < 500 && this.mageIsAlive)
+      this.cast("cure", "mage");
   else if(this.warriorHp < 100 && this.warriorIsAlive)
       this.cast("cure", "warrior");
+  else if(this.rangerHp < 100 && this.rangerIsAlive)
+      this.cast("cure", "ranger");
+  else if(this.turn > 1 && this.turn % 5 == 1 && this.warriorIsAlive)
+	  this.cast("remedy", "warrior")
   else if(this.turn % 8 == 0 && this.warriorIsAlive)
       this.cast("protect", "warrior");
   else if (this.turn % 3 == 0)
