@@ -113,7 +113,7 @@ export enum Value{
     MPCostAdvanced = 50,
     SpellFrames = 100,
     StartingPlayerHealth = 3000,
-    StartingPlayerMP = 1000,
+    StartingPlayerMP = 500,
     TPGainRate = .2
 }
 
