@@ -308,6 +308,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/sounds/SpellFX/black_magic/dark_sound.mp3"
   },
   {
+    "revision": "2d7fc1e5c164ea2729d9aae972ad24b7",
+    "url": "assets/sounds/SpellFX/black_magic/death_sound.mp3"
+  },
+  {
     "revision": "8738b451a5c8284389bd039b609c2a75",
     "url": "assets/sounds/SpellFX/black_magic/earth_sound.mp3"
   },
@@ -584,10 +588,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/spells/black_magic/confuse.png"
   },
   {
-    "revision": "2a62dc359913416b9d2a8889ee2bbf0b",
-    "url": "assets/spells/black_magic/curse.png"
-  },
-  {
     "revision": "be820f19622520e3c1903d055431e127",
     "url": "assets/spells/black_magic/dark1.png"
   },
@@ -598,6 +598,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "0f110d8626bbee9f2ac7804be91513f1",
     "url": "assets/spells/black_magic/dark3.png"
+  },
+  {
+    "revision": "2a62dc359913416b9d2a8889ee2bbf0b",
+    "url": "assets/spells/black_magic/death.png"
   },
   {
     "revision": "b6d4fb63d8b0da8e76979eeb1baadfb8",
@@ -920,12 +924,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "favicon.ico"
   },
   {
-    "revision": "ed6b1b010b03ed42497cf19b6064e861",
+    "revision": "3b22bf5997ec584528cfc3aa4da72122",
     "url": "index.html"
   },
   {
-    "revision": "49006e3bc7ad0061bf9f",
-    "url": "main.fbeea638a80142c902f2.bundle.js"
+    "revision": "05ed9a2d2a55bc0083bf",
+    "url": "main.901ca78ec09db49f00ef.bundle.js"
   },
   {
     "revision": "4cb13213f580a9954da2d3f2f7dc4fed",
