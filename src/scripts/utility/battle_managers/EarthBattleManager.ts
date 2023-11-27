@@ -86,16 +86,22 @@ export class EarthBattleManager extends BattleManager{
         {
             this.currentTarget =  this.battleParty.ranger;
             this.cast("death", "", true);
+
+            this.consoleLogger.logDialog(this.currentAttacker, this.currentTarget, 'Every 10 turns I will kill ' + this.currentTarget.name + '!');
         }
         else if(enemyMageTurn && (this.turnCount == 1 || this.turnCount % 5 == 0) && this.warriorIsAlive)
         {
             this.currentTarget =  this.battleParty.warrior;
             this.cast("sleep", "", true);
+            
+            this.consoleLogger.logDialog(this.currentAttacker, this.currentTarget, 'Every 5 turns I will put ' + this.currentTarget.name + ' to sleep!');
         }
         else if(enemyRangerTurn && (this.turnCount == 1 || this.turnCount % 5 == 0) && this.warriorIsAlive)
         {
             this.currentTarget =  this.battleParty.warrior;
             this.cast("poison", "", true);
+
+            this.consoleLogger.logDialog(this.currentAttacker, this.currentTarget, 'Every 5 turns I will poison ' + this.currentTarget.name + '!');
         }
         else
         {

@@ -542,6 +542,9 @@ export class Hero extends Character {
         this.characterType = CharacterType.player;
         this.maxMP = this.mp = Value.StartingPlayerMP;
 
+        if (config.heroType == HeroType.Magic)
+            this.maxMP = this.mp = (this.maxMP * 2);
+
         this.castEffectOffset = Value.CastEffectOffset;
 
         this.determineEquipmentTypes();

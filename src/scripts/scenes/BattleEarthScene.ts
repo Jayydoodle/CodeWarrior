@@ -20,7 +20,7 @@ export default class BattleEarthScene extends BattleScene {
               castImageKey: "orc_ranger_cast",
               weaponName: "wooden_bow",
               armorName: "ranger_clothes",
-              gridPosition: GridPosition.enemyTop
+              gridPosition: GridPosition.enemyBottom
             },
             {
               name: "Orc Mage",
@@ -45,7 +45,7 @@ export default class BattleEarthScene extends BattleScene {
               castImageKey: "orc_warrior_cast",
               weaponName: "wooden_sword",
               armorName: "warrior_clothes",
-              gridPosition: GridPosition.enemyBottom
+              gridPosition: GridPosition.enemyTop
             },
           ]
       });

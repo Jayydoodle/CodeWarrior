@@ -108,7 +108,7 @@ export default class BattleScene extends Phaser.Scene {
         }));
     });
 
-    this.enemyHud = new EnemyHud(this);
+    this.enemyHud = new EnemyHud(this, enemies);
     this.alignGrid.placeAtIndex(12, this.enemyHud);
     
     this.battleParty = this.gameState.party;

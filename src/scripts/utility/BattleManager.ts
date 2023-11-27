@@ -90,7 +90,7 @@ export class BattleManager{
         });
 
         this.hud.updateAll(battleParty);
-        this.enemyHud.update(this.enemyParty.group[0]);
+        this.enemyHud.updateAll(this.enemyParty);
 
         this.enemyParty.group.forEach(member => {
             this.queue.enqueue(member);
